@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpiderOS -- Mega Livrable Strategique</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #FFFEFC;
+  --card: #FFFFFF;
+  --neutral: #F4F4F6;
+  --warm: #FAF9F7;
+  --border: #E8E8ED;
+  --dark-gradient: linear-gradient(135deg, #022C22, #0A0A0A);
+  --electric: #00D4EE;
+  --glow: #00F5FF;
+  --text-primary: #0A0A0A;
+  --text-secondary: #525252;
+  --dark-bg: #0A0A0A;
+  --footer-bg: #171717;
+}
+
+body {
+  font-family: 'Fira Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.65;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- HEADER ---- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--card);
+  border-bottom: 2px solid var(--electric);
+  padding: 0.5rem 0 0 0;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 2rem 0.5rem;
+}
+
+.logo-mark {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-mark svg {
+  width: 28px;
+  height: 28px;
+  color: #022C22;
+}
+
+.logo-mark span {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.header-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+  margin-left: auto;
+}
+
+.tab-nav {
+  display: flex;
+  overflow-x: auto;
+  padding: 0 2rem;
+  gap: 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.55rem 1.1rem;
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  color: #022C22;
+  border-bottom-color: var(--electric);
+  font-weight: 600;
+}
+
+/* ---- MAIN ---- */
+.tab-content {
+  display: none;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* ---- SECTIONS ---- */
+.section-block {
+  padding: 2rem 0;
+}
+
+.section-block.cream { background: var(--bg); }
+.section-block.neutral { background: var(--neutral); }
+.section-block.warm { background: var(--warm); }
+.section-block.dark-hero {
+  background: var(--dark-gradient);
+  color: #FFFFFF;
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+}
+
+.section-block.dark-hero h2,
+.section-block.dark-hero h3,
+.section-block.dark-hero h4 {
+  color: #FFFFFF;
+}
+
+.section-block.dark-hero p,
+.section-block.dark-hero li {
+  color: rgba(255,255,255,0.88);
+}
+
+.section-block.dark-hero .text-secondary-dark {
+  color: rgba(255,255,255,0.6);
+}
+
+/* ---- TYPOGRAPHY ---- */
+h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 2rem 0 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem;
+}
+
+h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 1.2rem 0 0.4rem;
+}
+
+p {
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+strong { font-weight: 600; }
+
+ul, ol {
+  margin: 0.5rem 0 1rem 1.5rem;
+}
+
+li {
+  margin-bottom: 0.35rem;
+}
+
+code, .mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+}
+
+/* ---- ACCENT LINE ---- */
+.accent-line {
+  width: 48px;
+  height: 2px;
+  background: var(--electric);
+  margin-bottom: 1rem;
+}
+
+.dark-hero .accent-line {
+  box-shadow: 0 0 8px var(--glow);
+}
+
+/* ---- CARDS ---- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+/* ---- TABLES ---- */
+.table-wrap {
+  overflow-x: auto;
+  margin: 1rem 0;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+th {
+  background: var(--neutral);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+
+td {
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+tr:nth-child(even) td {
+  background: var(--warm);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Dark table variant */
+.dark-hero .table-wrap {
+  border-color: rgba(255,255,255,0.15);
+}
+
+.dark-hero th {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border-bottom-color: rgba(255,255,255,0.15);
+}
+
+.dark-hero td {
+  color: rgba(255,255,255,0.88);
+  border-bottom-color: rgba(255,255,255,0.08);
+}
+
+.dark-hero tr:nth-child(even) td {
+  background: rgba(255,255,255,0.04);
+}
+
+/* ---- BLOCKQUOTES ---- */
+blockquote {
+  border-left: 3px solid var(--electric);
+  background: var(--warm);
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+blockquote strong {
+  color: var(--text-primary);
+  font-style: normal;
+}
+
+/* ---- CONFIDENCE TAGS ---- */
+.tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.15rem 0.55rem;
+  border-radius: 99px;
+  vertical-align: middle;
+  letter-spacing: 0.02em;
+}
+
+.tag-proven {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.tag-plausible {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.tag-speculative {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+.tag-unknown {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.tag-est {
+  background: #f3e8ff;
+  color: #6b21a8;
+}
+
+/* ---- VERDICT PILLS ---- */
+.verdict {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.2rem 0.65rem;
+  border-radius: 6px;
+}
+
+.verdict-go { background: #dcfce7; color: #166534; }
+.verdict-warn { background: #ffedd5; color: #9a3412; }
+.verdict-kill { background: #fee2e2; color: #991b1b; }
+.verdict-neutral { background: #f3f4f6; color: #374151; }
+
+/* ---- PITCH CARDS (inside dark) ---- */
+.pitch-card {
+  background: #FFFFFF !important;
+  color: #0A0A0A !important;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.pitch-card h4,
+.pitch-card p,
+.pitch-card strong,
+.pitch-card li,
+.pitch-card span {
+  color: #0A0A0A !important;
+}
+
+.pitch-card .tag {
+  color: inherit !important;
+}
+
+.pitch-card .tag-proven { color: #166534 !important; }
+.pitch-card .tag-plausible { color: #1e40af !important; }
+.pitch-card .tag-speculative { color: #9a3412 !important; }
+
+/* ---- KPI ROW ---- */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.kpi {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+  text-align: center;
+}
+
+.kpi-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #022C22;
+  line-height: 1.2;
+}
+
+.kpi-label {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+.dark-hero .kpi {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.12);
+}
+
+.dark-hero .kpi-value {
+  color: var(--electric);
+}
+
+.dark-hero .kpi-label {
+  color: rgba(255,255,255,0.6);
+}
+
+/* ---- HR ---- */
+hr {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  margin: 2rem 0;
+}
+
+/* ---- SCENARIO COLUMNS ---- */
+.scenario-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.scenario-col {
+  border-radius: 10px;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+}
+
+.scenario-col.pessimiste {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.scenario-col.base {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.scenario-col.optimiste {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.scenario-col h4 {
+  margin-top: 0;
+}
+
+/* ---- TIMELINE ---- */
+.timeline {
+  position: relative;
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--electric);
+}
+
+.timeline-item {
+  position: relative;
+  padding: 0.75rem 0 0.75rem 1.25rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: 1.1rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--electric);
+  border: 2px solid var(--card);
+  box-shadow: 0 0 0 2px var(--electric);
+}
+
+.timeline-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ---- FOOTER ---- */
+.site-footer {
+  background: var(--footer-bg);
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  padding: 1.5rem 2rem;
+  font-size: 0.78rem;
+}
+
+.site-footer span {
+  color: var(--electric);
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 768px) {
+  .header-top { padding: 0 1rem 0.4rem; }
+  .tab-nav { padding: 0 0.75rem; }
+  .tab-btn { padding: 0.5rem 0.75rem; font-size: 0.75rem; }
+  .tab-content { padding: 1.5rem 1rem 2rem; }
+  .header-subtitle { display: none; }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.15rem; }
+  .card-grid { grid-template-columns: 1fr; }
+  .scenario-grid { grid-template-columns: 1fr; }
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  body { font-size: 14px; }
+}
+
+@media (max-width: 480px) {
+  .kpi-row { grid-template-columns: 1fr 1fr; }
+  .logo-mark span { font-size: 0.95rem; }
+}
+
+/* ---- SECTION INTRO ---- */
+.section-intro {
+  font-size: 1.02rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+}
+
+/* ---- COUNTER-POS ---- */
+.counter-pos {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.counter-bar {
+  height: 6px;
+  border-radius: 3px;
+  flex: 1;
+  max-width: 120px;
+}
+
+.counter-bar.forte { background: #16a34a; }
+.counter-bar.moderee { background: #f59e0b; }
+.counter-bar.faible { background: #ef4444; }
+
+.counter-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ---- NUMBERED LIST ---- */
+.numbered-list {
+  counter-reset: step;
+  list-style: none;
+  padding-left: 0;
+}
+
+.numbered-list li {
+  counter-increment: step;
+  padding-left: 2.2rem;
+  position: relative;
+  margin-bottom: 0.6rem;
+}
+
+.numbered-list li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: #022C22;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* scrollbar subtle */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header class="site-header">
+  <div class="header-top">
+    <div class="logo-mark">
+      <svg viewBox="0 0 654 761" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M256.597 749.381C233.338 734.373 210.407 719.519 187.377 704.819C181.461 701.043 179.05 696.156 179.139 689.013C179.719 642.525 179.708 596.028 180.485 549.544C180.696 536.936 174.217 532.934 162.696 537.845C135.412 549.476 108.674 562.294 81.6741 574.542C80.0052 575.3 78.2999 576 76.7057 576.895C66.0745 582.863 61.0464 577.635 56.699 570.851C47.8001 556.965 39.174 542.904 30.4025 528.937C21.6304 514.968 12.7706 501.054 4.03979 487.059C-1.78912 477.716 -1.39984 474.473 5.79144 466.174C32.5212 435.325 59.2269 404.455 85.925 373.579C91.9502 366.611 91.8511 364.258 85.2714 357.559C63.7862 335.684 42.2773 313.832 20.7841 291.965C9.87317 280.864 10.8449 274.947 24.8426 267.938C70.7151 244.968 116.606 222.034 162.492 199.093C171.371 194.654 171.367 194.651 169.064 184.913C166.386 173.592 163.847 162.236 161.058 150.942C158.778 141.706 160.746 134.46 169.105 128.913C196.868 110.488 224.509 91.8775 252.065 73.1449C259.535 68.0666 266.329 68.2296 273.718 73.2515C290.524 84.6745 307.527 95.8078 324.456 107.05C332.476 112.376 333.252 112.492 340.397 106.157C363.216 85.9242 385.245 64.8347 407.509 44.0003C420.162 32.1603 432.885 20.3955 445.643 8.6694C450.448 4.25357 455.401 -0.0215149 462.531 9.15527e-05C468.688 0.0187683 472.505 3.55344 472.909 9.70041C473.432 17.6326 470.948 25.1652 469.662 32.839C464.176 65.5874 458.468 98.2987 452.849 131.025C452.146 135.116 451.658 139.252 450.763 143.299C449.779 147.743 451.374 151.169 454.466 154.056C463.48 162.471 472.563 170.811 481.609 179.191C484.862 182.205 488.304 183.218 492.98 182.402C515.57 178.465 538.225 174.89 560.884 171.362C567.41 170.346 572.544 173.409 576.647 178.233C586.472 189.784 596.202 201.416 606.005 212.985C616.132 224.937 626.314 236.84 636.438 248.794C639.02 251.842 641.593 254.906 643.257 258.612C646.439 265.702 645.044 270.236 638.262 274.08C615.36 287.059 592.436 299.998 569.522 312.954C547.767 325.253 526.043 337.608 504.24 349.82C498.068 353.277 495.127 357.986 495.688 365.283C496.441 375.071 495.942 384.913 496.563 394.743C496.93 400.539 499.011 404.439 503.554 407.65C527.365 424.474 551.113 441.387 574.887 458.263C597.846 474.561 620.816 490.845 643.764 507.158C645.661 508.507 647.547 509.912 649.242 511.499C655.272 517.147 654.132 523.891 646.311 526.571C637.351 529.642 628.127 531.938 619.067 534.728C597.284 541.436 575.23 547.279 553.913 555.481C548.681 557.495 545.345 560.646 543.286 565.837C534.202 588.745 524.987 611.603 515.641 634.407C513.77 638.972 513.064 645.246 506.457 645.534C500.012 645.815 497.568 640.127 495.096 635.6C481.685 611.038 468.57 586.313 455.295 561.676C447.473 547.158 439.623 532.657 431.166 518.489C427.905 513.027 423.441 510.603 417.186 510.684C407.022 510.817 396.853 510.679 386.687 510.73C377.937 510.774 375.149 513.608 374.587 522.253C373.234 543.068 374.083 563.902 374.025 584.725C374.005 591.901 371.502 597.162 365.693 601.262C355.077 608.755 344.719 616.615 334.044 624.019C328.399 627.934 325.184 633.173 322.866 639.464C309.341 676.17 298.047 713.658 283.909 750.151C279.558 761.38 276.158 762.686 265.946 755.831C262.902 753.787 259.906 751.674 256.597 749.381Z" fill="currentColor"/></svg>
+      <span>SpiderOS</span>
+    </div>
+    <span class="header-subtitle">Mega Livrable Strategique &mdash; Fevrier 2026</span>
+  </div>
+  <nav class="tab-nav" role="tablist">
+    <button class="tab-btn active" data-tab="monde" role="tab" aria-selected="true">Le Monde</button>
+    <button class="tab-btn" data-tab="palantir" role="tab">Palantir</button>
+    <button class="tab-btn" data-tab="spider" role="tab">Spider</button>
+    <button class="tab-btn" data-tab="challenge" role="tab">Le Challenge</button>
+    <button class="tab-btn" data-tab="marche" role="tab">Le Marche</button>
+    <button class="tab-btn" data-tab="plan" role="tab">Le Plan</button>
+  </nav>
+</header>
+
+<!-- ================================================================ -->
+<!-- TAB 1 : LE MONDE                                                  -->
+<!-- ================================================================ -->
+<div class="tab-content active" id="tab-monde">
+
+  <div class="accent-line"></div>
+  <h1>Section 1 &mdash; Le Monde</h1>
+  <p class="section-intro">Ou en est l'IA et ou va le marche B2B. Fevrier 2026 : la technologie est extraordinairement capable ET fondamentalement non fiable en meme temps.</p>
+
+  <!-- 1.1 -->
+  <h2>1.1 L'etat des lieux de l'IA en fevrier 2026</h2>
+
+  <h3>Ce que l'IA sait faire <span class="tag tag-proven">PROVEN</span></h3>
+  <p>Les modeles frontier de fevrier 2026 (Claude Opus 4.5, GPT-5.2, Gemini 3 Pro) sont des systemes multimodaux capables de traiter texte, images, video, voix et donnees structurees dans un meme flux. Le rapport intelligence-par-dollar a double tous les quelques mois depuis 2023. Ce qui coutait 100$ en 2023 en coute 5$ aujourd'hui.</p>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-value">80.9%</div><div class="kpi-label">Claude Opus 4.5 sur SWE-bench</div></div>
+    <div class="kpi"><div class="kpi-value">100%</div><div class="kpi-label">GPT-5.2 sur AIME 2025</div></div>
+    <div class="kpi"><div class="kpi-value">1M</div><div class="kpi-label">Tokens de contexte (Gemini 3)</div></div>
+    <div class="kpi"><div class="kpi-value">62%</div><div class="kpi-label">Orgs. utilisant des agents IA</div></div>
+  </div>
+
+  <p>Le shift definitoire de 2026 : l'IA agentique &mdash; des systemes capables d'executer des taches multi-etapes avec supervision minimale. L'assistant IA de Klarna a gere 2.3 millions de conversations en un mois &mdash; l'equivalent de 700 agents humains &mdash; avec un temps de resolution passe de 11 a 2 minutes et +40M$ de profit annuel projete.</p>
+
+  <h3>Ce que l'IA ne sait PAS faire <span class="tag tag-proven">PROVEN</span></h3>
+
+  <div class="card-grid">
+    <div class="card">
+      <h4>Fiabilite des taches longues</h4>
+      <p>Sur des taches depassant 2 heures, meme les meilleurs systemes n'atteignent que <strong>50% de succes</strong>. Pour 80% de reussite, il faut limiter les taches a 25 minutes.</p>
+      <p style="font-size:0.78rem;color:var(--text-secondary)">Source : METR benchmarks</p>
+    </div>
+    <div class="card">
+      <h4>Hallucinations en production</h4>
+      <p><strong>38%</strong> des leaders produit IA classent les hallucinations parmi leurs 3 premiers defis. Dans les domaines specialises, les taux montent a 60-80%.</p>
+      <p style="font-size:0.78rem;color:var(--text-secondary)">Source : Deloitte 2026</p>
+    </div>
+    <div class="card">
+      <h4>Le gouffre pilot-production</h4>
+      <p>Seulement <strong>8.6%</strong> des entreprises ont des agents deployes en production. 50% des projets agentiques restent bloques au stade pilote.</p>
+      <p style="font-size:0.78rem;color:var(--text-secondary)">Source : Deloitte, Gartner</p>
+    </div>
+    <div class="card">
+      <h4>Utilisation informatique generale</h4>
+      <p>La ou les experts humains atteignent <strong>90%+</strong> de succes, les agents de pointe plafonnent sous les <strong>20%</strong>.</p>
+    </div>
+  </div>
+
+  <blockquote>Le paradoxe de fevrier 2026 : la technologie est extraordinairement capable ET fondamentalement non fiable en meme temps. Les demos sont epoustouflantes. La production est un champ de mines.</blockquote>
+
+  <h3>Ce que ca veut dire pour les PME francaises <span class="tag tag-plausible">PLAUSIBLE</span></h3>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-value">89%</div><div class="kpi-label">PME FR veulent l'IA</div></div>
+    <div class="kpi"><div class="kpi-value">10%</div><div class="kpi-label">L'utilisent reellement</div></div>
+    <div class="kpi"><div class="kpi-value">79 pts</div><div class="kpi-label">Gap intention / adoption</div></div>
+    <div class="kpi"><div class="kpi-value">25%</div><div class="kpi-label">PME sans budget digital</div></div>
+  </div>
+
+  <p>Ce gap de 79 points entre intention et adoption est enorme. Et il revele un probleme structurel : ce n'est pas un probleme de prix, de technologie, ou d'envie. C'est un probleme d'<strong>implementation</strong>. C'est PRECISEMENT dans ce fosse que Spider doit se positionner.</p>
+
+  <p>Le MIT (Project NANDA, 2025) confirme : <strong>95% des organisations ne voient aucun retour mesurable de leurs projets IA generative</strong>. 42% ont abandonne la plupart de leurs initiatives en 2025.</p>
+
+  <h3>Ce qui se passe CONCRETEMENT dans les back-offices en 2026 <span class="tag tag-proven">PROVEN</span></h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Domaine</th><th>Impact constate</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Finance</strong></td><td>38% d'amelioration de productivite, 40% de reduction des couts (Deloitte). 87% des CFOs considerent l'IA comme priorite.</td></tr>
+        <tr><td><strong>Service client</strong></td><td>Klarna : -700 agents humains. Mais modele hybride s'impose &mdash; Klarna a reembauche apres limites du 100% IA.</td></tr>
+        <tr><td><strong>Operations</strong></td><td>20-30% de cycles de workflow plus rapides. 60% des requetes Tier 1-2 automatisees.</td></tr>
+        <tr><td><strong>Dev logiciel</strong></td><td>+320% YoY en IA coding. 41% du code genere par IA en 2025. Un quart des startups YC W25 quasi-entierement generees par IA.</td></tr>
+        <tr><td><strong>Spider se situe au...</strong></td><td><strong>#3 &mdash; travail clerical et administratif des PME.</strong> Segment le plus mur pour l'automatisation et le moins bien servi.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- 1.2 -->
+  <h2>1.2 Le precedent historique</h2>
+
+  <h3>Ce n'est PAS l'internet. C'est l'electricite. <span class="tag tag-plausible">PLAUSIBLE</span></h3>
+  <p>L'internet a ete une revolution de la <strong>distribution</strong>. L'IA est une revolution de la <strong>production</strong>. L'analogie correcte est l'electricite : les usines qui ont simplement branche un moteur electrique sur leur ancien systeme a vapeur n'ont rien gagne. Celles qui ont repense leur architecture de production ont transforme leur industrie.</p>
+
+  <blockquote><strong>Implication directe pour Spider :</strong> chaque deployment Spider est une redesign d'un processus PME, pas un ajout d'IA sur un process existant.</blockquote>
+
+  <h3>Le framework de Carlota Perez <span class="tag tag-plausible">PLAUSIBLE</span></h3>
+  <p>Fevrier 2026 = fin de la frenesie, approche du point de bascule.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Revolution</th><th>Irruption</th><th>Frenesie</th><th>Crash</th><th>Age d'or</th></tr></thead>
+      <tbody>
+        <tr><td>Chemins de fer</td><td>1771</td><td>1780-1797</td><td>1797</td><td>1798-1829</td></tr>
+        <tr><td>Electricite</td><td>1875</td><td>1884-1893</td><td>1893</td><td>1895-1918</td></tr>
+        <tr><td>Production de masse</td><td>1908</td><td>1920-1929</td><td>1929</td><td>1943-1974</td></tr>
+        <tr><td>Internet/Telecoms</td><td>1971</td><td>1987-2000</td><td>2000</td><td>2003-??</td></tr>
+        <tr><td style="font-weight:600">IA / Intelligence</td><td style="font-weight:600">2022</td><td style="font-weight:600">2023-2026?</td><td style="font-weight:600">202X?</td><td style="font-weight:600">202X-20XX</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Les signaux de frenesie : les 5 plus grands hyperscalers vont depenser <strong>660-690 milliards de dollars</strong> en capex en 2026. Anthropic vaut 380 milliards avec 14 milliards de revenu. xAI + SpaceX : fusion a 1 250 milliards. Les investissements IA approchent 1.2% du PIB &mdash; exactement le niveau du pic dot-com.</p>
+
+  <blockquote><strong>Spider n'a pas besoin de gagner la frenesie. Spider doit survivre la correction et etre positionne pour l'age d'or.</strong> La question n'est pas "sommes-nous assez innovants ?" C'est "avons-nous un vrai business ?"</blockquote>
+
+  <hr>
+
+  <!-- 1.3 -->
+  <h2>1.3 La restructuration du marche B2B</h2>
+
+  <h3>Le SaaSpocalypse <span class="tag tag-proven">PROVEN</span></h3>
+  <p>Le 3 fevrier 2026, Anthropic lance Claude Cowork &mdash; pres de <strong>2 000 milliards de dollars</strong> effaces en 6 semaines. Le modele du SaaS &mdash; facturer par utilisateur humain &mdash; s'effondre quand les utilisateurs ne sont plus humains.</p>
+
+  <h3>Trois mouvements simultanees</h3>
+  <div class="card-grid">
+    <div class="card">
+      <h4>1. Les foundation models descendent</h4>
+      <p>OpenAI lance Frontier le 5 fevrier 2026 &mdash; une plateforme d'orchestration d'agents pour l'entreprise. Anthropic fait la meme chose avec Cowork. <span class="tag tag-proven">PROVEN</span></p>
+    </div>
+    <div class="card">
+      <h4>2. Les prix changent de nature</h4>
+      <p>Le pricing par siege passe de 21% a 15%. Les modeles hybrides explosent de 27% a 41%. Gartner : 40% du SaaS enterprise avec pricing outcome-based d'ici fin 2026. <span class="tag tag-proven">PROVEN</span></p>
+    </div>
+    <div class="card">
+      <h4>3. L'ERP devient un backend</h4>
+      <p>SAP annonce un serveur MCP pour SAP Commerce Cloud. L'ERP ne sert plus d'interface humaine, il sert de bus de donnees pour les agents. <span class="tag tag-plausible">PLAUSIBLE</span></p>
+    </div>
+  </div>
+
+  <p><strong>Spider est la couche semantique + orchestration pour les PME.</strong> Pas un concurrent d'Odoo. Un complement intelligent au-dessus d'Odoo. <span class="tag tag-plausible">PLAUSIBLE</span></p>
+
+  <h3>Les chiffres qui comptent</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Metrique</th><th>Valeur</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Capitalisation SaaS effacee (6 sem.)</td><td><strong>~2 000 Mds $</strong></td><td>Wall Street, fev 2026</td></tr>
+        <tr><td>Salesforce AgentForce ARR</td><td>540M $, +330%</td><td>Salesforce Q4</td></tr>
+        <tr><td>Entreprises avec agents IA en prod</td><td>8.6%</td><td>Deloitte 2026</td></tr>
+        <tr><td>Marche IA agentique projete 2030</td><td>35-45 Mds $</td><td>Deloitte</td></tr>
+        <tr><td>Batch YC S25 classe AI-native</td><td>88% (141/160)</td><td>YC data</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- 1.4 -->
+  <h2>1.4 Concentration vs Fragmentation <span class="tag tag-plausible">PLAUSIBLE</span></h2>
+  <p>La couche fondation se concentre (5 acteurs dominent, 80 Mds $ de financement). La couche application se fragmente (le Far West). <strong>Les deux mouvements aident Spider</strong> : la commoditisation des modeles reduit les barrieres d'entree, et la fragmentation cree des opportunites pour les specialistes.</p>
+
+  <blockquote><strong>Le vrai concurrent de Spider, dans 18 mois, ce n'est ni Salesforce ni Dust &mdash; c'est l'integrateur Odoo qui fait un pivot IA.</strong> <span class="tag tag-speculative">SPECULATIVE</span></blockquote>
+
+  <hr>
+
+  <!-- 1.5 -->
+  <h2>1.5 La fenetre</h2>
+  <p>Nathan dit 24 mois. Le consensus marche dit 12-18 mois. Les deux ont raison, mais pas sur le meme objet.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Porte</th><th>Timing</th><th>Ce qui se ferme</th></tr></thead>
+      <tbody>
+        <tr><td>P1 : First-mover PME FR</td><td>Maintenant - Dec 2026</td><td>Premiere reference credible</td></tr>
+        <tr><td>P2 : Ontologie verticale</td><td>2026-2027</td><td>Donnees captives suffisantes pour un moat</td></tr>
+        <tr><td>P3 : Categorie</td><td>2027-2028</td><td>"Managed AI Operations" a un nom et un leader</td></tr>
+        <tr><td>P4 : Reseau</td><td>2028+</td><td>L'effet Mycelium (si 1000+ clients)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Les 3 lecons des revolutions passees</h3>
+  <ol>
+    <li><strong>Syndrome Segway :</strong> construire sur une base instable (99.9% de fiabilite requise, 92% offerte). Spider doit etre hybride &mdash; humain dans la boucle.</li>
+    <li><strong>Syndrome Pets.com :</strong> ignorer le business model. 99% des startups IA mourront. Revenu reel, unit economics positifs.</li>
+    <li><strong>Syndrome Nokia :</strong> se battre sur les features au lieu des resultats. Spider ne doit pas construire "un meilleur CRM." Il doit automatiser la fonction back-office.</li>
+  </ol>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- TAB 2 : PALANTIR                                                  -->
+<!-- ================================================================ -->
+<div class="tab-content" id="tab-palantir">
+
+  <div class="accent-line"></div>
+  <h1>Section 2 &mdash; Palantir</h1>
+  <p class="section-intro">Ce qu'il faut retenir. Les 5 lecons concretes que Spider doit appliquer, et ce qu'il ne doit surtout PAS copier.</p>
+
+  <h2>2.1 Le modele en 60 secondes</h2>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-value">56x</div><div class="kpi-label">Expansion ($100K &rarr; $5.6M)</div></div>
+    <div class="kpi"><div class="kpi-value">139%</div><div class="kpi-label">Net Dollar Retention</div></div>
+    <div class="kpi"><div class="kpi-value">84%</div><div class="kpi-label">Marge brute GAAP</div></div>
+    <div class="kpi"><div class="kpi-value">$4.5B</div><div class="kpi-label">Revenue FY2025 (+56%)</div></div>
+  </div>
+
+  <h3>La machine <span class="tag tag-proven">PROVEN</span></h3>
+  <div class="card-grid">
+    <div class="card">
+      <h4>Bootcamp (gratuit, 5 jours)</h4>
+      <p>3-5 personnes deployees chez le prospect. Jour 2 : prototype fonctionnel. Jour 3 : le moment magique. Jour 5 : ROI chiffre au COMEX. Cout : 12-36K$. Taux de conversion : 22% en 90 jours.</p>
+    </div>
+    <div class="card">
+      <h4>Pilot (90 jours, -43% de marge)</h4>
+      <p>Le client paie 100-500K$. 4-5 FDE deployes. 10-30 interviews ethnographiques. Construction de l'ontologie. 3-10 applications livrees. Investissement deliberement a perte.</p>
+    </div>
+    <div class="card">
+      <h4>Expand (12-36 mois)</h4>
+      <p>L'ontologie passe de 5-20 objets a 100-500+. Le client passe de 100K-500K$ a 1-5M$. Les FDE commencent a se retirer. Marge : -43% a +35%.</p>
+    </div>
+    <div class="card">
+      <h4>Scale (3+ ans)</h4>
+      <p>0-1 FDE par client. ACV : 5-20M$+. Les top 20 clients paient en moyenne 94M$+/an. Marge : +55%+.</p>
+    </div>
+  </div>
+
+  <h3>Le FDE &mdash; pas un consultant, un hybride <span class="tag tag-proven">PROVEN</span></h3>
+  <p>Un "startup CTO embedded dans l'organisation de quelqu'un d'autre." Ce qu'il produit : du working software sur des donnees reelles. Pas des recommandations. Du code qui tourne. Si ca ne peut pas etre demontre en live, ca n'existe pas.</p>
+
+  <blockquote><strong>Traduction Spider :</strong> le FDC/FDE Spider doit arriver chez le client, se connecter aux donnees, et livrer un systeme fonctionnel en quelques jours. Pas un rapport. Un systeme qui tourne.</blockquote>
+
+  <hr>
+
+  <h2>2.2 Les 5 lecons pour Spider</h2>
+
+  <h3>Lecon 1 : Investir a perte pour prouver la valeur <span class="tag tag-proven">PROVEN</span></h3>
+  <p>Le Diagnostic Eclair doit etre gratuit ou quasi-gratuit (cout 500-2 000 EUR). L'objectif : creer un "moment magique" ou le dirigeant voit ses propres donnees reveler un probleme qu'il ignorait.</p>
+  <p><strong>Le moment magique pour Jordan :</strong> "39.3% de vos factures sont impayees. Voici les 285 lignes concernees."</p>
+
+  <h3>Lecon 2 : Capturer la data PENDANT qu'on fait le travail <span class="tag tag-proven">PROVEN</span></h3>
+  <p>L'equivalent de l'ontologie Palantir pour Spider : le Claims Engine &mdash; chaque information extraite est un "claim" avec un degre de croyance entre 0 et 1. Quand deux claims se contredisent, Spider leve une alerte &mdash; chaque conflit detecte est une opportunite de consulting.</p>
+
+  <h3>Lecon 3 : Upsell depuis les anomalies detectees <span class="tag tag-proven">PROVEN</span></h3>
+  <p>Le flywheel d'upsell : le client entre a 500 EUR/mois. En operant, Spider detecte les problemes. "39.3% d'impayes" = upsell Agent Relance (190-500 EUR/mois). L'expansion vient du systeme, pas du commercial.</p>
+  <p>Benchmark Palantir : 56x. Spider vise : <strong>4-6x</strong> (500 EUR/mois &rarr; 2-3K EUR/mois) sur 6-12 mois. <span class="tag tag-speculative">SPECULATIVE</span></p>
+
+  <h3>Lecon 4 : Rendre le depart impossible <span class="tag tag-proven">PROVEN</span></h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Couche</th><th>Palantir</th><th>Spider (equivalent PME)</th><th>Switching cost</th></tr></thead>
+      <tbody>
+        <tr><td>Data integration</td><td>15-40 connecteurs</td><td>3-7 connecteurs</td><td>5-15K EUR</td></tr>
+        <tr><td>Ontologie/Claims</td><td>100-1000+ objets</td><td>50-200 claims apres 6 mois</td><td>10-30K EUR</td></tr>
+        <tr><td>Applications/Agents</td><td>10-100+ apps</td><td>3-8 agents configures</td><td>5-20K EUR</td></tr>
+        <tr><td>Connaissance captive</td><td>L'ontologie = la memoire</td><td>Le Claims Engine = le tacite du client</td><td>Inestimable</td></tr>
+        <tr><td>Habitude/Formation</td><td>CoE certifie</td><td>Le dirigeant habitue au "oui, oui, oui"</td><td>Cout psychologique</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Cout de sortie total estime apres 12 mois :</strong> 30-80K EUR, soit 5-13 mois de facturation. <span class="tag tag-speculative">SPECULATIVE</span></p>
+
+  <h3>Lecon 5 : Automatiser pour ameliorer les marges <span class="tag tag-proven">PROVEN</span></h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Phase</th><th>Mix</th><th>Marge brute</th></tr></thead>
+      <tbody>
+        <tr><td>Annee 1-2 (services-led)</td><td>70% consulting / 30% software</td><td>35-45%</td></tr>
+        <tr><td>Annee 3-4 (hybride)</td><td>40% consulting / 60% software</td><td>55-65%</td></tr>
+        <tr><td>Annee 5+ (plateforme)</td><td>15% consulting / 85% software</td><td>70-80%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <h2>2.3 Ce que Spider ne doit PAS prendre de Palantir</h2>
+
+  <div class="card-grid">
+    <div class="card">
+      <h4>17 ans vers la rentabilite</h4>
+      <p>Spider doit prouver le modele en <strong>12-18 mois</strong>. Drakkar finance 100K EUR. Ce n'est pas un handicap &mdash; c'est une discipline. <span class="tag tag-proven">PROVEN</span></p>
+    </div>
+    <div class="card">
+      <h4>$5M+ ACV comme baseline</h4>
+      <p>Spider entre a 6K EUR ACV &mdash; 100-1000x plus petit. Besoin de "FDE lights" a 40-60K EUR/an. <span class="tag tag-plausible">PLAUSIBLE</span></p>
+    </div>
+    <div class="card">
+      <h4>Mentalite gouvernement</h4>
+      <p>Spider doit etre cloud-natif, simple a deployer, zero-friction. Pas de workflow d'approbation a 4 niveaux. <span class="tag tag-plausible">PLAUSIBLE</span></p>
+    </div>
+    <div class="card">
+      <h4>Le talent pool Stanford/MIT</h4>
+      <p>Un FDC Spider c'est un ex-dirigeant PME a 50-70K EUR/an qui comprend le metier parce qu'il l'a vecu. <span class="tag tag-unknown">UNKNOWN</span></p>
+    </div>
+  </div>
+
+  <h3>Tableau de transposition Palantir &rarr; Spider</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Dimension</th><th>Palantir</th><th>Spider</th><th>Ratio</th></tr></thead>
+      <tbody>
+        <tr><td>Client cible</td><td>Enterprise $1B+ revenue</td><td>PME 10-200, 1-30M EUR CA</td><td>100-1000x &darr;</td></tr>
+        <tr><td>ACV entry</td><td>$100K-$500K</td><td>6K-24K EUR/an</td><td>10-50x &darr;</td></tr>
+        <tr><td>Bootcamp equiv.</td><td>5 jours, $12-36K</td><td>Diagnostic 1-2 jours, 500-2K EUR</td><td>10-20x &darr;</td></tr>
+        <tr><td>FDE cost</td><td>$200-350K/an</td><td>40-60K EUR/an</td><td>3-5x &darr;</td></tr>
+        <tr><td>Time to profit</td><td>17 ans</td><td>12-18 mois (objectif)</td><td>10x &darr;</td></tr>
+        <tr><td>Ontologie</td><td>100-1000+ objets</td><td>50-200 claims, templates</td><td>5-10x &darr;</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote>L'analogie Palantir est utile comme structure mentale. Elle est dangereuse si elle devient un substitut a la reflexion propre. Les ratios ne se transferent pas. Les mecanismes, oui.</blockquote>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- TAB 3 : SPIDER                                                    -->
+<!-- ================================================================ -->
+<div class="tab-content" id="tab-spider">
+
+  <div class="accent-line"></div>
+  <h1>Section 3 &mdash; Spider</h1>
+  <p class="section-intro">Ce que c'est, tel qu'exprime par Nathan. Son miroir, pas son echo. Chaque these est taguee avec un niveau de confiance independant.</p>
+
+  <h2>3.1 Les 10 theses &mdash; synthese des verdicts</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>These</th><th>Verdict</th><th>Confiance</th></tr></thead>
+      <tbody>
+        <tr><td>T1</td><td>Le tacite est le dernier tresor</td><td>L'observation tient. Mecanisme a prouver.</td><td><span class="tag tag-plausible">PLAUSIBLE</span></td></tr>
+        <tr><td>T2</td><td>La vente B2B est un mensonge</td><td>Confirmee par Twoghether et France Num.</td><td><span class="tag tag-proven">PROVEN</span></td></tr>
+        <tr><td>T3</td><td>Les US ont impose leurs regles</td><td>Culturellement juste. Surestime la protection.</td><td><span class="tag tag-plausible">PLAUSIBLE</span></td></tr>
+        <tr><td>T4</td><td>La couronne, pas le fardeau</td><td>Confirmee par Decotec et 3 profils documentes.</td><td><span class="tag tag-proven">PROVEN</span></td></tr>
+        <tr><td>T5</td><td>Le ratio est catastrophique</td><td>Correct en description. Ratio inverse a prouver.</td><td><span class="tag tag-plausible">PLAUSIBLE</span></td></tr>
+        <tr><td>T6</td><td>L'IA rend possible</td><td>Vrai en theorie. 50% de succes en pratique sur taches longues.</td><td><span class="tag tag-plausible">PLAUSIBLE</span></td></tr>
+        <tr><td>T7</td><td>Triple convergence, 24 mois</td><td>Reelle mais l'urgence est exageree pour la France.</td><td><span class="tag tag-plausible">PLAUSIBLE</span></td></tr>
+        <tr><td>T8</td><td>Le code est mort</td><td><strong>La these la plus solide.</strong> Validee par le marche et les donnees.</td><td><span class="tag tag-proven">PROVEN</span></td></tr>
+        <tr><td>T9</td><td>Le Shogunat Digital</td><td>Memorable mais mecanisme de transition absent.</td><td><span class="tag tag-speculative">SPECULATIVE</span></td></tr>
+        <tr><td>T10</td><td>Toile, Data, Mycelium, Pouvoir</td><td>Phase 1 plausible. Phase 2-3 a 5-10 ans min.</td><td><span class="tag tag-speculative">SPECULATIVE</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>Score global :</strong> 2 theses prouvees (T2, T4), 1 tres forte (T8), 4 plausibles (T1, T3, T5, T6), 1 avec reserve (T7), 2 speculatives (T9, T10). Ratio raisonnable pour un projet pre-revenue.</p>
+
+  <hr>
+
+  <h2>3.2 Le modele Service-as-Software</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Dimension</th><th>SaaS classique</th><th>Consulting</th><th>Spider (SaS)</th></tr></thead>
+      <tbody>
+        <tr><td>Ce qui est vendu</td><td>Un outil</td><td>Des heures</td><td><strong>Un resultat</strong></td></tr>
+        <tr><td>Qui fait le travail</td><td>Le client</td><td>Le consultant</td><td>Le logiciel (+ supervision)</td></tr>
+        <tr><td>Marge brute</td><td>75-85%</td><td>20-35%</td><td>35-45% (Y1) &rarr; 70-80% (Y5+)</td></tr>
+        <tr><td>Multiple de valorisation</td><td>10-20x revenue</td><td>1-3x revenue</td><td>Depend du ratio humain/IA</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote><strong>Le test critique :</strong> est-ce que le temps humain par client diminue au fil du temps ? Si oui, Spider vaut 10-20x. Si non, Spider vaut 1-3x.</blockquote>
+
+  <hr>
+
+  <h2>3.3 L'equipe et le deal</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Personne</th><th>Age</th><th>% Spider</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Nathan Menard</strong></td><td>26</td><td>51%</td><td>CEO &mdash; vision, produit, sales</td></tr>
+        <tr><td><strong>Jean Le Tulzo</strong></td><td>38</td><td>20%</td><td>CFO &mdash; structuration offre, ops, front client</td></tr>
+        <tr><td><strong>Remy Menard</strong></td><td>23</td><td>14%</td><td>CTO &mdash; construit la tech</td></tr>
+        <tr><td><strong>Thierry Menard</strong></td><td>53</td><td>10%</td><td>Lead FDC &mdash; credibilite industrielle</td></tr>
+        <tr><td>Drakkar Group</td><td>&mdash;</td><td>5%</td><td>Financement (regime mere-fille)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Un fondateur de 26 ans qui passe de 70% a 51% avant le premier euro de revenu &mdash; c'est du Thiel-level thinking. 51% d'un empire vaut plus que 70% d'un side project. <span class="tag tag-proven">PROVEN</span></p>
+
+  <hr>
+
+  <h2>3.4 Le cas Jordan / ComPrivee <span class="tag tag-proven">PROVEN</span></h2>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-value">1.15M</div><div class="kpi-label">CA 2025 (EUR)</div></div>
+    <div class="kpi"><div class="kpi-value">27.2%</div><div class="kpi-label">Marge moyenne</div></div>
+    <div class="kpi"><div class="kpi-value">726</div><div class="kpi-label">Campagnes suivies</div></div>
+    <div class="kpi"><div class="kpi-value">39.3%</div><div class="kpi-label">Factures impayees</div></div>
+  </div>
+
+  <p><strong>Le probleme central :</strong> la triple saisie. Chaque campagne est saisie 3 fois dans 3 outils deconnectes (Google Sheets, Notion, Pennylane). 726 lignes x 3 saisies = des centaines d'heures evitables.</p>
+  <p><strong>Opportunite upsell :</strong> 285 factures impayees representant ~449K EUR de CA en retard. Un Agent Relance qui recupere 10% = ~45K EUR recuperes.</p>
+
+  <h3>Lecons des autres cas</h3>
+  <ul>
+    <li><strong>Decotec</strong> <span class="tag tag-proven">PROVEN</span> &mdash; 155 salaries, 3 ans de consulting Drakkar, zero changement. Prouve T4 (la couronne, pas le fardeau). Le dirigeant qui ne decide pas est le cas modal.</li>
+    <li><strong>Twoghether</strong> <span class="tag tag-proven">PROVEN</span> &mdash; Deal perdu face a The Tribe (70+ personnes). Prouve T2 (la vente B2B est un mensonge). "C'est une histoire de feeling."</li>
+  </ul>
+
+  <hr>
+
+  <h2>3.5 Evaluation honnete des forces et faiblesses</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Dimension</th><th>Score</th><th>Commentaire</th></tr></thead>
+      <tbody>
+        <tr><td>Vision strategique</td><td><strong>5/5</strong></td><td>These structurellement solide et bien articulee</td></tr>
+        <tr><td>Timing marche</td><td><strong>4/5</strong></td><td>Le fosse pilot-production est reel, la fenetre est ouverte</td></tr>
+        <tr><td>Alignement equipe</td><td><strong>4/5</strong></td><td>Le deal d'equity est intelligent</td></tr>
+        <tr><td>Connaissance metier PME</td><td>3/5</td><td>Drakkar donne une base, pas de validation systematique</td></tr>
+        <tr><td>Tech readiness</td><td>2/5</td><td>Architecture pensee mais 80% a construire</td></tr>
+        <tr><td>Preuve de marche</td><td>1/5</td><td>Zero client, zero revenu, zero validation prix</td></tr>
+        <tr><td>Canal d'acquisition</td><td>2/5</td><td>Reseau Drakkar + bouche-a-oreille</td></tr>
+        <tr><td>Defensibilite moat</td><td>1/5</td><td>Rien construit encore, tout theorique</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Score global : 27/50.</strong> Les forces sont strategiques (vision, timing, equipe). Les faiblesses sont operationnelles (preuve, moat). L'execution est tout.</p>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- TAB 4 : LE CHALLENGE                                              -->
+<!-- ================================================================ -->
+<div class="tab-content" id="tab-challenge">
+
+  <div class="accent-line"></div>
+  <h1>Section 4 &mdash; Le Challenge</h1>
+  <p class="section-intro">La section la plus importante du livrable. Chaque affirmation est passee a la meule. Ce qui tient, tient. Ce qui ne tient pas est dit.</p>
+
+  <h2>4.1 Les 5 Pourquoi sur chaque these majeure</h2>
+
+  <h3>T1 : Le tacite est le dernier tresor</h3>
+  <p><strong>Cause racine :</strong> Le tacite europeen est culturellement invisible pour les builders tech parce qu'il est, par nature, ce qui ne s'ecrit pas. Le LLM est le premier outil capable de le capturer par observation passive. MAIS : cela suppose que la capture passive fonctionne en contexte PME (non prouve) et que la valeur capturee est perceptible par le dirigeant (non prouve).</p>
+  <blockquote><strong>Implication GTM :</strong> Spider ne peut pas vendre "on capture votre tacite." Spider doit vendre un benefice tangible (gain de temps, argent recupere) et capturer le tacite en sous-produit. Le pitch "dernier tresor" est un narratif investisseur, pas un pitch client.</blockquote>
+
+  <h3>T8 : Le code est mort, le service est le produit</h3>
+  <p><strong>Cause racine :</strong> Le Service-as-Software fonctionne SI ET SEULEMENT SI l'IA reduit reellement le cout marginal par client dans le temps. Bench a echoue parce que les humains restaient necessaires et que le cout ne baissait pas.</p>
+  <blockquote><strong>Kill criteria H6 :</strong> si les heures-humaines par client ne baissent pas apres 6 mois, pivoter. Spider est Bench avec un meilleur marketing.</blockquote>
+
+  <h3>T9 : Le Shogunat Digital</h3>
+  <p><strong>Cause racine :</strong> T9 est une metaphore puissante pour le pitch investisseur. Ce n'est pas un mecanisme operationnel. Le passage de "assistant utile" a "shogun qui gouverne" suppose (a) une IA quasi-infaillible, (b) un dirigeant passif, (c) un cout de sortie suffisant. Les trois sont non prouves.</p>
+  <blockquote><strong>Implication GTM :</strong> Ne JAMAIS utiliser la metaphore du Shogunat devant un client PME. Le dirigeant veut un assistant fiable, pas un shogun. Vendre la tranquillite, pas le pouvoir.</blockquote>
+
+  <hr>
+
+  <h2>4.2 Hamilton Helmer &mdash; 7 Powers applique rigoureusement</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Power</th><th>Statut</th><th>Implication Spider</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Scale Economies</strong></td><td><span class="tag tag-speculative">SPECULATIVE</span></td><td>Depend du transfert d'ontologie entre clients. A mesurer des le client 2.</td></tr>
+        <tr><td><strong>Network Effects</strong></td><td><span class="tag tag-speculative">SPECULATIVE</span></td><td>Mycelium = 1000+ clients + consentement RGPD. Ne pas planifier avant 2028.</td></tr>
+        <tr><td><strong>Counter-Positioning</strong></td><td><span class="tag tag-plausible">PLAUSIBLE</span></td><td>Reel face aux grands (Salesforce, Accenture). Faible face aux freelances.</td></tr>
+        <tr><td><strong>Switching Costs</strong></td><td><span class="tag tag-plausible">PLAUSIBLE</span> (faible au debut)</td><td>6 premiers mois a haut risque de churn. Contrat annuel necessaire.</td></tr>
+        <tr><td><strong>Branding</strong></td><td><span class="verdict verdict-kill">ABSENT</span></td><td>Spider n'existe pas comme marque. "Spider" evoque la surveillance &mdash; tester.</td></tr>
+        <tr><td><strong>Cornered Resource</strong></td><td><span class="verdict verdict-kill">ABSENT</span></td><td>Les donnees appartiennent aux clients (RGPD). Reseau Drakkar transitoire.</td></tr>
+        <tr><td><strong>Process Power</strong></td><td><span class="tag tag-plausible">PLAUSIBLE</span> &mdash; le plus prometteur</td><td>Investir massivement dans le Diagnostic Eclair. C'est le Power le plus accessible.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>Verdict :</strong> 2 Powers reels a court terme (Counter-Positioning + Process Power), 2 plausibles a moyen terme (Scale Economies + Switching Costs), 3 absents. Suffisant pour un business viable. Le monopole depend d'hypotheses non prouvees.</p>
+
+  <hr>
+
+  <h2>4.3 Counter-positioning &mdash; formalise</h2>
+
+  <div class="card-grid">
+    <div class="card">
+      <h4>vs Salesforce</h4>
+      <p>Le cycle de vente Salesforce coute $50-100K par deal. A 6K EUR/an, le CAC depasse le LTV.</p>
+      <div class="counter-pos"><div class="counter-bar forte"></div><span class="counter-label" style="color:#16a34a">Force : FORTE</span></div>
+    </div>
+    <div class="card">
+      <h4>vs Accenture / ESN</h4>
+      <p>Plancher de cout structurel. Un consultant a $2-5K/jour ne peut pas servir une PME a 500 EUR/mois.</p>
+      <div class="counter-pos"><div class="counter-bar forte"></div><span class="counter-label" style="color:#16a34a">Force : TRES FORTE</span></div>
+    </div>
+    <div class="card">
+      <h4>vs Odoo</h4>
+      <p>Odoo ne voit que les donnees DANS Odoo. Spider voit les emails, les appels, les fichiers Excel, les tetes des gens. Mais un integrateur pourrait coupler Odoo + Dust + service.</p>
+      <div class="counter-pos"><div class="counter-bar moderee"></div><span class="counter-label" style="color:#f59e0b">Force : MODEREE</span></div>
+    </div>
+    <div class="card">
+      <h4>vs Dust.tt</h4>
+      <p>Dust monte en gamme (ICP tech enterprises). Mais le risque est que Dust capture le NARRATIF "AI agent platform" et que Spider soit invisible.</p>
+      <div class="counter-pos"><div class="counter-bar moderee"></div><span class="counter-label" style="color:#f59e0b">Force : MODEREE</span></div>
+    </div>
+    <div class="card">
+      <h4>vs Pennylane</h4>
+      <p>800K clients FR, 6000 cabinets comptables. Pourrait ajouter un "dashboard operationnel." Controle le canal comptable.</p>
+      <div class="counter-pos"><div class="counter-bar faible"></div><span class="counter-label" style="color:#ef4444">Force : FAIBLE</span></div>
+    </div>
+    <div class="card">
+      <h4>vs Freelance + Claude + Zapier</h4>
+      <p>Le vrai danger. Pas de structure de cout a amortir, customisation en temps reel, cout inferieur. <strong>Au jour 1, le freelance bat Spider.</strong></p>
+      <div class="counter-pos"><div class="counter-bar faible"></div><span class="counter-label" style="color:#ef4444">Force : TRES FAIBLE au debut</span></div>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>4.4 Echecs passes &mdash; qui a essaye et echoue</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Pattern d'echec</th><th>Qui</th><th>Spider vulnerable ?</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td>Unit economics negatives qui s'aggravent</td><td>Bench ($135M)</td><td><span class="verdict verdict-kill">OUI</span></td><td>Tracker H6 des le jour 1</td></tr>
+        <tr><td>Faux AI (humains deguises)</td><td>ScaleFactor ($104M)</td><td><span class="verdict verdict-warn">POSSIBLE</span></td><td>Transparence totale</td></tr>
+        <tr><td>Enterprise DNA inadaptee</td><td>IBM Watson ($4B)</td><td><span class="verdict verdict-go">NON</span></td><td>Spider construit pour PME</td></tr>
+        <tr><td>Capture tacite par demande volontaire</td><td>Jive ($1.7B &rarr; $462M)</td><td><span class="verdict verdict-go">NON</span></td><td>Capture passive (bon design)</td></tr>
+        <tr><td>Scaling premature</td><td>Olive AI ($850M)</td><td><span class="verdict verdict-warn">POSSIBLE</span></td><td>Focus Phase 1. Gate system.</td></tr>
+        <tr><td>Anti-growth churn</td><td>Bench</td><td><span class="verdict verdict-warn">A SURVEILLER</span></td><td>Upsell multi-processus</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <h2>4.5 Le break test des theses</h2>
+
+  <p><strong>Theses qui tiennent :</strong> T2 (vente B2B = confiance), T4 (couronne pas fardeau), T5 (ratio catastrophique), T6 (IA rend possible), T8 (service-as-software).</p>
+  <p><strong>A affiner :</strong> T1 (tacite), T3 (regles US), T7 (timing).</p>
+  <p><strong>Ne tiennent pas en l'etat :</strong> T9 (Shogunat &mdash; metaphore sans mecanisme), T10 (Phases 2-3 speculatives).</p>
+
+  <blockquote><strong>Le paradoxe du fondateur :</strong> Nathan a raison sur le QUOI (le probleme existe, le moment est bon, la tech est prete). Ses theses les plus faibles sont sur le COMMENT (T9, T10). Le travail strategique est de transformer les QUOI en HOW concrets et testables.</blockquote>
+
+  <hr>
+
+  <h2>4.6 Challenges par gravite</h2>
+
+  <h3 style="color:#991b1b">FATAL &mdash; Si vrai, Spider s'arrete</h3>
+  <ul>
+    <li><strong>F1.</strong> Aucun dirigeant PME ne paie pour des operations gerees. Test : semaine 4.</li>
+    <li><strong>F2.</strong> L'IA ne reduit pas le cout marginal par client. Test : mois 6.</li>
+    <li><strong>F3.</strong> Drakkar s'effondre avant que Spider ne soit viable. Monitoring continu.</li>
+  </ul>
+
+  <h3 style="color:#9a3412">CRITIQUE &mdash; Si vrai, Spider pivote</h3>
+  <ul>
+    <li><strong>C1.</strong> Le transfert d'ontologie entre clients ne fonctionne pas.</li>
+    <li><strong>C2.</strong> Aucun non-ami ne paie dans les 90 jours.</li>
+    <li><strong>C3.</strong> Un integrateur Odoo + LLM copie le modele.</li>
+    <li><strong>C4.</strong> Le race-to-bottom freelance arrive plus vite que prevu.</li>
+  </ul>
+
+  <h3>La question de Thiel</h3>
+  <blockquote>"Qui specifiquement, dans une PME que vous ne connaissez pas, va payer 500 EUR/mois des la premiere conversation, et comment trouvez-vous cette personne demain matin ?"</blockquote>
+
+  <h4>Les 3 personas qui paient le plus vite</h4>
+  <div class="card-grid">
+    <div class="card">
+      <h4>Persona A : Le dirigeant en hemorragie</h4>
+      <p>Son meilleur commercial vient de partir. Il emporte contacts, tacite, deals en cours. Le CRM est vide. <strong>Douleur IMMEDIATE.</strong></p>
+    </div>
+    <div class="card">
+      <h4>Persona B : Le repreneur</h4>
+      <p>Rachete depuis 6-12 mois. Decouvre que tout repose sur 3 personnes qui ont 58 ans. <strong>PEUR concrete.</strong></p>
+    </div>
+    <div class="card">
+      <h4>Persona C : Le noye dans l'admin</h4>
+      <p>15h/semaine sur des taches qu'il deteste. Veut faire ce qu'il aime : les clients. <strong>FRUSTRATION quotidienne.</strong> Jordan est ce profil.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- TAB 5 : LE MARCHE                                                 -->
+<!-- ================================================================ -->
+<div class="tab-content" id="tab-marche">
+
+  <div class="accent-line"></div>
+  <h1>Section 5 &mdash; Le Marche</h1>
+  <p class="section-intro">Cartographie concurrentielle, matrices de positionnement, TAM/SAM/SOM, et le danger du stack "good enough".</p>
+
+  <h2>5.1 Cartographie concurrentielle</h2>
+
+  <h3>Cercle 1 : Concurrents directs</h3>
+  <p><strong>Personne.</strong> Aucun acteur identifie ne fait "AI-native operational intelligence for European PMEs." C'est la bonne et la mauvaise nouvelle. L'absence peut signifier une opportunite enorme ou un marche qui n'existe pas.</p>
+
+  <h3>Cercle 2 : Concurrents adjacents</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Acteur</th><th>Overlap</th><th>Menace 18 mois</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Dust.tt</strong></td><td>Narratif "AI OS for business"</td><td>HAUTE (narratif), BASSE (ICP)</td></tr>
+        <tr><td><strong>Pennylane</strong></td><td>Meme ICP PME FR, canal comptable</td><td>HAUTE (si expansion scope)</td></tr>
+        <tr><td><strong>Odoo</strong></td><td>Substrat de donnees, Odoo 20 agentic AI</td><td>HAUTE (si agents reussissent)</td></tr>
+        <tr><td><strong>n8n</strong></td><td>Workflow automation + AI agents</td><td>MOYENNE</td></tr>
+        <tr><td><strong>Agicap</strong></td><td>Intelligence financiere PME FR</td><td>MOYENNE</td></tr>
+        <tr><td><strong>Lindy.ai</strong></td><td>"AI COO" &mdash; positioning le plus proche</td><td>MOYENNE (si entree EU)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Cercle 3 : Ce que les PME font AUJOURD'HUI</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Alternative</th><th>Cout</th><th>Pitch Spider vs.</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Ne rien faire</strong> (80% des PME)</td><td>0 EUR</td><td>"Le cout : 39% de vos factures impayees"</td></tr>
+        <tr><td>Assistante de direction</td><td>2 500-3 500 EUR/mois</td><td>"Spider = 24/7 pour 500 EUR, ne part jamais"</td></tr>
+        <tr><td>BPO (Officeo, 3h18)</td><td>38-80 EUR/heure</td><td>"Meme travail, 24/7, cout fixe"</td></tr>
+        <tr><td>DAF externalise</td><td>500-2 000 EUR/mois</td><td>"Spider voit vos operations, pas juste vos comptes"</td></tr>
+        <tr><td>Freelance + Claude + Zapier</td><td>200-500 EUR/mois</td><td>"Spider apprend de chaque client" (valide apres 50+ clients)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote><strong>Le vrai adversaire de Spider n'est pas Dust ou Salesforce. C'est l'integrateur Odoo de province qui decouvre Claude demain matin.</strong></blockquote>
+
+  <hr>
+
+  <h2>5.3 Matrices de positionnement</h2>
+
+  <h3>Matrice 1 : Couverture metier x Data-to-Decision</h3>
+  <p>Le quadrant haut-droite (couverture complete + recommandation actionnable) est <strong>vide sauf Spider</strong>. Dust est haut-centre-droit mais pour l'enterprise. Le risque : le quadrant est vide parce que c'est trop dur a executer.</p>
+
+  <h3>Matrice 2 : Prix x Human-in-loop ratio</h3>
+  <p>Spider entre ENTRE les solutions full-automation (Zapier, 0 EUR de service) et full-humain (Officeo, 100% humain). <strong>La trajectoire est de descendre sur l'axe Y</strong> (moins d'humain) tout en restant au meme prix. Si Spider ne descend PAS, il reste une ESN avec de l'IA. C'est le test H6.</p>
+
+  <h3>Matrice 3 : Sophistication tech x Accessibilite PME</h3>
+  <p>Le quadrant AI-native + PME-accessible est le plus vide et le plus dur a executer. Spider resout la tension par le modele managed service : le client ne touche JAMAIS a la couche AI-native.</p>
+
+  <hr>
+
+  <h2>5.4 TAM / SAM / SOM</h2>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-value">150 Mds</div><div class="kpi-label">TAM (vanity metric, EUR)</div></div>
+    <div class="kpi"><div class="kpi-value">360M</div><div class="kpi-label">SAM ~30 000 PME FR (EUR)</div></div>
+    <div class="kpi"><div class="kpi-value">500K</div><div class="kpi-label">SOM 18 mois ~50 clients (EUR)</div></div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Scenario churn</th><th>Churn mensuel</th><th>Clients nets a M18</th><th>Revenue annualise</th></tr></thead>
+      <tbody>
+        <tr><td>Optimiste</td><td>2%</td><td>~72</td><td>~860K EUR</td></tr>
+        <tr><td>Base</td><td>5%</td><td>~50</td><td>~500K EUR</td></tr>
+        <tr><td>Pessimiste</td><td>10%</td><td>~28</td><td>~280K EUR</td></tr>
+        <tr><td style="color:#991b1b">Catastrophe</td><td style="color:#991b1b">15%</td><td style="color:#991b1b">~16</td><td style="color:#991b1b">~160K EUR</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>A 15% de churn mensuel, Spider ne franchit jamais les 20 clients actifs. C'est le scenario Bench. <strong>Le churn est la metrique de survie.</strong></p>
+
+  <hr>
+
+  <h2>5.5 Le vrai risque : le stack "good enough"</h2>
+
+  <p>Un dirigeant pragmatique peut assembler : Pennylane (35-100 EUR) + Agicap (200-500 EUR) + Upflow (300 EUR) + Metabase (gratuit) + Zapier (20-50 EUR) = <strong>600-1 000 EUR/mois pour 70-80% de la valeur Spider.</strong></p>
+
+  <h4>Ce que le stack ne fait PAS :</h4>
+  <ol>
+    <li><strong>Personne n'orchestre l'ensemble.</strong> Chaque outil est un silo.</li>
+    <li><strong>Personne ne voit le non-structure.</strong> Aucun de ces outils ne lit les emails.</li>
+    <li><strong>Personne ne recommande proactivement.</strong> Metabase montre des donnees, ne dit pas quoi faire.</li>
+    <li><strong>Personne n'apprend du contexte.</strong> Zapier connecte mecaniquement, ne comprend pas les relations.</li>
+  </ol>
+
+  <blockquote><strong>Spider ne doit PAS se vendre en remplacement du stack.</strong> Spider se vend en COMPLEMENT : "Gardez Pennylane, gardez Agicap. Spider se branche au-dessus et fait parler vos outils entre eux."</blockquote>
+
+  <p><strong>Scenario ou le stack gagne definitivement :</strong> si les APIs deviennent assez ouvertes (MCP natif partout en 2027), un Claude Desktop connecte a tous les outils fait 90% de Spider. <strong>Le seul antidote :</strong> prouver que la vision integree GENERE de l'argent que le stack deconnecte ne peut pas generer.</p>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- TAB 6 : LE PLAN                                                   -->
+<!-- ================================================================ -->
+<div class="tab-content" id="tab-plan">
+
+  <div class="accent-line"></div>
+  <h1>Section 6-7 &mdash; Le Plan</h1>
+  <p class="section-intro">Ma proposition strategique. Pas un document de consultation. Une decision. Chaque recommandation est adossee a un chiffre reel.</p>
+
+  <!-- 6.1 -->
+  <h2>6.1 Business Model &mdash; 490 EUR/mois</h2>
+
+  <h3>Pourquoi 490 et pas 500</h3>
+  <p>En dessous de 500 EUR/mois, le CEO signe seul dans <strong>95% des cas</strong> pour les PME de 10-30 salaries. A 490 EUR, on est en dessous. Le cycle passe de "1-3 mois avec consultation DAF" a "1-3 semaines, decision solo." La difference de 10 EUR/mois est negligeable en revenu mais decisive en vitesse.</p>
+
+  <h3>Architecture de revenus &mdash; 4 couches</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Couche</th><th>Ce que c'est</th><th>Prix</th><th>Quand</th></tr></thead>
+      <tbody>
+        <tr><td><strong>L1 : Freemium</strong></td><td>Spider People (CRM auto-rempli) + Chatbot</td><td>Gratuit / 49 EUR/mois</td><td>Phase 2+ (M6-12)</td></tr>
+        <tr><td><strong>L2 : Operations gerees</strong></td><td>1 process complet gere par Spider</td><td style="font-weight:700;color:#022C22">490 EUR/mois</td><td>Phase 0 (immediatement)</td></tr>
+        <tr><td><strong>L3 : Setup fees</strong></td><td>Diagnostic + connexion + calibrage</td><td style="font-weight:700;color:#022C22">1 990 EUR one-time</td><td>Phase 0</td></tr>
+        <tr><td><strong>L4 : Agents supplementaires</strong></td><td>Relance, Achats, Contenu, Reporting</td><td>190-490 EUR/mois par agent</td><td>Phase 1+ (M3+)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>Le contrat :</strong> engagement annuel avec porte de sortie a 90 jours. Remise 10% pour paiement annuel upfront (441 EUR/mois).</p>
+  <p><strong>Garantie premier mois :</strong> "Si apres 30 jours Spider n'a pas cree de valeur, on rembourse integralement les 490 EUR."</p>
+
+  <hr>
+
+  <!-- 6.2 -->
+  <h2>6.2 ICP &mdash; Les 50 premiers clients</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Critere</th><th>Valeur</th><th>Pourquoi</th></tr></thead>
+      <tbody>
+        <tr><td>Taille</td><td><strong>5-50 salaries</strong></td><td>En dessous de 5 : CA insuffisant. Au-dessus de 50 : CODIR dans la boucle.</td></tr>
+        <tr><td>CA</td><td><strong>500K-10M EUR</strong></td><td>490 EUR/mois = 0.06%-1% du CA. Acceptable.</td></tr>
+        <tr><td>Decideur</td><td><strong>CEO seul</strong></td><td>Signe seul pour &lt;500 EUR/mois dans 95% des cas.</td></tr>
+        <tr><td>Digital existant</td><td><strong>Sheets + Notion ou Odoo + Pennylane</strong></td><td>Spider a besoin de donnees a ingerer.</td></tr>
+        <tr><td>Pain trigger</td><td><strong>Triple saisie, relances manuelles</strong></td><td>Probleme ressenti quotidiennement.</td></tr>
+        <tr><td>Vertical</td><td><strong>Agences, services B2B, commerce de gros</strong></td><td>Processus repetitifs automatisables.</td></tr>
+        <tr><td>Geo</td><td><strong>Normandie + IDF</strong></td><td>Reseau Drakkar + proximite physique non-negociable en Phase 0.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- 6.3 -->
+  <h2>6.3 GTM &mdash; Canaux par ordre de priorite</h2>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-label">Phase 0 &mdash; Mois 0-3</div>
+      <h4>Founder-led, reseau uniquement</h4>
+      <p><strong>Canal 1 :</strong> Reseau Drakkar (warm intros) &mdash; CAC ~200 EUR, 3-5 clients.<br>
+      <strong>Canal 2 :</strong> Reseau personnel Nathan &mdash; CAC ~0, 1-2 clients (s'epuise vite).</p>
+      <p><strong>Objectif Phase 0 :</strong> 5 clients payants a 490 EUR/mois. MRR = 2 450 EUR.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">Phase 1 &mdash; Mois 3-6</div>
+      <h4>Expert-comptable channel</h4>
+      <p><strong>Canal 3 :</strong> 3-5 cabinets comptables partenaires &mdash; CAC ~500 EUR, cible 5-10 clients. Referral fee de 20% (398 EUR par client signe).</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">Phase 2 &mdash; Mois 6-12</div>
+      <h4>Content + outbound cible</h4>
+      <p>N'activer QUE SI NPS &gt;70. LinkedIn content (Nathan 3-5x/semaine), CCI/France Num, cold diagnostic cible.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">Phase 3 &mdash; Mois 12+</div>
+      <h4>Product-led growth</h4>
+      <p>N'activer QUE SI 20+ clients et NPS &gt;80. Freemium conversion (CAC ~300 EUR), referral program (CAC ~150 EUR).</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- 6.4 -->
+  <h2>6.4 Sales Motion &mdash; Le Diagnostic Eclair</h2>
+
+  <ol class="numbered-list">
+    <li><strong>CONNECTER</strong> (30 min, a distance) &mdash; Connexion aux outils via Nango. Le client ne fait rien sauf accepter les OAuth.</li>
+    <li><strong>ANALYSER</strong> (overnight, automatise) &mdash; Extraction LLM. Chez Jordan : 726 lignes, 73 clients, ~2 000 claims. Cout compute : 30-50 EUR.</li>
+    <li><strong>REVELER</strong> (1h30, en personne) &mdash; Le pivot emotionnel. Thierry mene le process mapping (45 min). Nathan montre le diagnostic (45 min). "39.3% d'impayes. Votre bus factor Publitex = 1. Votre pic de septembre est 11x votre creux."</li>
+    <li><strong>PROPOSER</strong> (fin de reunion) &mdash; "490 EUR/mois. Setup : 1 990 EUR. Premier mois garanti." Pas 3 jours plus tard. Le pivot emotionnel se refroidit.</li>
+    <li><strong>DELIVRER</strong> (semaines 1-4) &mdash; Elimination triple saisie. Alertes auto. Bilan semaine 4 et decision de renouvellement.</li>
+  </ol>
+
+  <p><strong>Conversion cible : 40-50%</strong> (vs 22% Palantir). Ticket 500x plus bas, leads warm, CEO decide seul.</p>
+
+  <hr>
+
+  <!-- 6.5 -->
+  <h2>6.5 Unit Economics &mdash; 3 scenarios</h2>
+
+  <div class="scenario-grid">
+    <div class="scenario-col pessimiste">
+      <h4 style="color:#991b1b">Pessimiste</h4>
+      <p style="font-size:0.82rem"><strong>0 upsell, 6% churn, ratio 1:5</strong></p>
+      <div class="kpi" style="background:white;border-color:#fecaca;margin:0.5rem 0"><div class="kpi-value" style="color:#991b1b">34.3%</div><div class="kpi-label">Marge brute</div></div>
+      <div class="kpi" style="background:white;border-color:#fecaca;margin:0.5rem 0"><div class="kpi-value" style="color:#991b1b">1.4x</div><div class="kpi-label">LTV:CAC</div></div>
+      <div class="kpi" style="background:white;border-color:#fecaca;margin:0.5rem 0"><div class="kpi-value" style="color:#991b1b">27.8</div><div class="kpi-label">Payback (mois)</div></div>
+      <p style="font-size:0.78rem;font-weight:600;color:#991b1b;margin-top:0.5rem">NON VIABLE</p>
+    </div>
+    <div class="scenario-col base">
+      <h4 style="color:#166534">Base</h4>
+      <p style="font-size:0.82rem"><strong>+100 EUR/mois upsell M7+, 3.5% churn, ratio 1:8</strong></p>
+      <div class="kpi" style="background:white;border-color:#bbf7d0;margin:0.5rem 0"><div class="kpi-value" style="color:#166534">60.9%</div><div class="kpi-label">Marge brute</div></div>
+      <div class="kpi" style="background:white;border-color:#bbf7d0;margin:0.5rem 0"><div class="kpi-value" style="color:#166534">9.3x</div><div class="kpi-label">LTV:CAC</div></div>
+      <div class="kpi" style="background:white;border-color:#bbf7d0;margin:0.5rem 0"><div class="kpi-value" style="color:#166534">5.0</div><div class="kpi-label">Payback (mois)</div></div>
+      <p style="font-size:0.78rem;font-weight:600;color:#166534;margin-top:0.5rem">SAIN &mdash; cible Year 1</p>
+    </div>
+    <div class="scenario-col optimiste">
+      <h4 style="color:#1e40af">Optimiste</h4>
+      <p style="font-size:0.82rem"><strong>+200 EUR/mois M5+, 2% churn, ratio 1:12</strong></p>
+      <div class="kpi" style="background:white;border-color:#bfdbfe;margin:0.5rem 0"><div class="kpi-value" style="color:#1e40af">76.2%</div><div class="kpi-label">Marge brute</div></div>
+      <div class="kpi" style="background:white;border-color:#bfdbfe;margin:0.5rem 0"><div class="kpi-value" style="color:#1e40af">45.3x</div><div class="kpi-label">LTV:CAC</div></div>
+      <div class="kpi" style="background:white;border-color:#bfdbfe;margin:0.5rem 0"><div class="kpi-value" style="color:#1e40af">1.9</div><div class="kpi-label">Payback (mois)</div></div>
+      <p style="font-size:0.78rem;font-weight:600;color:#1e40af;margin-top:0.5rem">CIBLE Year 2-3</p>
+    </div>
+  </div>
+
+  <h3>Les 3 leviers critiques</h3>
+  <ol>
+    <li><strong>Le ratio FDE:clients.</strong> La difference entre 350 EUR/client/mois (1:5) et 120 EUR (1:12) fait passer la marge de 34% a 76%. C'est LA question existentielle.</li>
+    <li><strong>L'upsell.</strong> Sans upsell, LTV:CAC = 1.4x (mort). Avec 1 agent supplementaire : 9.3x (sain). L'upsell n'est pas optionnel &mdash; c'est structurel.</li>
+    <li><strong>Le churn.</strong> 43% des pertes SMB arrivent dans les 90 premiers jours. L'onboarding est LE moment.</li>
+  </ol>
+
+  <hr>
+
+  <!-- 6.6 -->
+  <h2>6.6 Milestones et Kill Criteria</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Milestone</th><th>Timing</th><th>Ce que ca prouve</th><th>Signal GO</th><th>Signal KILL</th></tr></thead>
+      <tbody>
+        <tr><td><strong>M1</strong></td><td>Semaine 4</td><td>Un dirigeant paie 490 EUR</td><td><span class="verdict verdict-go">Jordan paie sans negotiation</span></td><td><span class="verdict verdict-kill">Refuse ou &lt;300 EUR</span></td></tr>
+        <tr><td><strong>M2</strong></td><td>Mois 3</td><td>Un non-ami paie</td><td><span class="verdict verdict-go">2+ non-amis a 490+</span></td><td><span class="verdict verdict-kill">0 non-ami</span></td></tr>
+        <tr><td><strong>M4</strong></td><td>Mois 6</td><td>Premier upsell naturel</td><td><span class="verdict verdict-go">1+ client ajoute un agent</span></td><td><span class="verdict verdict-kill">0 expansion en 6 mois</span></td></tr>
+        <tr><td><strong>M5</strong></td><td>Mois 6</td><td>L'ontologie se transfere</td><td><span class="verdict verdict-go">Client 5 &lt; 60% du temps client 1</span></td><td><span class="verdict verdict-kill">&gt;80% du temps</span></td></tr>
+        <tr><td><strong>M6</strong></td><td>Mois 9</td><td>Modele eco fonctionne</td><td><span class="verdict verdict-go">10 clients, churn &lt;4%</span></td><td><span class="verdict verdict-kill">&lt;7 clients ou churn &gt;6%</span></td></tr>
+        <tr><td><strong>M8</strong></td><td>Mois 12</td><td>Scale path visible</td><td><span class="verdict verdict-go">20+ clients, 15K+ MRR, marge &gt;50%</span></td><td><span class="verdict verdict-kill">&lt;15 clients ou marge &lt;35%</span></td></tr>
+        <tr><td><strong>M9</strong></td><td>Mois 18</td><td>PMF confirme</td><td><span class="verdict verdict-go">30+ clients, NPS &gt;70, NDR &gt;100%</span></td><td><span class="verdict verdict-kill">&lt;20 clients, NPS &lt;50</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote><strong>KILL LE PROJET SI :</strong> Apres 6 mois (M6), zero client non-ami n'a paye &gt;300 EUR/mois. La these est fausse.</blockquote>
+
+  <hr>
+
+  <!-- 6.7 -->
+  <h2>6.7 Hiring Plan</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Timing</th><th>Recrutement</th><th>Salaire brut</th><th>Condition</th></tr></thead>
+      <tbody>
+        <tr><td>Mois 0</td><td>Nathan (CEO), Remy (CTO), Thierry (FDC)</td><td>36K EUR chacun</td><td>&mdash;</td></tr>
+        <tr><td>Mois 3</td><td><strong>FDE #1</strong> (dev mid-senior, Normandie)</td><td>45-50K EUR</td><td>M2 valide (2+ non-amis)</td></tr>
+        <tr><td>Mois 6</td><td><strong>FDE #2</strong></td><td>45-50K EUR</td><td>M6 valide (10 clients)</td></tr>
+        <tr><td>Mois 9-12</td><td><strong>Commercial #1</strong></td><td>40K EUR fixe + variable</td><td>M8 valide (20+ clients)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>Cout total equipe a 6 personnes (mois 12) :</strong> ~417K EUR/an. Arbitrage Normandie = 20-25% d'economie par recrutement.</p>
+
+  <hr>
+
+  <!-- DARK HERO : MONDAY MORNING -->
+  <div class="section-block dark-hero">
+    <div class="accent-line"></div>
+    <h2 style="border-bottom-color:rgba(255,255,255,0.15);margin-top:0">6.8 Ce que Nathan fait lundi matin</h2>
+    <p style="color:rgba(255,255,255,0.7);font-size:0.9rem;margin-bottom:1.5rem">Pas de strategie sans action concrete. Les 5 actions de la semaine 1.</p>
+
+    <div class="card-grid">
+      <div class="pitch-card">
+        <h4>Action 1 : Appeler Jordan. 9h.</h4>
+        <p>"Jordan, on lance. Le prix c'est <strong>490 EUR par mois</strong>. Setup : 1 990 EUR. Premier mois garanti."</p>
+        <p>Pas de "prix d'ami." Si Jordan negocie en dessous de 300 EUR, c'est un kill signal sur H1.</p>
+      </div>
+      <div class="pitch-card">
+        <h4>Action 2 : Connecter les 3 sources</h4>
+        <p>Connecter Google Sheets (plans media), Notion (726 lignes, 35 champs), Pennylane (facturation) via Nango.</p>
+        <p><strong>Temps estime :</strong> 30-45 minutes.</p>
+      </div>
+      <div class="pitch-card">
+        <h4>Action 3 : Extraction LLM overnight</h4>
+        <p>Haiku 4.5 sur les 726 lignes. Entity resolution : 5-8 entity types, ~2 000 claims. Resultat mercredi matin.</p>
+      </div>
+      <div class="pitch-card">
+        <h4>Action 4 : Preparer le Diagnostic</h4>
+        <p>5-10 insights data-driven. Les 39.3% d'impayes, le bus factor Publitex, la saisonnalite, la dispersion des marges.</p>
+      </div>
+      <div class="pitch-card">
+        <h4>Action 5 : Identifier 3 cabinets comptables</h4>
+        <p>Thierry et Jean identifient 3 cabinets en Normandie. Premier contact semaine 2. "On offre un diagnostic gratuit a vos 3-5 meilleurs clients."</p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- 7.1 -->
+  <h2>7.1 Mapping Palantir &rarr; Spider &mdash; 20 concepts cles</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Concept Palantir</th><th>Equivalent Spider</th><th>Statut</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>AIP Bootcamp (5 jours, gratuit)</td><td><strong>Diagnostic Eclair</strong> (1/2 journee, cible 40-50%)</td><td>A lancer S1</td></tr>
+        <tr><td>2</td><td>Pilot 90 jours ($250K)</td><td><strong>Phase 0</strong> (490 EUR/mois, 4 semaines)</td><td>En cours</td></tr>
+        <tr><td>3</td><td>Ontology (custom, $millions)</td><td><strong>Claims Engine</strong> (templates, 1 990 EUR setup)</td><td>Architecture definie</td></tr>
+        <tr><td>5</td><td>FDE ($200K+, Stanford)</td><td><strong>FDE Spider</strong> (45-50K EUR, Normandie)</td><td>A recruter M3</td></tr>
+        <tr><td>6</td><td>Deployment Strategist</td><td><strong>FDC</strong> (Thierry Menard, credibilite industrielle)</td><td>En place</td></tr>
+        <tr><td>11</td><td>NDR 139%</td><td><strong>NDR cible 130%</strong></td><td>A prouver</td></tr>
+        <tr><td>12</td><td>$100K &rarr; $5.6M (56x)</td><td><strong>490 &rarr; 2-3K EUR/mois (4-7x)</strong></td><td>A prouver</td></tr>
+        <tr><td>20</td><td>N'existe pas chez Palantir</td><td><strong>Mycelium</strong> (intelligence collective inter-PME)</td><td>Vision Phase 2-3</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>La regle de conversion</h3>
+  <blockquote><strong>Diviser l'echelle par 1 000. Diviser le temps par 10. Multiplier l'IA par 10.</strong></blockquote>
+
+  <hr>
+
+  <!-- 7.2 -->
+  <h2>7.2 Les 12 premieres semaines</h2>
+
+  <h3>Semaines 1-2 : Le Bootcamp Jordan</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Jour</th><th>Action</th><th>Livrable</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Lundi J1</strong></td><td>Appeler Jordan. Fixer 490 EUR/mois + 1 990 EUR setup.</td><td>Accord verbal ou kill signal</td></tr>
+        <tr><td>L-Ma</td><td>Connecter Sheets + Notion + Pennylane via Nango</td><td>3 sources connectees</td></tr>
+        <tr><td>Mardi soir</td><td>Extraction LLM overnight sur 726 campagnes</td><td>Ontologie Jordan V1</td></tr>
+        <tr><td>Me-Je</td><td>Preparer le Diagnostic Eclair</td><td>5-10 insights data-driven</td></tr>
+        <tr><td><strong>Vendredi J5</strong></td><td>Diagnostic Eclair chez Jordan. Proposition en fin de reunion.</td><td>Buy-in emotionnel + engagement</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Semaines 3-4 : Le Pilot rapide</h3>
+  <p>Pipeline operationnel. Elimination triple saisie. Test sur 5-10 campagnes actives. <strong>GATE M1</strong> semaine 4 : "Jordan, tu renouvelles a 490 EUR ?"</p>
+
+  <h3>Semaines 5-8 : Replication (2-3 clients Drakkar)</h3>
+  <p>Diagnostics Eclair chez chaque prospect. Test H4 : le temps d'onboarding client 2-3 est-il inferieur a Jordan ? <strong>GATE M2</strong> semaine 8 : 2+ clients payants non-amis ?</p>
+
+  <h3>Semaines 9-12 : Premier upsell + recrutement FDE</h3>
+  <p>Spider detecte les 285 factures impayees. Agent Relance propose. MRR Jordan : 490 &rarr; 680 EUR. Recrutement FDE #1 en cours.</p>
+
+  <h3>Metriques de succes semaine 12</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Metrique</th><th>Minimum</th><th>Ideal</th></tr></thead>
+      <tbody>
+        <tr><td>Clients payants</td><td>3</td><td>5</td></tr>
+        <tr><td>Dont non-amis</td><td>2</td><td>3+</td></tr>
+        <tr><td>MRR total</td><td>1 470 EUR</td><td>3 000+ EUR</td></tr>
+        <tr><td>Jordan renouvelle</td><td>Oui</td><td>Oui + 1 upsell</td></tr>
+        <tr><td>Setup fees encaisses</td><td>5 970 EUR</td><td>9 950+ EUR</td></tr>
+        <tr><td>Temps onboarding client 3 vs client 1</td><td>&lt;80%</td><td>&lt;60% (H4 validee)</td></tr>
+        <tr><td>Cabinets comptables en discussion</td><td>2</td><td>3+</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <h2>Glossaire</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Terme</th><th>Definition</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mono">ARPA</span></td><td>Average Revenue Per Account</td></tr>
+        <tr><td><span class="mono">ACV</span></td><td>Annual Contract Value</td></tr>
+        <tr><td><span class="mono">CAC</span></td><td>Customer Acquisition Cost</td></tr>
+        <tr><td><span class="mono">LTV</span></td><td>Lifetime Value du client</td></tr>
+        <tr><td><span class="mono">NDR</span></td><td>Net Dollar Retention (&gt;100% = expansion &gt; churn)</td></tr>
+        <tr><td><span class="mono">MRR</span></td><td>Monthly Recurring Revenue</td></tr>
+        <tr><td><span class="mono">FDC</span></td><td>Forward Deployed Consultant</td></tr>
+        <tr><td><span class="mono">FDE</span></td><td>Forward Deployed Engineer</td></tr>
+        <tr><td><span class="mono">ICP</span></td><td>Ideal Customer Profile</td></tr>
+        <tr><td><span class="mono">PMF</span></td><td>Product-Market Fit</td></tr>
+        <tr><td><span class="mono">Claims</span></td><td>Affirmation extraite par l'IA avec degre de croyance [0,1]</td></tr>
+        <tr><td><span class="mono">Ontologie</span></td><td>Modele semantique vivant de l'entreprise</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="site-footer">
+  <span>SpiderOS</span> &mdash; Mega Livrable Strategique &mdash; Fevrier 2026
+</footer>
+
+<!-- ===================== JS ===================== -->
+<script>
+(function() {
+  const tabs = document.querySelectorAll('.tab-btn');
+  const contents = document.querySelectorAll('.tab-content');
+
+  tabs.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const target = btn.getAttribute('data-tab');
+
+      tabs.forEach(function(t) {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+
+      contents.forEach(function(c) {
+        c.classList.remove('active');
+      });
+      document.getElementById('tab-' + target).classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

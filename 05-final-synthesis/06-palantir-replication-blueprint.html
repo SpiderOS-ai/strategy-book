@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Replicate Palantir — Builder's Blueprint</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e14;
+  --bg-card: #111820;
+  --bg-card-hover: #161e28;
+  --border: #1e2a3a;
+  --border-accent: #2a3a4e;
+  --text: #b8c4d0;
+  --text-bright: #e2e8f0;
+  --text-muted: #8b95a5;
+  --blue: #58a6ff;
+  --blue-dim: rgba(88, 166, 255, 0.12);
+  --green: #3fb950;
+  --green-dim: rgba(63, 185, 80, 0.12);
+  --purple: #a78bfa;
+  --purple-dim: rgba(167, 139, 250, 0.12);
+  --yellow: #e3b341;
+  --yellow-dim: rgba(227, 179, 65, 0.12);
+  --red: #f47067;
+  --red-dim: rgba(244, 112, 103, 0.10);
+  --orange: #db8b4b;
+  --cyan: #56d4dd;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px 120px;
+}
+
+/* ─── HERO ─── */
+.hero {
+  padding: 80px 0 60px;
+  text-align: center;
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(88,166,255,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 16px;
+  opacity: 0.8;
+}
+.hero h1 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 800;
+  color: var(--text-bright);
+  letter-spacing: -1px;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.hero h1 span { color: var(--blue); }
+.hero-sub {
+  font-size: 17px;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ─── SECTION ─── */
+.section {
+  margin-top: 72px;
+}
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--blue);
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+.section-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-bright);
+  letter-spacing: -0.3px;
+}
+
+/* ─── CARDS ─── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px;
+  margin-bottom: 20px;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: var(--border-accent); }
+.card h3 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card h3 .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.card ul {
+  list-style: none;
+  padding: 0;
+}
+.card li {
+  padding: 5px 0;
+  padding-left: 18px;
+  position: relative;
+  color: var(--text);
+  font-size: 14px;
+}
+.card li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+/* ─── METRIC CARDS ─── */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin: 24px 0;
+}
+.metric {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+.metric-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-bright);
+  line-height: 1.2;
+}
+.metric-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  letter-spacing: 0.3px;
+}
+
+/* ─── SVG CONTAINERS ─── */
+.diagram {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 32px;
+  margin: 24px 0;
+  overflow-x: auto;
+}
+.diagram svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ─── CALLOUT ─── */
+.callout {
+  background: var(--blue-dim);
+  border-left: 3px solid var(--blue);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px;
+  margin: 20px 0;
+  font-size: 14px;
+  color: var(--text-bright);
+}
+.callout.warn {
+  background: var(--yellow-dim);
+  border-left-color: var(--yellow);
+}
+.callout.danger {
+  background: var(--red-dim);
+  border-left-color: var(--red);
+}
+.callout strong { color: var(--blue); }
+.callout.warn strong { color: var(--yellow); }
+
+/* ─── ROLE CARDS ─── */
+.roles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+.role-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px;
+}
+.role-card h4 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.role-card p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* ─── COMPARISON TABLE ─── */
+.comparison {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 14px;
+}
+.comparison th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--border-accent);
+  color: var(--text-muted);
+}
+.comparison td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.comparison tr:last-child td { border-bottom: none; }
+.comparison td:first-child {
+  font-weight: 600;
+  color: var(--text-bright);
+  white-space: nowrap;
+}
+.comparison .pal { color: var(--purple); }
+.comparison .spider { color: var(--green); }
+
+/* ─── PRICING TABLE ─── */
+.pricing {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 16px 0;
+}
+.pricing th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--border-accent);
+  color: var(--text-muted);
+}
+.pricing td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.pricing td:nth-child(2) {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  color: var(--text-bright);
+  font-size: 13px;
+}
+
+/* ─── GRID 3-COL ─── */
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 20px 0;
+}
+@media (max-width: 768px) {
+  .grid3 { grid-template-columns: 1fr; }
+  .roles { grid-template-columns: 1fr; }
+  .hero { padding: 48px 0 40px; }
+  .section { margin-top: 48px; }
+  .diagram { padding: 16px; }
+}
+
+/* ─── FOOTER ─── */
+.footer {
+  margin-top: 80px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ════════════════════════════════════════
+     HERO
+     ════════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-label">Builder's Blueprint</div>
+  <h1>How to <span>Replicate</span> Palantir</h1>
+  <p class="hero-sub">
+    Architecture, delivery model, and commercial engine — reverse-engineered from 27 research files into one macro playbook for builders.
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════
+     01. THE BIG PICTURE
+     ════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <span class="section-title">The Big Picture</span>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg">
+      <!-- Three pillars -->
+      <!-- BUILD -->
+      <rect x="20" y="60" width="260" height="260" rx="12" fill="#111820" stroke="#58a6ff" stroke-width="1.5"/>
+      <rect x="20" y="60" width="260" height="44" rx="12" fill="rgba(88,166,255,0.12)"/>
+      <text x="150" y="88" text-anchor="middle" fill="#58a6ff" font-family="JetBrains Mono, monospace" font-size="14" font-weight="700">BUILD</text>
+      <text x="150" y="135" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">Operational Ontology</text>
+      <text x="150" y="155" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">The semantic data layer</text>
+      <line x1="150" y1="170" x2="150" y2="180" stroke="#2a3a4e" stroke-width="1"/>
+      <text x="150" y="198" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">Data Platform</text>
+      <text x="150" y="218" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">Ingest, transform, pipeline</text>
+      <line x1="150" y1="230" x2="150" y2="240" stroke="#2a3a4e" stroke-width="1"/>
+      <text x="150" y="258" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">AI / Agent Layer</text>
+      <text x="150" y="278" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">LLMs + governed actions</text>
+      <!-- Replicability badge -->
+      <rect x="95" y="294" width="110" height="20" rx="10" fill="rgba(244,112,103,0.15)" stroke="#f47067" stroke-width="0.8"/>
+      <text x="150" y="308" text-anchor="middle" fill="#f47067" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">MOAT: ~30% REPL.</text>
+
+      <!-- DELIVER -->
+      <rect x="320" y="60" width="260" height="260" rx="12" fill="#111820" stroke="#3fb950" stroke-width="1.5"/>
+      <rect x="320" y="60" width="260" height="44" rx="12" fill="rgba(63,185,80,0.12)"/>
+      <text x="450" y="88" text-anchor="middle" fill="#3fb950" font-family="JetBrains Mono, monospace" font-size="14" font-weight="700">DELIVER</text>
+      <text x="450" y="135" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">FDE Model</text>
+      <text x="450" y="155" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">"Startup CTO" embedded at client</text>
+      <line x1="450" y1="170" x2="450" y2="180" stroke="#2a3a4e" stroke-width="1"/>
+      <text x="450" y="198" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">AIP Bootcamps</text>
+      <text x="450" y="218" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">5-day free immersive sessions</text>
+      <line x1="450" y1="230" x2="450" y2="240" stroke="#2a3a4e" stroke-width="1"/>
+      <text x="450" y="258" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">Acquire → Expand → Scale</text>
+      <text x="450" y="278" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">$100K → $5.6M (56x)</text>
+      <!-- Delivery badge -->
+      <rect x="383" y="294" width="134" height="20" rx="10" fill="rgba(63,185,80,0.15)" stroke="#3fb950" stroke-width="0.8"/>
+      <text x="450" y="308" text-anchor="middle" fill="#3fb950" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">NDR 139% Q4 2025</text>
+
+      <!-- SELL -->
+      <rect x="620" y="60" width="260" height="260" rx="12" fill="#111820" stroke="#a78bfa" stroke-width="1.5"/>
+      <rect x="620" y="60" width="260" height="44" rx="12" fill="rgba(167,139,250,0.12)"/>
+      <text x="750" y="88" text-anchor="middle" fill="#a78bfa" font-family="JetBrains Mono, monospace" font-size="14" font-weight="700">SELL</text>
+      <text x="750" y="135" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">Land &amp; Expand</text>
+      <text x="750" y="155" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">Negative margin to acquire, expand to profit</text>
+      <line x1="750" y1="170" x2="750" y2="180" stroke="#2a3a4e" stroke-width="1"/>
+      <text x="750" y="198" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">Usage-Based Pricing</text>
+      <text x="750" y="218" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">No pricing strategy — land grab</text>
+      <line x1="750" y1="230" x2="750" y2="240" stroke="#2a3a4e" stroke-width="1"/>
+      <text x="750" y="258" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">Revenue Flywheel</text>
+      <text x="750" y="278" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">FDE insights → platform → self-service</text>
+      <!-- Revenue badge -->
+      <rect x="688" y="294" width="124" height="20" rx="10" fill="rgba(167,139,250,0.15)" stroke="#a78bfa" stroke-width="0.8"/>
+      <text x="750" y="308" text-anchor="middle" fill="#a78bfa" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">$4.5B FY2025</text>
+
+      <!-- Connecting arrows -->
+      <line x1="280" y1="190" x2="320" y2="190" stroke="#8b95a5" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <polygon points="317,186 323,190 317,194" fill="#8b95a5"/>
+      <line x1="580" y1="190" x2="620" y2="190" stroke="#8b95a5" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <polygon points="617,186 623,190 617,194" fill="#8b95a5"/>
+
+      <!-- Top label -->
+      <text x="450" y="35" text-anchor="middle" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="3" font-weight="600">THREE PILLARS OF PALANTIR</text>
+    </svg>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     02. ARCHITECTURE — WHAT TO BUILD
+     ════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <span class="section-title">Architecture — What to Build</span>
+  </div>
+
+  <!-- Stack diagram -->
+  <div class="diagram">
+    <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg">
+      <!-- Title -->
+      <text x="450" y="25" text-anchor="middle" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="3" font-weight="600">7-STEP CLOSED LOOP — THE FULL DATA FLOW</text>
+
+      <!-- Layer 1: Data Sources (bottom) -->
+      <rect x="60" y="470" width="500" height="34" rx="6" fill="rgba(90,106,122,0.15)" stroke="#2a3a4e" stroke-width="1"/>
+      <text x="310" y="492" text-anchor="middle" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600">1 — DATA SOURCES (ERP, CRM, IoT, files, APIs...)</text>
+
+      <!-- Arrow UP 1→2 -->
+      <line x1="310" y1="466" x2="310" y2="450" stroke="#2a3a4e" stroke-width="1.2"/>
+      <polygon points="306,453 310,446 314,453" fill="#2a3a4e"/>
+
+      <!-- Layer 2: Connectors -->
+      <rect x="60" y="394" width="500" height="52" rx="8" fill="rgba(63,185,80,0.08)" stroke="#3fb950" stroke-width="1.2"/>
+      <text x="85" y="416" fill="#3fb950" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">2</text>
+      <text x="110" y="416" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">Data Connectors</text>
+      <text x="110" y="434" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">150+ sources — ERP, CRM, databases, APIs, files</text>
+
+      <!-- Arrow UP 2→3 -->
+      <line x1="310" y1="390" x2="310" y2="374" stroke="#2a3a4e" stroke-width="1.2"/>
+      <polygon points="306,377 310,370 314,377" fill="#2a3a4e"/>
+
+      <!-- Layer 3: Pipelines -->
+      <rect x="60" y="318" width="500" height="52" rx="8" fill="rgba(227,179,65,0.08)" stroke="#e3b341" stroke-width="1.2"/>
+      <text x="85" y="340" fill="#e3b341" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">3</text>
+      <text x="110" y="340" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">Pipelines &amp; Transforms</text>
+      <text x="110" y="358" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">DAG-based, batch + streaming</text>
+
+      <!-- Arrow UP 3→4 -->
+      <line x1="310" y1="314" x2="310" y2="298" stroke="#2a3a4e" stroke-width="1.2"/>
+      <polygon points="306,301 310,294 314,301" fill="#2a3a4e"/>
+
+      <!-- Layer 4: ONTOLOGY (highlighted, center) -->
+      <rect x="50" y="230" width="520" height="64" rx="10" fill="rgba(88,166,255,0.10)" stroke="#58a6ff" stroke-width="2"/>
+      <text x="85" y="256" fill="#58a6ff" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">4</text>
+      <text x="110" y="256" fill="#58a6ff" font-family="JetBrains Mono, monospace" font-size="15" font-weight="700">ONTOLOGY</text>
+      <text x="258" y="256" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13">— The semantic business model</text>
+      <text x="110" y="280" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">Objects · Properties · Links · Actions · Interfaces · Functions</text>
+
+      <!-- Arrow UP 4→5 -->
+      <line x1="310" y1="226" x2="310" y2="210" stroke="#2a3a4e" stroke-width="1.2"/>
+      <polygon points="306,213 310,206 314,213" fill="#2a3a4e"/>
+
+      <!-- Layer 5: AI / Agents -->
+      <rect x="60" y="154" width="500" height="52" rx="8" fill="rgba(86,212,221,0.08)" stroke="#56d4dd" stroke-width="1.2"/>
+      <text x="85" y="176" fill="#56d4dd" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">5</text>
+      <text x="110" y="176" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">AI / Agents</text>
+      <text x="110" y="194" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">LLMs receive typed Ontology objects, not raw text</text>
+
+      <!-- Arrow UP 5→6 -->
+      <line x1="310" y1="150" x2="310" y2="134" stroke="#2a3a4e" stroke-width="1.2"/>
+      <polygon points="306,137 310,130 314,137" fill="#2a3a4e"/>
+
+      <!-- Layer 6: Applications -->
+      <rect x="60" y="78" width="500" height="52" rx="8" fill="rgba(167,139,250,0.08)" stroke="#a78bfa" stroke-width="1.2"/>
+      <text x="85" y="100" fill="#a78bfa" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">6</text>
+      <text x="110" y="100" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">Applications</text>
+      <text x="110" y="118" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">Dashboards, workflows, operational UIs</text>
+
+      <!-- Arrow UP 6→7 -->
+      <line x1="310" y1="74" x2="310" y2="58" stroke="#2a3a4e" stroke-width="1.2"/>
+      <polygon points="306,61 310,54 314,61" fill="#2a3a4e"/>
+
+      <!-- Layer 7: Actions/Writeback (top) -->
+      <rect x="60" y="40" width="500" height="14" rx="4" fill="rgba(244,112,103,0.15)" stroke="#f47067" stroke-width="1.2"/>
+      <text x="310" y="51" text-anchor="middle" fill="#f47067" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">7 — ACTIONS &amp; WRITEBACK → Close the loop</text>
+
+      <!-- Writeback loop arrow (right side) — from top back down to bottom -->
+      <path d="M 570 47 Q 620 47 620 260 Q 620 487 570 487" fill="none" stroke="#f47067" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <polygon points="572,484 567,492 575,491" fill="#f47067"/>
+      <text x="640" y="270" fill="#f47067" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600" transform="rotate(90,640,270)">WRITEBACK LOOP</text>
+
+      <!-- OSS equivalents (right side annotations) -->
+      <text x="690" y="492" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="9">your client data</text>
+      <text x="690" y="420" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="9">Airbyte (400+ connectors)</text>
+      <text x="690" y="344" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="9">Dagster / Airflow</text>
+      <text x="690" y="262" fill="#58a6ff" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">NO EQUIVALENT EXISTS</text>
+      <text x="690" y="184" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="9">LangChain / LlamaIndex</text>
+      <text x="690" y="108" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="9">Retool / Appsmith</text>
+      <text x="690" y="50" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="9">custom actions engine</text>
+
+      <!-- BI stops callout -->
+      <text x="690" y="130" fill="#f47067" font-family="JetBrains Mono, monospace" font-size="8">BI tools stop at step 6.</text>
+      <text x="690" y="140" fill="#f47067" font-family="JetBrains Mono, monospace" font-size="8">Palantir closes the loop.</text>
+    </svg>
+  </div>
+
+  <div class="callout warn">
+    <strong>The Ontology is the moat.</strong> Every other layer has 50-95% open-source equivalents. The Operational Ontology — a live, governed, action-capable business model — has ~30% replicability. No OSS project does this.
+  </div>
+
+  <!-- Key decisions -->
+  <div class="grid3">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--blue)"></span> 6 Primitives</h3>
+      <ul>
+        <li><strong>Objects</strong> — entities (Client, Order…)</li>
+        <li><strong>Properties</strong> — attributes</li>
+        <li><strong>Links</strong> — relationships</li>
+        <li><strong>Actions</strong> — operations + writeback</li>
+        <li><strong>Interfaces</strong> — abstract types</li>
+        <li><strong>Functions</strong> — computed values</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--green)"></span> 3 Layers</h3>
+      <ul>
+        <li><strong style="color:var(--blue)">Semantic</strong> — WHAT: data model, business entities</li>
+        <li><strong style="color:var(--yellow)">Kinetic</strong> — HOW: real-time flows, actions, writeback</li>
+        <li><strong style="color:var(--red)">Dynamic</strong> — GUARDRAILS: RBAC, audit, provenance</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--purple)"></span> Key Decisions</h3>
+      <ul>
+        <li><strong>PostgreSQL</strong> JSONB + pgvector as backbone</li>
+        <li>User edits = first-class, append-only log</li>
+        <li>Optimistic concurrency on Actions</li>
+        <li>Schema evolution via manual remapping</li>
+        <li>"Copy the contracts, not the code"</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     03. DELIVERY — HOW TO DEPLOY
+     ════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <span class="section-title">Delivery — How to Deploy</span>
+  </div>
+
+  <!-- Delivery pipeline diagram -->
+  <div class="diagram">
+    <svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg">
+      <text x="450" y="25" text-anchor="middle" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="3" font-weight="600">ACQUIRE → EXPAND → SCALE</text>
+
+      <!-- Phase 1: Bootcamp -->
+      <rect x="20" y="50" width="190" height="160" rx="10" fill="#111820" stroke="#3fb950" stroke-width="1.5"/>
+      <rect x="20" y="50" width="190" height="36" rx="10" fill="rgba(63,185,80,0.15)"/>
+      <text x="115" y="74" text-anchor="middle" fill="#3fb950" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700">BOOTCAMP</text>
+      <text x="115" y="105" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">5 days, FREE</text>
+      <text x="115" y="128" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">5-20 client stakeholders</text>
+      <text x="115" y="145" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">5-9 Palantir team</text>
+      <text x="115" y="168" text-anchor="middle" fill="#e3b341" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600">~22% convert in 90d</text>
+      <text x="115" y="200" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="10">Karp: "10h to prove value"</text>
+
+      <!-- Arrow 1→2 -->
+      <line x1="210" y1="130" x2="242" y2="130" stroke="#3fb950" stroke-width="1.5"/>
+      <polygon points="239,126 246,130 239,134" fill="#3fb950"/>
+
+      <!-- Phase 2: Pilot -->
+      <rect x="246" y="50" width="190" height="160" rx="10" fill="#111820" stroke="#58a6ff" stroke-width="1.5"/>
+      <rect x="246" y="50" width="190" height="36" rx="10" fill="rgba(88,166,255,0.15)"/>
+      <text x="341" y="74" text-anchor="middle" fill="#58a6ff" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700">PILOT</text>
+      <text x="341" y="105" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">~90 days, $100-500K</text>
+      <text x="341" y="128" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">4-5 FDEs embedded</text>
+      <text x="341" y="145" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">Negative margin</text>
+      <text x="341" y="168" text-anchor="middle" fill="#f47067" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600">Margin: NEGATIVE</text>
+      <text x="341" y="200" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="10">Production software, not a POC</text>
+
+      <!-- Arrow 2→3 -->
+      <line x1="436" y1="130" x2="468" y2="130" stroke="#58a6ff" stroke-width="1.5"/>
+      <polygon points="465,126 472,130 465,134" fill="#58a6ff"/>
+
+      <!-- Phase 3: Expand -->
+      <rect x="472" y="50" width="190" height="160" rx="10" fill="#111820" stroke="#a78bfa" stroke-width="1.5"/>
+      <rect x="472" y="50" width="190" height="36" rx="10" fill="rgba(167,139,250,0.15)"/>
+      <text x="567" y="74" text-anchor="middle" fill="#a78bfa" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700">EXPAND</text>
+      <text x="567" y="105" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">$1M-5M+ ACV</text>
+      <text x="567" y="128" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">Multi-department ontology</text>
+      <text x="567" y="145" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">Co-development mode</text>
+      <text x="567" y="168" text-anchor="middle" fill="#e3b341" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600">Margin: -43%→+35%</text>
+      <text x="567" y="200" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="10">Ontology becomes the OS</text>
+
+      <!-- Arrow 3→4 -->
+      <line x1="662" y1="130" x2="694" y2="130" stroke="#a78bfa" stroke-width="1.5"/>
+      <polygon points="691,126 698,130 691,134" fill="#a78bfa"/>
+
+      <!-- Phase 4: Scale -->
+      <rect x="698" y="50" width="182" height="160" rx="10" fill="#111820" stroke="#e3b341" stroke-width="1.5"/>
+      <rect x="698" y="50" width="182" height="36" rx="10" fill="rgba(227,179,65,0.15)"/>
+      <text x="789" y="74" text-anchor="middle" fill="#e3b341" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700">SCALE</text>
+      <text x="789" y="105" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="13" font-weight="600">$5M-20M+ ACV</text>
+      <text x="789" y="128" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">Enterprise-wide platform</text>
+      <text x="789" y="145" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="11">Minimal FDE, self-service</text>
+      <text x="789" y="168" text-anchor="middle" fill="#3fb950" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600">Margin: +55%</text>
+      <text x="789" y="200" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="10">Customer owns the platform</text>
+
+      <!-- Bottom summary -->
+      <rect x="20" y="240" width="860" height="30" rx="6" fill="rgba(88,166,255,0.06)" stroke="#1e2a3a" stroke-width="1"/>
+      <text x="450" y="261" text-anchor="middle" fill="#58a6ff" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600">$100K initial → $5.6M mature ACV = 56x expansion · NDR 139% · Sales cycle: 9mo → 6 weeks post-bootcamp</text>
+    </svg>
+  </div>
+
+  <!-- Roles -->
+  <div class="roles">
+    <div class="role-card">
+      <h4 style="color:var(--green)">FDE — Forward Deployed Engineer</h4>
+      <p>Not a consultant. A "startup CTO" embedded at the client site. Builds production software on the platform. 4-5 per customer in Acquire phase. Codename "Delta". $171-415K total comp entry level. Insights feed back into platform R&D.</p>
+    </div>
+    <div class="role-card">
+      <h4 style="color:var(--purple)">Deployment Strategist — "Echo"</h4>
+      <p>Ex-McKinsey/BCG. Hybrid: consultant + sales engineer + PM. Shapes the deal, identifies highest-impact use cases, manages C-level relationships. 1-2 per bootcamp.</p>
+    </div>
+    <div class="role-card">
+      <h4 style="color:var(--yellow)">The Flywheel Effect</h4>
+      <p>FDE work on client problems → discovers platform gaps → improvements shipped to product → benefits all customers. This is why FDE costs are classified as R&D, not COGS. Revenue/employee: $1.01M.</p>
+    </div>
+  </div>
+
+  <!-- Key metrics -->
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-value">~22%</div>
+      <div class="metric-label">Bootcamp conversion rate</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">56x</div>
+      <div class="metric-label">Expansion multiple ($100K→$5.6M)</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">139%</div>
+      <div class="metric-label">Net Dollar Retention (Q4 2025)</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">$1.01M</div>
+      <div class="metric-label">Revenue per employee (2025)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     03b. BOOTCAMP DEEP-DIVE
+     ════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">03b</span>
+    <span class="section-title">Inside a Bootcamp — Day by Day</span>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg">
+      <text x="450" y="25" text-anchor="middle" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="3" font-weight="600">5-DAY AIP BOOTCAMP — ON CLIENT'S OWN DATA</text>
+
+      <!-- Pre-work -->
+      <rect x="20" y="50" width="120" height="220" rx="8" fill="#111820" stroke="#8b95a5" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="80" y="72" text-anchor="middle" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">PRE-WORK</text>
+      <text x="80" y="72" text-anchor="middle" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">PRE-WORK</text>
+      <text x="80" y="92" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="9">2-4 weeks before</text>
+      <text x="30" y="118" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› ID 3-5 use cases</text>
+      <text x="30" y="138" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Client shares data</text>
+      <text x="30" y="158" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Pre-build pipelines</text>
+      <text x="30" y="178" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Define KPIs</text>
+
+      <!-- Arrow -->
+      <line x1="140" y1="160" x2="155" y2="160" stroke="#8b95a5" stroke-width="1"/>
+      <polygon points="153,157 158,160 153,163" fill="#8b95a5"/>
+
+      <!-- Day 1 -->
+      <rect x="158" y="50" width="130" height="220" rx="8" fill="#111820" stroke="#3fb950" stroke-width="1.2"/>
+      <rect x="158" y="50" width="130" height="28" rx="8" fill="rgba(63,185,80,0.12)"/>
+      <text x="223" y="69" text-anchor="middle" fill="#3fb950" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">DAY 1</text>
+      <text x="223" y="92" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="10" font-weight="600">Problem Framing</text>
+      <text x="168" y="116" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Exec kickoff</text>
+      <text x="168" y="136" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Align on objectives</text>
+      <text x="168" y="156" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Show data already</text>
+      <text x="168" y="172" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">  in Foundry</text>
+      <text x="168" y="196" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› "Art of the possible"</text>
+      <text x="168" y="212" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">  demos from similar</text>
+      <text x="168" y="228" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">  industries</text>
+
+      <!-- Arrow -->
+      <line x1="288" y1="160" x2="303" y2="160" stroke="#8b95a5" stroke-width="1"/>
+      <polygon points="301,157 306,160 301,163" fill="#8b95a5"/>
+
+      <!-- Day 2-3 -->
+      <rect x="306" y="50" width="170" height="220" rx="8" fill="#111820" stroke="#58a6ff" stroke-width="1.2"/>
+      <rect x="306" y="50" width="170" height="28" rx="8" fill="rgba(88,166,255,0.12)"/>
+      <text x="391" y="69" text-anchor="middle" fill="#58a6ff" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">DAY 2-3</text>
+      <text x="391" y="92" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="10" font-weight="600">Build Sprints</text>
+      <text x="316" y="116" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› FDEs + client co-build</text>
+      <text x="316" y="136" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Create Ontology objects</text>
+      <text x="316" y="156" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Working prototype EOD2</text>
+      <text x="316" y="176" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Add LLM features (NL</text>
+      <text x="316" y="192" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">  queries, auto-reports)</text>
+      <text x="316" y="216" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Use Case #2 begins D3</text>
+      <text x="316" y="236" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Mid-week exec check-in</text>
+
+      <!-- Arrow -->
+      <line x1="476" y1="160" x2="491" y2="160" stroke="#8b95a5" stroke-width="1"/>
+      <polygon points="489,157 494,160 489,163" fill="#8b95a5"/>
+
+      <!-- Day 4 -->
+      <rect x="494" y="50" width="130" height="220" rx="8" fill="#111820" stroke="#a78bfa" stroke-width="1.2"/>
+      <rect x="494" y="50" width="130" height="28" rx="8" fill="rgba(167,139,250,0.12)"/>
+      <text x="559" y="69" text-anchor="middle" fill="#a78bfa" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">DAY 4</text>
+      <text x="559" y="92" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="10" font-weight="600">Stress Testing</text>
+      <text x="504" y="116" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Domain experts run</text>
+      <text x="504" y="132" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">  "what-if" scenarios</text>
+      <text x="504" y="156" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Edge cases fixed</text>
+      <text x="504" y="172" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">  in real-time</text>
+      <text x="504" y="196" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Security/compliance</text>
+      <text x="504" y="212" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">  discussion</text>
+      <text x="504" y="236" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Use Case #3 if time</text>
+
+      <!-- Arrow -->
+      <line x1="624" y1="160" x2="639" y2="160" stroke="#8b95a5" stroke-width="1"/>
+      <polygon points="637,157 642,160 637,163" fill="#8b95a5"/>
+
+      <!-- Day 5 -->
+      <rect x="642" y="50" width="140" height="220" rx="8" fill="#111820" stroke="#e3b341" stroke-width="1.2"/>
+      <rect x="642" y="50" width="140" height="28" rx="8" fill="rgba(227,179,65,0.12)"/>
+      <text x="712" y="69" text-anchor="middle" fill="#e3b341" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">DAY 5</text>
+      <text x="712" y="92" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="10" font-weight="600">Exec Pitch + Roadmap</text>
+      <text x="652" y="116" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Final demo to execs</text>
+      <text x="652" y="136" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Quantified ROI</text>
+      <text x="652" y="156" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Deployment roadmap</text>
+      <text x="652" y="172" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">  (4-12w to prod)</text>
+      <text x="652" y="196" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Commercial terms</text>
+      <text x="652" y="216" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Prototypes stay in</text>
+      <text x="652" y="232" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">  sandbox for trial</text>
+
+      <!-- Bottom: team composition -->
+      <rect x="158" y="286" width="624" height="42" rx="6" fill="rgba(63,185,80,0.06)" stroke="#1e2a3a" stroke-width="1"/>
+      <text x="470" y="304" text-anchor="middle" fill="#3fb950" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600">PALANTIR TEAM: 1-2 Deployment Strategists · 2-4 FDEs · 1 Product Specialist · 1 AE</text>
+      <text x="470" y="320" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="10">Cost to Palantir: $12-36K commercial / $50-150K gov · CAC at 22% conversion: ~$110-165K</text>
+    </svg>
+  </div>
+
+  <!-- Post-bootcamp -->
+  <div class="callout">
+    <strong>Post-bootcamp (weeks 1-6):</strong> Summary doc + commercial terms within 48h. Prototypes remain in sandbox. 30-90 day pilot offered. The question shifts from "should we do AI?" to "how fast can we deploy?"
+  </div>
+
+  <!-- Volume stats -->
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-value">~5/day</div>
+      <div class="metric-label">Bootcamps running (Q4 2024)</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">1,300+</div>
+      <div class="metric-label">Total bootcamps (mid-2024)</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">$12-36K</div>
+      <div class="metric-label">Cost per bootcamp to Palantir</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">6 weeks</div>
+      <div class="metric-label">Sales cycle (was 9+ months)</div>
+    </div>
+  </div>
+
+  <!-- Bootcamp case studies -->
+  <div class="grid3">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--green)"></span> Nebraska Medicine</h3>
+      <ul>
+        <li>Bootcamp → production: <strong>6 weeks</strong></li>
+        <li>Discharge lounge utilization: <strong>+2,000%</strong></li>
+        <li>AI-drafted insurance appeals: 1,200+</li>
+        <li>10+ apps built in Year 1</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--blue)"></span> Fortune 100 CPG</h3>
+      <ul>
+        <li><strong>7 ERPs unified</strong> into digital twin in 5 days</li>
+        <li>Projected Year 1 savings: <strong>$100M</strong></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--yellow)"></span> Healthcare System</h3>
+      <ul>
+        <li>2 bootcamps → <strong>$96M</strong> total contract value</li>
+        <li>Highest disclosed bootcamp conversion</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     03c. PILOT & ONTOLOGY METHODOLOGY
+     ════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">03c</span>
+    <span class="section-title">Pilot — Process Mapping &amp; Ontology Building</span>
+  </div>
+
+  <!-- Ontology building process diagram -->
+  <div class="diagram">
+    <svg viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg">
+      <text x="450" y="25" text-anchor="middle" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="3" font-weight="600">90-DAY PILOT — FROM RAW DATA TO OPERATIONAL ONTOLOGY</text>
+
+      <!-- Timeline bar -->
+      <rect x="60" y="50" width="780" height="6" rx="3" fill="#1e2a3a"/>
+      <rect x="60" y="50" width="195" height="6" rx="3" fill="#3fb950"/>
+      <rect x="255" y="50" width="195" height="6" rx="3" fill="#58a6ff"/>
+      <rect x="450" y="50" width="195" height="6" rx="3" fill="#a78bfa"/>
+      <rect x="645" y="50" width="195" height="6" rx="3" fill="#e3b341"/>
+
+      <!-- Week labels -->
+      <text x="157" y="74" text-anchor="middle" fill="#3fb950" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">WEEKS 1-4</text>
+      <text x="352" y="74" text-anchor="middle" fill="#58a6ff" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">WEEKS 2-6</text>
+      <text x="547" y="74" text-anchor="middle" fill="#a78bfa" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">WEEKS 3-8</text>
+      <text x="742" y="74" text-anchor="middle" fill="#e3b341" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">WEEKS 6-12</text>
+
+      <!-- Phase 1: Data Integration -->
+      <rect x="60" y="86" width="195" height="130" rx="8" fill="#111820" stroke="#3fb950" stroke-width="1"/>
+      <text x="157" y="108" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="12" font-weight="600">Data Integration</text>
+      <text x="70" y="130" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Ingest from source systems</text>
+      <text x="70" y="148" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› PySpark/SQL pipelines</text>
+      <text x="70" y="166" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Clean, normalize, dedupe</text>
+      <text x="70" y="184" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Data quality assessment</text>
+      <text x="70" y="202" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Row-level access controls</text>
+
+      <!-- Phase 2: Ontology Mapping -->
+      <rect x="255" y="86" width="195" height="130" rx="8" fill="#111820" stroke="#58a6ff" stroke-width="1"/>
+      <text x="352" y="108" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="12" font-weight="600">Ontology Mapping</text>
+      <text x="265" y="130" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Map entities → Object Types</text>
+      <text x="265" y="148" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Define Properties + types</text>
+      <text x="265" y="166" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Create Link Types (1:N, N:M)</text>
+      <text x="265" y="184" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› AI-assisted schema discovery</text>
+      <text x="265" y="202" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› 50-100 Object Types, 20-50 Links</text>
+
+      <!-- Phase 3: Actions & Logic -->
+      <rect x="450" y="86" width="195" height="130" rx="8" fill="#111820" stroke="#a78bfa" stroke-width="1"/>
+      <text x="547" y="108" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="12" font-weight="600">Actions &amp; Logic</text>
+      <text x="460" y="130" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Define Action Types</text>
+      <text x="460" y="148" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">  (Approve, Reroute, Flag…)</text>
+      <text x="460" y="166" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Validation rules (budget,</text>
+      <text x="460" y="182" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">  approvals, constraints)</text>
+      <text x="460" y="200" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Writeback to source systems</text>
+
+      <!-- Phase 4: Applications -->
+      <rect x="645" y="86" width="195" height="130" rx="8" fill="#111820" stroke="#e3b341" stroke-width="1"/>
+      <text x="742" y="108" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="12" font-weight="600">Applications</text>
+      <text x="655" y="130" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Build ops UIs (Workshop)</text>
+      <text x="655" y="148" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Dashboards (Quiver)</text>
+      <text x="655" y="166" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Train power users (5-10)</text>
+      <text x="655" y="184" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› 2-3 production apps</text>
+      <text x="655" y="202" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Set up monitoring</text>
+
+      <!-- The political layer -->
+      <rect x="60" y="234" width="780" height="46" rx="8" fill="rgba(244,112,103,0.06)" stroke="#f47067" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="80" y="256" fill="#f47067" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600">PARALLEL TRACK: POLITICAL NAVIGATION</text>
+      <text x="80" y="272" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">Data access negotiation (teams are hostile gatekeepers) · RBAC as sales pitch ("your data is MORE secure") · Champion cultivation · C-level alignment</text>
+
+      <!-- FDE methodology principles -->
+      <rect x="60" y="298" width="380" height="70" rx="8" fill="#111820" stroke="#1e2a3a" stroke-width="1"/>
+      <text x="80" y="320" fill="#58a6ff" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600">FDE METHODOLOGY</text>
+      <text x="80" y="340" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Start with CEO's Top 5 problems, work backwards</text>
+      <text x="80" y="356" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› Build rudimentary demo in days, not months</text>
+
+      <rect x="460" y="298" width="380" height="70" rx="8" fill="#111820" stroke="#1e2a3a" stroke-width="1"/>
+      <text x="480" y="320" fill="#e3b341" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600">CORE PRINCIPLE</text>
+      <text x="480" y="340" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">› "If the problem could have been solved with a</text>
+      <text x="480" y="356" fill="#b8c4d0" font-family="DM Sans, sans-serif" font-size="10">  requirements document, it would have been"</text>
+    </svg>
+  </div>
+
+  <!-- FDE daily rhythm -->
+  <div class="card">
+    <h3><span class="dot" style="background:var(--green)"></span> FDE Daily Rhythm (On-Site 2-4 days/week)</h3>
+    <ul>
+      <li><strong>2-4h</strong> — Design, write, test code and workflows</li>
+      <li><strong>2-3h</strong> — Configure Foundry to unlock functionality</li>
+      <li><strong>1-2h</strong> — Meetings, stand-ups, stakeholder alignment</li>
+      <li><strong>Remaining</strong> — Navigate data access politics, train users, document</li>
+    </ul>
+  </div>
+
+  <!-- Ontology expansion dynamics -->
+  <div class="diagram">
+    <svg viewBox="0 0 900 200" xmlns="http://www.w3.org/2000/svg">
+      <text x="450" y="25" text-anchor="middle" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="3" font-weight="600">ONTOLOGY EXPANSION = COMPOUNDING SWITCHING COSTS</text>
+
+      <!-- Year 1 -->
+      <rect x="40" y="50" width="200" height="90" rx="8" fill="#111820" stroke="#3fb950" stroke-width="1.2"/>
+      <text x="140" y="72" text-anchor="middle" fill="#3fb950" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">YEAR 1 — ACQUIRE</text>
+      <text x="140" y="94" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="11">1 department, 1-3 use cases</text>
+      <text x="140" y="112" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="10">50-100 Object Types</text>
+      <text x="140" y="128" text-anchor="middle" fill="#f47067" font-family="JetBrains Mono, monospace" font-size="10">Switch cost: ~$500K</text>
+
+      <line x1="240" y1="95" x2="288" y2="95" stroke="#8b95a5" stroke-width="1.2"/>
+      <polygon points="285,92 291,95 285,98" fill="#8b95a5"/>
+
+      <!-- Year 2-3 -->
+      <rect x="290" y="45" width="260" height="100" rx="8" fill="#111820" stroke="#58a6ff" stroke-width="1.2"/>
+      <text x="420" y="67" text-anchor="middle" fill="#58a6ff" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">YEAR 2-3 — EXPAND</text>
+      <text x="420" y="89" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="11">3-5 departments, ontology spreads</text>
+      <text x="420" y="107" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="10">Supply chain + Finance + HR + Ops</text>
+      <text x="420" y="133" text-anchor="middle" fill="#f47067" font-family="JetBrains Mono, monospace" font-size="10">Switch cost: $2.5-5M + 6-9 months</text>
+
+      <line x1="550" y1="95" x2="598" y2="95" stroke="#8b95a5" stroke-width="1.2"/>
+      <polygon points="595,92 601,95 595,98" fill="#8b95a5"/>
+
+      <!-- Year 4+ -->
+      <rect x="600" y="40" width="260" height="110" rx="8" fill="#111820" stroke="#e3b341" stroke-width="1.2"/>
+      <text x="730" y="62" text-anchor="middle" fill="#e3b341" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">YEAR 4+ — SCALE</text>
+      <text x="730" y="84" text-anchor="middle" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="11">Enterprise-wide, 100s of use cases</text>
+      <text x="730" y="102" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="10">Ontology = operational nerve system</text>
+      <text x="730" y="120" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="10">Client builds 70-85% of apps</text>
+      <text x="730" y="140" text-anchor="middle" fill="#f47067" font-family="JetBrains Mono, monospace" font-size="10">Switch cost: $5-7.5M + 12mo</text>
+
+      <!-- Compounding factors -->
+      <text x="450" y="185" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="10">Why it compounds: deep integration · proprietary knowledge · operational dependency · decision history · security infra woven through</text>
+    </svg>
+  </div>
+
+  <!-- Scale examples -->
+  <div class="roles">
+    <div class="role-card">
+      <h4 style="color:var(--blue)">Airbus Skywise (Gold Standard)</h4>
+      <p>50,000+ users across 100+ airlines. 85-90% self-service. Airbus builds most apps, Palantir provides infrastructure. Reached self-service in ~2-3 years.</p>
+    </div>
+    <div class="role-card">
+      <h4 style="color:var(--green)">Lear Corporation</h4>
+      <p>100 users → 16,000 users. 4 use cases → 280 use cases. Classic Expand→Scale trajectory.</p>
+    </div>
+    <div class="role-card">
+      <h4 style="color:var(--yellow)">Center of Excellence (Emerges Year 2)</h4>
+      <p>Platform Owner · Permissions Manager · Ontology Steward · Data Engineers ("South team") · App Developers ("North team"). Client governance structure.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     03d. AIFD — AI-ACCELERATED DEPLOYMENT
+     ════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">03d</span>
+    <span class="section-title">AIFD — How AI Changed Everything</span>
+  </div>
+
+  <div class="callout">
+    <strong>"AIFD" = AI-First Deployment.</strong> Not a formal product — it's how AIP accelerates FDE work. SAP migrations that took years now take weeks. An "army of SI consultants" replaced by two humans + "an army of AI FTEs."
+  </div>
+
+  <!-- Before/After comparison -->
+  <div class="card">
+    <h3><span class="dot" style="background:var(--cyan)"></span> Before vs After AIP</h3>
+    <table class="comparison">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th class="pal">Pre-AIP (2013-2022)</th>
+          <th class="spider">Post-AIP (2023+)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Time to first prototype</td>
+          <td class="pal">2-4 months</td>
+          <td class="spider">5 days (bootcamp)</td>
+        </tr>
+        <tr>
+          <td>Time to production</td>
+          <td class="pal">6-18 months</td>
+          <td class="spider">1-3 months</td>
+        </tr>
+        <tr>
+          <td>FDE person-months/deployment</td>
+          <td class="pal">12-60</td>
+          <td class="spider">2-6 (80-90% reduction)</td>
+        </tr>
+        <tr>
+          <td>Deployments per FDE/year</td>
+          <td class="pal">1-2</td>
+          <td class="spider">5-15+</td>
+        </tr>
+        <tr>
+          <td>FDE cost per $1M ARR</td>
+          <td class="pal">~$700K (2016)</td>
+          <td class="spider">~$80-150K (2025)</td>
+        </tr>
+        <tr>
+          <td>Revenue per employee</td>
+          <td class="pal">$448K (2020)</td>
+          <td class="spider">$1.01M (2025)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- What AI automates -->
+  <div class="grid3">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--green)"></span> AI Does Well</h3>
+      <ul>
+        <li>Schema/ontology mapping from data sources</li>
+        <li>Pipeline code generation (80%+ boilerplate)</li>
+        <li>Workshop app scaffolding from NL descriptions</li>
+        <li>Migration plan generation (60 seconds)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--yellow)"></span> AI Assists</h3>
+      <ul>
+        <li>Data quality assessment</li>
+        <li>Link inference from data structure</li>
+        <li>Application UI refinement</li>
+        <li>Documentation generation</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--red)"></span> Still Human</h3>
+      <ul>
+        <li>Client relationship management</li>
+        <li>Complex business logic / domain expertise</li>
+        <li>Security architecture (classified)</li>
+        <li>Change management &amp; adoption</li>
+        <li>Data access politics</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <strong>Jevons Paradox in action:</strong> Despite AI making each FDE 5-15x more productive, Palantir hired MORE people (3,838 → 4,414 headcount 2023→2025). AI is a scaling tool, not a cost-cutting tool. Each FDE handles more engagements → more revenue → hire more.
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     04. COMMERCIAL — HOW TO SELL
+     ════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <span class="section-title">Commercial — How to Sell</span>
+  </div>
+
+  <!-- Flywheel diagram -->
+  <div class="diagram">
+    <svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg">
+      <text x="450" y="25" text-anchor="middle" fill="#8b95a5" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="3" font-weight="600">REVENUE FLYWHEEL</text>
+
+      <!-- Central circle -->
+      <circle cx="350" cy="220" r="140" fill="none" stroke="#1e2a3a" stroke-width="1.5"/>
+      <circle cx="350" cy="220" r="50" fill="rgba(88,166,255,0.08)" stroke="#58a6ff" stroke-width="1.5"/>
+      <text x="350" y="215" text-anchor="middle" fill="#58a6ff" font-family="JetBrains Mono, monospace" font-size="11" font-weight="700">ONTOLOGY</text>
+      <text x="350" y="232" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="9">The platform</text>
+
+      <!-- Acquire node (top) -->
+      <circle cx="350" cy="80" r="42" fill="#111820" stroke="#f47067" stroke-width="2"/>
+      <text x="350" y="76" text-anchor="middle" fill="#f47067" font-family="JetBrains Mono, monospace" font-size="11" font-weight="700">ACQUIRE</text>
+      <text x="350" y="93" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="9">$100-500K</text>
+
+      <!-- Expand node (bottom-right) -->
+      <circle cx="471" cy="290" r="42" fill="#111820" stroke="#e3b341" stroke-width="2"/>
+      <text x="471" y="286" text-anchor="middle" fill="#e3b341" font-family="JetBrains Mono, monospace" font-size="11" font-weight="700">EXPAND</text>
+      <text x="471" y="303" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="9">$1-5M+</text>
+
+      <!-- Scale node (bottom-left) -->
+      <circle cx="229" cy="290" r="42" fill="#111820" stroke="#3fb950" stroke-width="2"/>
+      <text x="229" y="286" text-anchor="middle" fill="#3fb950" font-family="JetBrains Mono, monospace" font-size="11" font-weight="700">SCALE</text>
+      <text x="229" y="303" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="9">$5-20M+</text>
+
+      <!-- Curved arrows between nodes -->
+      <!-- Acquire → Expand -->
+      <path d="M 388 98 Q 480 140 492 250" fill="none" stroke="#f47067" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+      <!-- Expand → Scale -->
+      <path d="M 432 312 Q 350 370 252 312" fill="none" stroke="#e3b341" stroke-width="1.5" marker-end="url(#arrowYellow)"/>
+      <!-- Scale → Acquire (self-service + new departments) -->
+      <path d="M 208 252 Q 220 140 312 98" fill="none" stroke="#3fb950" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+
+      <defs>
+        <marker id="arrowRed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#f47067"/></marker>
+        <marker id="arrowYellow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#e3b341"/></marker>
+        <marker id="arrowGreen" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#3fb950"/></marker>
+        <marker id="arrowBlue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#58a6ff"/></marker>
+      </defs>
+
+      <!-- Margin annotations -->
+      <text x="500" y="170" fill="#f47067" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">NEGATIVE margin</text>
+      <text x="470" y="360" fill="#e3b341" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">-43% → +35%</text>
+      <text x="130" y="200" fill="#3fb950" font-family="JetBrains Mono, monospace" font-size="9" font-weight="600">+55% margin</text>
+      <text x="130" y="214" fill="#3fb950" font-family="JetBrains Mono, monospace" font-size="9">self-service</text>
+
+      <!-- Product feedback loop -->
+      <rect x="620" y="70" width="250" height="300" rx="10" fill="#111820" stroke="#1e2a3a" stroke-width="1"/>
+      <text x="745" y="98" text-anchor="middle" fill="#58a6ff" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="1">PRODUCT LOOP</text>
+
+      <text x="640" y="132" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="12" font-weight="600">1. FDE discovers client gaps</text>
+      <line x1="650" y1="145" x2="650" y2="160" stroke="#2a3a4e" stroke-width="1"/>
+      <text x="640" y="176" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="12" font-weight="600">2. Insight → platform R&D</text>
+      <line x1="650" y1="189" x2="650" y2="204" stroke="#2a3a4e" stroke-width="1"/>
+      <text x="640" y="220" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="12" font-weight="600">3. Feature ships to ALL clients</text>
+      <line x1="650" y1="233" x2="650" y2="248" stroke="#2a3a4e" stroke-width="1"/>
+      <text x="640" y="264" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="12" font-weight="600">4. Platform gets stickier</text>
+      <line x1="650" y1="277" x2="650" y2="292" stroke="#2a3a4e" stroke-width="1"/>
+      <text x="640" y="308" fill="#e2e8f0" font-family="DM Sans, sans-serif" font-size="12" font-weight="600">5. NDR ↑ Churn ↓</text>
+
+      <text x="745" y="352" text-anchor="middle" fill="#8b95a5" font-family="DM Sans, sans-serif" font-size="10">This is why FDE = R&D spend</text>
+
+      <!-- Arrow connecting flywheel to product loop -->
+      <path d="M 510 220 L 615 220" fill="none" stroke="#58a6ff" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arrowBlue)"/>
+    </svg>
+  </div>
+
+  <!-- Pricing table -->
+  <div class="card" style="margin-top:24px">
+    <h3><span class="dot" style="background:var(--purple)"></span> Pricing Architecture</h3>
+    <table class="pricing">
+      <thead>
+        <tr><th>Product</th><th>Price</th><th>Source</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Gotham (per-core perpetual)</td><td>$141,000/core + $28K/year maint.</td><td>GSA Schedule</td></tr>
+        <tr><td>Foundry (per-core annual)</td><td>£66,000/core/year</td><td>G-Cloud 14</td></tr>
+        <tr><td>FDE Services</td><td>£150,000/person/quarter</td><td>G-Cloud 14</td></tr>
+        <tr><td>Organization License</td><td>£3,000,000/year</td><td>G-Cloud 14</td></tr>
+        <tr><td>AIP</td><td>Usage-based (compute + storage + ontology)</td><td>Public</td></tr>
+        <tr><td>Apollo standalone</td><td>~$100/install/month</td><td>Azure/AWS Marketplace</td></tr>
+      </tbody>
+    </table>
+    <div class="callout" style="margin-top:16px;margin-bottom:0">
+      <strong>Karp:</strong> "There is explicitly no pricing strategy for AIP." — Pure land grab. Get users on the platform, monetize through expansion.
+    </div>
+  </div>
+
+  <!-- Moat -->
+  <div class="grid3" style="margin-top:20px">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--blue)"></span> Ontology Moat</h3>
+      <ul>
+        <li>No direct competitor has an operational ontology</li>
+        <li>Databricks has Unity Catalog — data governance, not operational</li>
+        <li>Microsoft Fabric + Copilot — existential risk #1, but lacks writeback + governed agents</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--green)"></span> Trust Moat</h3>
+      <ul>
+        <li>~20 years of deployed gov infrastructure</li>
+        <li>FedRAMP High, DoD IL5/IL6</li>
+        <li>Five Eyes, NATO, Ukraine deployed</li>
+        <li>954 clients (+34% YoY)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--purple)"></span> Talent Moat</h3>
+      <ul>
+        <li>170+ startups founded by ex-FDEs</li>
+        <li>$24B+ raised collectively by alumni</li>
+        <li>More ex-Palantir founders than ex-Google in each YC batch</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     05. FOR SPIDER — KEY ADAPTATIONS
+     ════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <span class="section-title">For Spider — Key Adaptations</span>
+  </div>
+
+  <div class="card">
+    <table class="comparison">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th class="pal">Palantir</th>
+          <th class="spider">Spider</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Target</td>
+          <td class="pal">Enterprise / Government ($5M+ ACV)</td>
+          <td class="spider">PME / ETI européennes (€500-5,000/mois)</td>
+        </tr>
+        <tr>
+          <td>Delivery</td>
+          <td class="pal">FDE on-site, 4-5 engineers embedded</td>
+          <td class="spider">AI-assisted remote setup, templated</td>
+        </tr>
+        <tr>
+          <td>Ontology</td>
+          <td class="pal">Custom per client, months to build</td>
+          <td class="spider">Templated vertical ontologies (retail, manufacturing, services)</td>
+        </tr>
+        <tr>
+          <td>Deployment</td>
+          <td class="pal">Air-gapped, on-prem, edge, gov cloud</td>
+          <td class="spider">Cloud-native EU (SecNumCloud-compatible)</td>
+        </tr>
+        <tr>
+          <td>Architecture</td>
+          <td class="pal">Foundry: 150+ microservices (Rubix/K8s)</td>
+          <td class="spider">PostgreSQL monolith (JSONB + pgvector)</td>
+        </tr>
+        <tr>
+          <td>AI Strategy</td>
+          <td class="pal">50+ models, BYOM, multi-vendor</td>
+          <td class="spider">Mistral/Claude, EU-sovereign, focused</td>
+        </tr>
+        <tr>
+          <td>Sales Cycle</td>
+          <td class="pal">9+ months → 6 weeks post-bootcamp</td>
+          <td class="spider">Self-serve trial → onboarding call → go</td>
+        </tr>
+        <tr>
+          <td>Data Maturity</td>
+          <td class="pal">Assumes sophisticated data infrastructure</td>
+          <td class="spider">83% use Excel → ERP connector = wedge</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn">
+    <strong>The core insight:</strong> Palantir proved the Ontology model works. Spider's bet is that the same architecture — simplified, templated, AI-automated — can serve the 50-100K European companies that have an ERP + €10-100M revenue but zero data infrastructure.
+  </div>
+
+  <div class="callout danger">
+    <strong>Counter-thesis to internalize:</strong> 83% of EU SMBs use Excel for analytics. 80% of AI projects fail (RAND). APEX benchmark: 29.8% best score. The gap isn't technology — it's organizational readiness. Spider must solve adoption, not just architecture.
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     FOOTER
+     ════════════════════════════════════════ -->
+<div class="footer">
+  Synthesized from 27 research files (~1.3 MB) · Data current as of Palantir Q4 2025 earnings · February 2026
+</div>
+
+</div><!-- /.page -->
+</body>
+</html>

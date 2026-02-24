@@ -1,0 +1,188 @@
+# BMAD Method Workflow Status
+# Generated: 2026-01-13T00:00:00Z
+# Project: SpiderOS
+
+project_name: "SpiderOS"
+project_type: "web-app"
+project_level: 4
+communication_language: "French"
+output_language: "French"
+input_method: "SuperWhisper (voice-to-text)"
+input_notes: |
+  L'utilisateur dicte en français via SuperWhisper.
+  Erreurs de transcription fréquentes :
+  - "BMAD" peut être transcrit "Bimad", "B-Mad", "bi-mad", etc.
+  - Noms propres et termes techniques peuvent être mal transcrits
+  - Toujours interpréter l'intention, pas la transcription littérale
+last_updated: "2026-01-18T14:00:00Z"
+
+# Workflow Status Tracking
+# Status values:
+#   - "required" - Must be completed
+#   - "optional" - Can be skipped
+#   - "recommended" - Strongly suggested
+#   - "conditional" - Required based on project level
+#   - "{file-path}" - Completed (path to output file)
+#   - "skipped" - Explicitly skipped
+
+workflow_status:
+  # Phase 1: Analysis (Optional but recommended)
+  - name: product-brief
+    phase: 1
+    status: "docs/product-brief.md"
+    completed: "2026-01-18"
+    description: "Create comprehensive product brief - DONE (12 sections + Vision Stratégique confidentielle)"
+
+  # Brainstorming
+  - name: brainstorm-project
+    phase: 1
+    status: "docs/brainstorming/modules-overview.md"
+    description: "Structured brainstorming session"
+
+  - name: brainstorm-spider-builder
+    phase: 1
+    status: "docs/brainstorming/spider-builder.md"
+    description: "Deep dive brainstorming - Spider Builder module"
+
+  - name: brainstorm-spider-content
+    phase: 1
+    status: "docs/brainstorming/spider-content.md"
+    description: "Deep dive brainstorming - Spider Content module"
+
+  - name: brainstorm-spider-memory
+    phase: 1
+    status: "docs/brainstorming/spider-memory.md"
+    description: "Deep dive brainstorming - Spider Memory (moteur mémoire et vectorisation, ex-Spider Vector)"
+
+  - name: brainstorm-spider-people
+    phase: 1
+    status: "docs/brainstorming/spider-people.md"
+    description: "Deep dive brainstorming - Spider People module - DONE (5 sessions)"
+
+  - name: brainstorm-spider-chatbot
+    phase: 1
+    status: "docs/brainstorming/spider-chatbot.md"
+    description: "Deep dive brainstorming - Spider Chatbot (interface IA unifiee)"
+
+  - name: brainstorm-spider-documents
+    phase: 1
+    status: "docs/brainstorming/spider-documents.md"
+    description: "Deep dive brainstorming - Spider Documents (notes strategiques, slides, propales) - DONE"
+
+  # Research - Spider People
+  - name: research-people-comprehensive
+    phase: 1
+    status: "docs/research/research-spider-people-2026-01-14.md"
+    description: "Research Spider People - Comprehensive (score connaissance, fiabilité data, concurrence, technique, marché) - DONE"
+
+  - name: research-score-connaissance-deep
+    phase: 1
+    status: "docs/research/research-score-connaissance-deep-2026-01-14.md"
+    description: "Research Deep Dive - Score de connaissance (CIA, FBI, psychologie clinique, influence, linguistique) - DONE"
+
+  # Research - Spider Builder
+  - name: research-builder-market
+    phase: 1
+    status: "docs/research/spider-builder/market.md"
+    description: "Research Spider Builder - AI coding tools market & positioning"
+
+  - name: research-builder-technical
+    phase: 1
+    status: "docs/research/spider-builder/technical.md"
+    description: "Research Spider Builder - Technical deep dive (architecture, guards, collaboration)"
+
+  - name: research-builder-context
+    phase: 1
+    status: "docs/research/spider-builder/context.md"
+    description: "Research Spider Builder - Context management approaches"
+
+  # Research - Spider Content
+  - name: research-content-market
+    phase: 1
+    status: "docs/research/spider-content/market.md"
+    description: "Research Spider Content - AI content generation market"
+
+  - name: research-content-strategic
+    phase: 1
+    status: "docs/research/spider-content/strategic.md"
+    description: "Research Spider Content - Strategic (distribution, pricing, agencies)"
+
+  - name: research-content-brand-extraction
+    phase: 1
+    status: "docs/research/spider-content/brand-extraction.md"
+    description: "Research Spider Content - Brand extraction AI tools benchmark"
+
+  # Research - Spider Memory (ex-Spider Vector)
+  - name: research-memory-databases
+    phase: 1
+    status: "docs/research/spider-memory/databases.md"
+    description: "Research Spider Memory - Vector databases comparison"
+
+  - name: research-memory-embeddings
+    phase: 1
+    status: "docs/research/spider-memory/embeddings.md"
+    description: "Research Spider Memory - Embedding models comparison"
+
+  - name: research-memory-infrastructure
+    phase: 1
+    status: "docs/research/spider-memory/infrastructure.md"
+    description: "Research Spider Memory - Infrastructure, scale, concurrents RAG"
+
+  - name: research-memory-summarization
+    phase: 1
+    status: "docs/research/spider-memory/summarization.md"
+    description: "Research Spider Memory - Résumés fiables et anti-hallucination"
+
+  - name: research-memory-confidence
+    phase: 1
+    status: "docs/research/spider-memory/confidence-scoring.md"
+    description: "Research Spider Memory - Indice de confiance (état de l'art)"
+
+  # Research - Spider Chatbot
+  - name: research-chatbot-market
+    phase: 1
+    status: "docs/research/spider-chatbot/market.md"
+    description: "Research Spider Chatbot - AI chat platforms market"
+
+  # Research - Spider Documents
+  - name: research-documents-market
+    phase: 1
+    status: "docs/research/spider-documents/market.md"
+    description: "Research Spider Documents - AI docs/slides generation market"
+
+  - name: research-documents-ux-tracking
+    phase: 1
+    status: "docs/research/spider-documents/ux-tracking-deep-dive.md"
+    description: "Research Spider Documents - UX concurrents, tracking web, pain points commerciaux - DONE"
+
+  # Phase 2: Planning (Required - choose one based on project level)
+  - name: prd
+    phase: 2
+    status: "docs/prd-spideros-2026-01-18.md"
+    completed: "2026-01-18"
+    description: "Product Requirements Document - DONE (64 FRs, 24 NFRs, 25 Epics)"
+
+  - name: tech-spec
+    phase: 2
+    status: "optional"  # optional for level 2+
+    description: "Technical Specification"
+
+  - name: create-ux-design
+    phase: 2
+    status: "docs/ux-design-spideros.md"
+    completed: "2026-01-18"
+    description: "UX/UI design workflow - DONE (58 ecrans, 8 flows, WCAG 2.1 AA, design tokens complets)"
+
+  # Phase 3: Solutioning (Conditional on project level)
+  - name: architecture
+    phase: 3
+    status: "required"  # required for level 2+
+    description: "System architecture design"
+
+  - name: solutioning-gate-check
+    phase: 3
+    status: "optional"
+    description: "Validate architecture against requirements"
+
+  # Phase 4: Implementation (Required)
+  # Note: Implementation tracked in sprint-status.yaml

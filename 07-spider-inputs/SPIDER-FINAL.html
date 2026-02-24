@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpiderOS -- Le Document Final</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Fira Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+  color: #0A0A0A;
+  background: #FFFEFC;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.025em;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+h1 { font-size: 3rem; margin-bottom: 1.5rem; }
+h2 { font-size: 2.25rem; margin-bottom: 1.25rem; }
+h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+h4 { font-size: 1.125rem; margin-bottom: 0.75rem; font-weight: 500; }
+
+p { margin-bottom: 1rem; color: #0A0A0A; }
+p.secondary { color: #525252; }
+p.muted { opacity: 0.4; }
+
+strong { font-weight: 600; }
+em { font-style: italic; }
+
+code, .mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875em;
+}
+
+code {
+  background: #F4F4F6;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  color: #525252;
+}
+
+a {
+  color: #0A0A0A;
+  text-decoration: underline;
+  text-decoration-color: #E8E8ED;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s;
+}
+a:hover { text-decoration-color: #0A0A0A; }
+a:focus-visible { outline: 2px solid #00D4EE; outline-offset: 2px; }
+
+/* ===== LAYOUT ===== */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.container--wide {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+section {
+  padding: 5rem 0;
+}
+
+section.bg-cream { background: #FFFEFC; }
+section.bg-neutral { background: #F4F4F6; }
+section.bg-warm { background: #FAF9F7; }
+section.bg-white { background: #FFFFFF; }
+
+section.bg-dark {
+  background: linear-gradient(135deg, #022C22, #0A0A0A);
+  color: #FFFFFF;
+}
+section.bg-dark p { color: rgba(255,255,255,0.85); }
+section.bg-dark h2, section.bg-dark h3 { color: #FFFFFF; }
+section.bg-dark code { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); }
+section.bg-dark .card { background: rgba(255,255,255,0.06) !important; border-color: rgba(255,255,255,0.1) !important; }
+section.bg-dark .card h3, section.bg-dark .card h4 { color: #FFFFFF !important; }
+section.bg-dark .card p { color: rgba(255,255,255,0.8) !important; }
+section.bg-dark .card strong { color: #FFFFFF; }
+section.bg-dark .card blockquote p { color: rgba(255,255,255,0.9) !important; }
+section.bg-dark blockquote { border-left-color: #00F5FF; color: #FFFFFF; }
+section.bg-dark blockquote p { color: rgba(255,255,255,0.9); }
+section.bg-dark .table-wrapper th { background: rgba(255,255,255,0.08); color: #FFFFFF; }
+section.bg-dark .table-wrapper td { color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.08); }
+section.bg-dark .table-wrapper tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+/* ===== HEADER ===== */
+.site-header {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #E8E8ED;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 254, 252, 0.92);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-glyph {
+  height: 28px;
+  width: auto;
+}
+
+.logo-text {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #0A0A0A;
+}
+
+.header-subtitle {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: #525252;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ===== HERO ===== */
+.hero {
+  padding: 6rem 0 5rem;
+  border-bottom: 1px solid #E8E8ED;
+}
+
+.hero h1 {
+  font-size: 4.5rem;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+}
+
+.hero .lead {
+  font-size: 1.125rem;
+  color: #525252;
+  max-width: 640px;
+  line-height: 1.8;
+}
+
+.hero .meta {
+  margin-top: 2rem;
+  font-size: 0.875rem;
+  color: #525252;
+  opacity: 0.6;
+}
+
+/* ===== TOC ===== */
+.toc {
+  padding: 3rem 0;
+  background: #F4F4F6;
+  border-bottom: 1px solid #E8E8ED;
+}
+
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.75rem;
+}
+
+.toc-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #FFFFFF;
+  border: 1px solid #E8E8ED;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.toc-item:hover {
+  border-color: #525252;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.toc-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: #525252;
+  flex-shrink: 0;
+}
+
+.toc-label {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #0A0A0A;
+}
+
+/* ===== PART HEADER ===== */
+.part-header {
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #E8E8ED;
+  position: relative;
+}
+
+.part-header::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 80px;
+  height: 2px;
+  background: #00D4EE;
+}
+
+section.bg-dark .part-header { border-bottom-color: rgba(255,255,255,0.15); }
+section.bg-dark .part-header::after { background: #00F5FF; }
+
+.part-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8125rem;
+  color: #525252;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+section.bg-dark .part-number { color: rgba(255,255,255,0.5); }
+
+/* ===== CARDS ===== */
+.card {
+  background: #FFFFFF;
+  border: 1px solid #E8E8ED;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.card--flush { padding: 0; overflow: hidden; }
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.card-grid--2 { grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); }
+
+/* ===== BLOCKQUOTES ===== */
+blockquote {
+  border-left: 3px solid #00D4EE;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  background: #FAF9F7;
+  border-radius: 0 8px 8px 0;
+}
+
+blockquote p {
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: #0A0A0A;
+  margin-bottom: 0;
+  font-style: italic;
+}
+
+/* ===== TABLES ===== */
+.table-wrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  border: 1px solid #E8E8ED;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #525252;
+  background: #F4F4F6;
+  border-bottom: 1px solid #E8E8ED;
+  white-space: nowrap;
+}
+
+td {
+  padding: 0.625rem 1rem;
+  border-bottom: 1px solid #F4F4F6;
+  color: #0A0A0A;
+  vertical-align: top;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:nth-child(even) td { background: #FAFAFA; }
+
+/* ===== SVG DIAGRAMS ===== */
+.diagram {
+  margin: 2rem 0;
+  padding: 2rem;
+  background: #FFFFFF;
+  border: 1px solid #E8E8ED;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.diagram-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #525252;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.diagram svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+
+section.bg-dark .diagram {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.1);
+}
+section.bg-dark .diagram-title { color: rgba(255,255,255,0.6); }
+
+/* ===== PITCH CARDS ===== */
+.pitch-card {
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid;
+}
+
+.pitch-card--familial { background: #FAF9F7 !important; border-color: #E8E8ED; color: #0A0A0A !important; }
+.pitch-card--corporate { background: #F0FDF4 !important; border-color: #BBF7D0; color: #0A0A0A !important; }
+.pitch-card--heritier { background: #FFFBEB !important; border-color: #FDE68A; color: #0A0A0A !important; }
+section.bg-dark .pitch-card--familial p,
+section.bg-dark .pitch-card--familial blockquote p,
+section.bg-dark .pitch-card--familial .pitch-persona,
+section.bg-dark .pitch-card--corporate p,
+section.bg-dark .pitch-card--corporate blockquote p,
+section.bg-dark .pitch-card--corporate .pitch-persona,
+section.bg-dark .pitch-card--heritier p,
+section.bg-dark .pitch-card--heritier blockquote p,
+section.bg-dark .pitch-card--heritier .pitch-persona { color: #525252 !important; }
+section.bg-dark .pitch-card--familial blockquote,
+section.bg-dark .pitch-card--corporate blockquote,
+section.bg-dark .pitch-card--heritier blockquote { border-left-color: #00D4EE; background: rgba(0,0,0,0.03); }
+.pitch-card--investisseur { background: linear-gradient(135deg, #022C22, #0A0A0A); border-color: transparent; color: #FFFFFF; }
+.pitch-card--investisseur p { color: rgba(255,255,255,0.85); }
+.pitch-card--investisseur blockquote { background: rgba(255,255,255,0.06); }
+.pitch-card--investisseur blockquote p { color: #FFFFFF; }
+
+.pitch-persona {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  color: #525252;
+}
+
+.pitch-card--investisseur .pitch-persona { color: rgba(255,255,255,0.5); }
+
+/* ===== NUMBERED LIST (ordered) ===== */
+ol.thesis-list {
+  list-style: none;
+  counter-reset: thesis;
+}
+
+ol.thesis-list li {
+  counter-increment: thesis;
+  margin-bottom: 1.25rem;
+  padding-left: 2.5rem;
+  position: relative;
+}
+
+ol.thesis-list li::before {
+  content: counter(thesis);
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  width: 1.75rem;
+  height: 1.75rem;
+  background: #F4F4F6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #525252;
+}
+
+/* ===== HYPOTHESIS TAGS ===== */
+.tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: 0.2em 0.6em;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.tag--green { background: #F0FDF4; color: #16A34A; }
+.tag--red { background: #FEF2F2; color: #DC2626; }
+.tag--amber { background: #FFFBEB; color: #D97706; }
+
+/* ===== UTILITY ===== */
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+.mt-4 { margin-top: 2rem; }
+
+.text-center { text-align: center; }
+.text-small { font-size: 0.875rem; }
+.text-muted { color: #525252; }
+
+.accent-line {
+  width: 48px;
+  height: 2px;
+  background: #00D4EE;
+  margin-bottom: 1.5rem;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #E8E8ED;
+  margin: 3rem 0;
+}
+
+section.bg-dark .divider { border-top-color: rgba(255,255,255,0.1); }
+
+/* ===== CODE BLOCKS ===== */
+pre {
+  background: #171717;
+  color: #E8E8ED;
+  padding: 1.25rem 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  margin: 1.5rem 0;
+}
+
+/* ===== FOOTER ===== */
+.site-footer {
+  padding: 3rem 0;
+  background: #171717;
+  font-size: 0.8125rem;
+  text-align: center;
+}
+.site-footer p { color: rgba(255,255,255,0.5) !important; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+  .hero h1 { font-size: 2.75rem; }
+  h1 { font-size: 2.25rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.25rem; }
+  section { padding: 3rem 0; }
+  .hero { padding: 4rem 0 3rem; }
+  .container, .container--wide { padding: 0 1.25rem; }
+  .card { padding: 1.25rem; }
+  .card-grid, .card-grid--2 { grid-template-columns: 1fr; }
+  .toc-grid { grid-template-columns: 1fr; }
+  .header-subtitle { display: none; }
+  .diagram { padding: 1rem; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 2rem; }
+  h1 { font-size: 1.75rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="container">
+    <div class="header-inner">
+      <svg class="logo-glyph" viewBox="0 0 654 761" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M256.597 749.381C233.338 734.373 210.407 719.519 187.377 704.819C181.461 701.043 179.05 696.156 179.139 689.013C179.719 642.525 179.708 596.028 180.485 549.544C180.696 536.936 174.217 532.934 162.696 537.845C135.412 549.476 108.674 562.294 81.6741 574.542C80.0052 575.3 78.2999 576 76.7057 576.895C66.0745 582.863 61.0464 577.635 56.699 570.851C47.8001 556.965 39.174 542.904 30.4025 528.937C21.6304 514.968 12.7706 501.054 4.03979 487.059C-1.78912 477.716 -1.39984 474.473 5.79144 466.174C32.5212 435.325 59.2269 404.455 85.925 373.579C91.9502 366.611 91.8511 364.258 85.2714 357.559C63.7862 335.684 42.2773 313.832 20.7841 291.965C9.87317 280.864 10.8449 274.947 24.8426 267.938C70.7151 244.968 116.606 222.034 162.492 199.093C171.371 194.654 171.367 194.651 169.064 184.913C166.386 173.592 163.847 162.236 161.058 150.942C158.778 141.706 160.746 134.46 169.105 128.913C196.868 110.488 224.509 91.8775 252.065 73.1449C259.535 68.0666 266.329 68.2296 273.718 73.2515C290.524 84.6745 307.527 95.8078 324.456 107.05C332.476 112.376 333.252 112.492 340.397 106.157C363.216 85.9242 385.245 64.8347 407.509 44.0003C420.162 32.1603 432.885 20.3955 445.643 8.6694C450.448 4.25357 455.401 -0.0215149 462.531 9.15527e-05C468.688 0.0187683 472.505 3.55344 472.909 9.70041C473.432 17.6326 470.948 25.1652 469.662 32.839C464.176 65.5874 458.468 98.2987 452.849 131.025C452.146 135.116 451.658 139.252 450.763 143.299C449.779 147.743 451.374 151.169 454.466 154.056C463.48 162.471 472.563 170.811 481.609 179.191C484.862 182.205 488.304 183.218 492.98 182.402C515.57 178.465 538.225 174.89 560.884 171.362C567.41 170.346 572.544 173.409 576.647 178.233C586.472 189.784 596.202 201.416 606.005 212.985C616.132 224.937 626.314 236.84 636.438 248.794C639.02 251.842 641.593 254.906 643.257 258.612C646.439 265.702 645.044 270.236 638.262 274.08C615.36 287.059 592.436 299.998 569.522 312.954C547.767 325.253 526.043 337.608 504.24 349.82C498.068 353.277 495.127 357.986 495.688 365.283C496.441 375.071 495.942 384.913 496.563 394.743C496.93 400.539 499.011 404.439 503.554 407.65C527.365 424.474 551.113 441.387 574.887 458.263C597.846 474.561 620.816 490.845 643.764 507.158C645.661 508.507 647.547 509.912 649.242 511.499C655.272 517.147 654.132 523.891 646.311 526.571C637.351 529.642 628.127 531.938 619.067 534.728C597.284 541.436 575.23 547.279 553.913 555.481C548.681 557.495 545.345 560.646 543.286 565.837C534.202 588.745 524.987 611.603 515.641 634.407C513.77 638.972 513.064 645.246 506.457 645.534C500.012 645.815 497.568 640.127 495.096 635.6C481.685 611.038 468.57 586.313 455.295 561.676C447.473 547.158 439.623 532.657 431.166 518.489C427.905 513.027 423.441 510.603 417.186 510.684C407.022 510.817 396.853 510.679 386.687 510.73C377.937 510.774 375.149 513.608 374.587 522.253C373.234 543.068 374.083 563.902 374.025 584.725C374.005 591.901 371.502 597.162 365.693 601.262C355.077 608.755 344.719 616.615 334.044 624.019C328.399 627.934 325.184 633.173 322.866 639.464C309.341 676.17 298.047 713.658 283.909 750.151C279.558 761.38 276.158 762.686 265.946 755.831C262.902 753.787 259.906 751.674 256.597 749.381ZM407.384 171.96C412.681 145.419 417.973 118.877 423.279 92.3384C424.589 85.7867 425.944 79.244 427.299 72.5935C424.949 72.4016 424.218 73.7021 423.288 74.5498C413.686 83.3012 404.163 92.138 394.536 100.861C377.381 116.405 360.238 131.964 342.947 147.355C336.461 153.128 331.349 153.301 323.838 148.793C321.985 147.681 320.205 146.441 318.42 145.219C303.165 134.783 287.894 124.371 272.682 113.874C268.437 110.945 264.271 110.956 260.141 113.781C242.41 125.908 224.608 137.935 207.077 150.344C200.36 155.099 199.354 161.605 203.077 168.913C205.134 172.948 207.861 176.53 210.911 179.851C225.571 195.812 241.613 210.378 257.136 225.466C276.963 244.737 296.909 263.887 316.746 283.149C321.202 287.477 326.289 290.232 332.488 288.615C348.092 284.544 363.584 280.048 379.154 275.842C384.992 274.264 388.007 270.551 389.146 264.716C395.128 234.068 401.228 203.442 407.384 171.96ZM171.922 496.094C177.497 493.474 183.073 490.854 188.649 488.235C210.857 477.803 231.396 464.41 252.58 452.165C257.538 449.299 260.629 444.717 260.041 438.954C258.71 425.918 256.893 412.928 255.101 399.944C254.393 394.816 251.143 392.036 245.933 391.71C234.649 391.004 223.366 390.158 212.068 389.789C186.443 388.951 160.805 388.506 135.183 387.595C127.472 387.321 121.925 390.203 117.019 395.965C95.5302 421.199 73.8279 446.252 52.1957 471.365C47.0311 477.36 46.662 479.444 50.7579 485.995C58.969 499.127 67.2548 512.216 75.7297 525.178C81.085 533.37 83.3494 533.859 92.2603 530.204C118.754 519.336 145.12 508.169 171.922 496.094ZM75.2032 293.172C92.2383 309.574 109.306 325.942 126.279 342.408C129.385 345.421 132.738 347.6 137.12 347.957C141.094 348.279 145.062 348.696 149.041 348.935C173.117 350.382 197.195 351.795 221.273 353.208C228.746 353.647 236.313 353.461 243.673 354.614C253.811 356.202 261.49 353.36 267.628 345.097C273.579 337.084 280.019 329.432 286.315 321.679C293.23 313.162 292.95 307.241 284.999 299.498C276.528 291.249 267.994 283.064 259.484 274.855C242.946 258.899 226.4 242.953 209.871 226.989C204.376 221.682 198.235 220.178 191.159 223.586C188.91 224.669 186.565 225.555 184.335 226.672C166.022 235.843 147.739 245.075 129.419 254.234C112.292 262.797 95.0843 271.201 78.0084 279.865C70.8242 283.51 70.1325 286.863 75.2032 293.172ZM275.557 659.016C280.44 644.862 285.384 630.728 290.181 616.545C292.602 609.389 296.569 603.501 302.712 598.974C311.154 592.753 319.412 586.283 327.769 579.944C332.511 576.348 335.331 571.985 335.628 565.685C336.238 552.703 336.285 539.725 336.194 526.744C336.15 520.366 334.655 514.28 331.74 508.502C326.591 498.295 317.836 491.757 309.053 485.061C297.419 476.192 285.975 475.768 273.508 483.531C259.522 492.241 245.27 500.575 230.752 508.36C221.656 513.238 218.054 520.342 217.995 530.193C217.721 575.813 217.404 621.433 215.957 667.035C215.804 671.839 217.718 675.279 221.74 677.857C233.092 685.135 244.405 692.476 255.655 699.91C259.174 702.236 261.136 701.941 262.545 697.596C266.65 684.938 271.044 672.373 275.557 659.016ZM435.043 224.175C431.943 241.154 429.08 258.182 425.61 275.085C424.418 280.893 426.182 285.38 429.656 289.294C438.952 299.768 448.954 309.553 459.894 318.335C466.44 323.59 473.288 324.257 480.723 320.008C514.698 300.592 548.743 281.297 582.722 261.887C588.355 258.669 589.078 255.062 585.165 250.024C575.46 237.528 565.44 225.272 555.929 212.631C551.704 207.015 546.618 205.805 540.186 206.925C522.685 209.973 505.086 212.518 487.674 216C480.148 217.504 474.681 215.526 469.838 210.172C462.689 202.268 455.524 194.378 448.346 186.5C447.141 185.177 446.147 183.519 443.266 183.247C439.462 196.316 438.144 210.002 435.043 224.175ZM541.864 527.981C559.855 522.521 578.107 517.869 596.396 511.397C593.768 507.775 590.915 506.025 588.249 504.134C556.759 481.795 525.245 459.49 493.717 437.206C488.123 433.252 483.261 433.503 477.709 437.636C472.163 441.764 468.165 447.337 463.545 452.345C451.649 465.24 450.397 478.888 458.598 494.416C472.431 520.604 485.537 547.174 499.01 573.552C500.407 576.287 501.645 579.209 504.016 581.396C506.112 580.014 506.509 577.963 507.229 576.167C510.694 567.522 514.112 558.857 517.486 550.176C525.535 529.463 523.958 533.96 541.864 527.981Z" fill="currentColor"/>
+      </svg>
+      <span class="logo-text">SpiderOS</span>
+      <span class="header-subtitle">Document Interne &mdash; Fevrier 2026</span>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero bg-cream">
+  <div class="container">
+    <h1>Le Document<br>Final</h1>
+    <p class="lead">
+      Pas un pitch deck. Pas un executive summary.
+      C'est le document qu'on donne a un Thiel, un Graham, ou un co-fondateur pour qu'il comprenne <strong>tout</strong>.
+    </p>
+    <p class="meta">Derniere mise a jour : 19 fevrier 2026</p>
+  </div>
+</section>
+
+<!-- ===== TABLE DES MATIERES ===== -->
+<nav class="toc">
+  <div class="container">
+    <div class="toc-grid">
+      <a href="#part-1" class="toc-item"><span class="toc-num">I</span><span class="toc-label">La These</span></a>
+      <a href="#part-2" class="toc-item"><span class="toc-num">II</span><span class="toc-label">Le Modele</span></a>
+      <a href="#part-3" class="toc-item"><span class="toc-num">III</span><span class="toc-label">La Preuve -- Jordan</span></a>
+      <a href="#part-4" class="toc-item"><span class="toc-num">IV</span><span class="toc-label">Le Marche</span></a>
+      <a href="#part-5" class="toc-item"><span class="toc-num">V</span><span class="toc-label">La Tech</span></a>
+      <a href="#part-6" class="toc-item"><span class="toc-num">VI</span><span class="toc-label">L'Equipe et le Deal</span></a>
+      <a href="#part-7" class="toc-item"><span class="toc-num">VII</span><span class="toc-label">La Roadmap</span></a>
+      <a href="#part-8" class="toc-item"><span class="toc-num">VIII</span><span class="toc-label">Ce qu'on ne sait pas</span></a>
+      <a href="#part-9" class="toc-item"><span class="toc-num">IX</span><span class="toc-label">Hypotheses et Kill Criteria</span></a>
+      <a href="#part-10" class="toc-item"><span class="toc-num">X</span><span class="toc-label">Le Pitch</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================================ -->
+<!-- PART I -- LA THESE -->
+<!-- ============================================================ -->
+<section id="part-1" class="bg-cream">
+  <div class="container">
+    <div class="part-header">
+      <span class="part-number">Partie I</span>
+      <h1>La These</h1>
+    </div>
+
+    <h2>L'Europe est en train de mourir</h2>
+    <p>3 guerres. 3 defaites.</p>
+    <p><strong>Tech</strong> : zero GAFAM, zero plateforme. Tout transite par des serveurs americains, regis par des lois americaines. <strong>Industrie</strong> : les savoir-faire sont partis en Chine. Il reste des marques qui sous-traitent et des consommateurs qui importent. <strong>Capital</strong> : les pepites se vendent aux Americains avant la taille critique. Les fonds europeens sont trop petits, trop lents, trop frileux.</p>
+
+    <blockquote>
+      <p>Il reste un actif. Un seul. 25 millions de PME/ETI. 5 a 7 trillions d'euros de valeur ajoutee. 40% du PIB europeen. Et ces PME possedent quelque chose que personne n'a reussi a leur prendre : le tacite.</p>
+    </blockquote>
+
+    <p>Le relationnel tisse sur des decennies. Le savoir-faire depose dans les gestes par 30 ans de metier. Le sur-mesure accumule dans des milliers d'exceptions que les process ne captureront jamais.</p>
+    <p>C'est le dernier tresor europeen. Ce que les Americains ne peuvent pas coder. Ce que les Chinois ne peuvent pas fabriquer. Et ce tresor pourrit de l'interieur.</p>
+
+    <hr class="divider">
+
+    <h2>Les 10 theses -- en bref</h2>
+
+    <!-- DIAGRAM 1: 4-axis thesis grid -->
+    <div class="diagram">
+      <div class="diagram-title">Les 10 theses -- 4 axes</div>
+      <svg viewBox="0 0 920 520" xmlns="http://www.w3.org/2000/svg" style="max-width:920px;">
+        <!-- Axis 1: L'ACTIF -->
+        <rect x="10" y="10" width="210" height="440" rx="12" fill="#022C22" opacity="0.08" stroke="#022C22" stroke-width="1.5"/>
+        <text x="115" y="46" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="14" fill="#022C22" letter-spacing="0.1em">L'ACTIF</text>
+        <rect x="24" y="62" width="182" height="56" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="115" y="82" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#0A0A0A">T1</text>
+        <text x="115" y="105" text-anchor="middle" font-family="Fira Sans" font-size="10.5" fill="#525252">Le tacite est le dernier tresor</text>
+        <rect x="24" y="128" width="182" height="56" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="115" y="148" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#0A0A0A">T2</text>
+        <text x="115" y="171" text-anchor="middle" font-family="Fira Sans" font-size="10.5" fill="#525252">La vente B2B est un mensonge</text>
+        <rect x="24" y="194" width="182" height="56" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="115" y="214" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#0A0A0A">T3</text>
+        <text x="115" y="237" text-anchor="middle" font-family="Fira Sans" font-size="10.5" fill="#525252">Les US ont impose leurs regles</text>
+
+        <!-- Arrow 1->2 -->
+        <line x1="224" y1="230" x2="240" y2="230" stroke="#525252" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+        <text x="232" y="260" text-anchor="middle" font-family="Fira Sans" font-size="8" fill="#525252" transform="rotate(90 232 260)" opacity="0.6">Le tresor pourrit</text>
+
+        <!-- Axis 2: L'IMPASSE -->
+        <rect x="240" y="10" width="210" height="440" rx="12" fill="#DC2626" opacity="0.05" stroke="#DC2626" stroke-width="1" stroke-opacity="0.3"/>
+        <text x="345" y="46" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="14" fill="#DC2626" letter-spacing="0.1em">L'IMPASSE</text>
+        <rect x="254" y="62" width="182" height="56" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="345" y="82" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#0A0A0A">T4</text>
+        <text x="345" y="105" text-anchor="middle" font-family="Fira Sans" font-size="10.5" fill="#525252">La couronne, pas le fardeau</text>
+        <rect x="254" y="128" width="182" height="56" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="345" y="148" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#0A0A0A">T5</text>
+        <text x="345" y="171" text-anchor="middle" font-family="Fira Sans" font-size="10.5" fill="#525252">Le ratio est catastrophique</text>
+
+        <!-- Arrow 2->3 -->
+        <line x1="454" y1="230" x2="470" y2="230" stroke="#525252" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+        <text x="462" y="260" text-anchor="middle" font-family="Fira Sans" font-size="8" fill="#525252" transform="rotate(90 462 260)" opacity="0.6">La fenetre s'ouvre</text>
+
+        <!-- Axis 3: LA BRECHE -->
+        <rect x="470" y="10" width="210" height="440" rx="12" fill="#16A34A" opacity="0.06" stroke="#16A34A" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="575" y="46" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="14" fill="#16A34A" letter-spacing="0.1em">LA BRECHE</text>
+        <rect x="484" y="62" width="182" height="56" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="575" y="82" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#0A0A0A">T6</text>
+        <text x="575" y="105" text-anchor="middle" font-family="Fira Sans" font-size="10.5" fill="#525252">L'IA rend possible le reve</text>
+        <rect x="484" y="128" width="182" height="56" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="575" y="148" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#0A0A0A">T7</text>
+        <text x="575" y="171" text-anchor="middle" font-family="Fira Sans" font-size="10.5" fill="#525252">Triple convergence, 24 mois</text>
+        <rect x="484" y="194" width="182" height="56" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="575" y="214" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#0A0A0A">T8</text>
+        <text x="575" y="237" text-anchor="middle" font-family="Fira Sans" font-size="10.5" fill="#525252">Le code est mort</text>
+
+        <!-- Arrow 3->4 -->
+        <line x1="684" y1="230" x2="700" y2="230" stroke="#525252" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+        <text x="692" y="260" text-anchor="middle" font-family="Fira Sans" font-size="8" fill="#525252" transform="rotate(90 692 260)" opacity="0.6">Le plan</text>
+
+        <!-- Axis 4: LE MONOPOLE -->
+        <rect x="700" y="10" width="210" height="440" rx="12" fill="#D97706" opacity="0.07" stroke="#D97706" stroke-width="1" stroke-opacity="0.4"/>
+        <text x="805" y="46" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="14" fill="#D97706" letter-spacing="0.1em">LE MONOPOLE</text>
+        <rect x="714" y="62" width="182" height="56" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="805" y="82" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#0A0A0A">T9</text>
+        <text x="805" y="105" text-anchor="middle" font-family="Fira Sans" font-size="10.5" fill="#525252">Le Shogunat Digital</text>
+        <rect x="714" y="128" width="182" height="56" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="805" y="148" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#0A0A0A">T10</text>
+        <text x="805" y="171" text-anchor="middle" font-family="Fira Sans" font-size="10.5" fill="#525252">Toile. Data. Mycelium. Pouvoir.</text>
+
+        <!-- Bottom flow arrow -->
+        <defs>
+          <marker id="arrowGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#525252"/>
+          </marker>
+        </defs>
+
+        <!-- Bottom summary bar -->
+        <rect x="10" y="470" width="900" height="40" rx="8" fill="#F4F4F6" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="115" y="495" text-anchor="middle" font-family="Fira Sans" font-size="10" fill="#022C22" font-weight="500">Actif</text>
+        <line x1="228" y1="478" x2="240" y2="490" stroke="#525252" stroke-width="1"/>
+        <line x1="240" y1="490" x2="252" y2="478" stroke="#525252" stroke-width="1"/>
+        <text x="345" y="495" text-anchor="middle" font-family="Fira Sans" font-size="10" fill="#DC2626" font-weight="500">Impasse</text>
+        <line x1="458" y1="478" x2="470" y2="490" stroke="#525252" stroke-width="1"/>
+        <line x1="470" y1="490" x2="482" y2="478" stroke="#525252" stroke-width="1"/>
+        <text x="575" y="495" text-anchor="middle" font-family="Fira Sans" font-size="10" fill="#16A34A" font-weight="500">Breche</text>
+        <line x1="688" y1="478" x2="700" y2="490" stroke="#525252" stroke-width="1"/>
+        <line x1="700" y1="490" x2="712" y2="478" stroke="#525252" stroke-width="1"/>
+        <text x="805" y="495" text-anchor="middle" font-family="Fira Sans" font-size="10" fill="#D97706" font-weight="500">Monopole</text>
+      </svg>
+    </div>
+
+    <!-- Theses details -->
+    <h3>AXE 1 -- L'ACTIF</h3>
+    <div class="card">
+      <h4>T1 : Le tacite est le dernier tresor</h4>
+      <p>Le technicien qui "sent" la machine. Le commercial qui sait qu'on ne parle jamais du concurrent X devant ce client. La secretaire qui connait les secrets de chaque relation. Ce savoir ne s'ecrit pas, il se vit. 3 formes : <strong>relationnel</strong> (tissu de confiance), <strong>savoir-faire</strong> (intelligence des mains), <strong>sur-mesure</strong> (milliers d'exceptions). C'est le seul actif non-reproductible. Et il meurt a chaque depart en retraite, chaque demission, chaque transmission ratee.</p>
+    </div>
+    <div class="card">
+      <h4>T2 : La vente B2B est un mensonge</h4>
+      <p>Le dirigeant sait a qui il veut acheter avant que le process commence. L'appel d'offres, les criteres, les scores = theatre pour justifier la decision deja prise. Le mot que personne ne prononce : <strong>confiance</strong>. Pas contractuelle -- viscerale. Les CRM capturent le theatre. Le commercial garde le vrai dans sa tete. Quand il part, il l'emporte.</p>
+    </div>
+    <div class="card">
+      <h4>T3 : Les US nous ont impose leurs regles</h4>
+      <p>Salesforce, HubSpot, Monday, Notion -- 100% de la stack B2B concue par et pour des Americains. Mentalite US : transactionnelle, standardisee, court-terme, explicite. Mentalite europeenne : relationnelle, artisanale, long-terme, implicite. L'Europeen achete quand meme, echoue a l'adoption, se blame lui-meme. Spider est le premier outil concu POUR l'Europe.</p>
+    </div>
+
+    <h3>AXE 2 -- L'IMPASSE</h3>
+    <div class="card">
+      <h4>T4 : Ils veulent la couronne, pas le fardeau</h4>
+      <p>Le familial a deja gagne (3M EUR d'EBE, belle maison, statut). Pourquoi risquerait-il ? Le corporate veut son "dernier chapitre", achete un bilan, recoit une coquille. L'heritier a recu le titre, pas le savoir. 3 profils, une maladie : ils veulent regner, pas gouverner. Le tacite meurt parce que personne ne veut payer le prix de le sauver.</p>
+    </div>
+    <div class="card">
+      <h4>T5 : Le ratio est catastrophique</h4>
+      <p>CRM = effort max, benefice nul pour un CEO relationnel. ERP = 18 mois de migration = humiliation publique. Consultants = rapport dans le tiroir. <strong>Spider inverse le ratio</strong> : contrainte quasi-nulle, benefice reel, aveu zero. Spider est le premier outil qui respecte la lachete du client.</p>
+    </div>
+
+    <h3>AXE 3 -- LA BRECHE</h3>
+    <div class="card">
+      <h4>T6 : L'IA rend possible ce qui etait un reve</h4>
+      <p>Avant 2023, capturer le tacite = techniquement impossible. Apres 2023, l'IA lit 10 000 mails et comprend que "la relation avec Dupont se degrade depuis mars." Les Americains ne le feront pas : Salesforce fait $35Mds de CA, leur modele transactionnel marche. L'Europeen qui comprend le probleme n'a pas la tech. L'Americain qui a la tech ne comprend pas le probleme. <strong>Spider a les deux.</strong></p>
+    </div>
+    <div class="card">
+      <h4>T7 : Triple convergence. 24 mois.</h4>
+      <p><strong>Crise</strong> : pour la 1ere fois depuis 2008, les clients ne renouvellent plus automatiquement. <strong>Transmission</strong> : 700 000 departs, le tacite s'evapore. <strong>IA mature</strong> : on peut capturer automatiquement. Les trois ensemble = breche. Avant 2026 = pas assez mal. Apres 2028 = commoditise. <strong>La fenetre est maintenant.</strong></p>
+    </div>
+    <div class="card">
+      <h4>T8 : Le code est mort. Le service est le produit.</h4>
+      <p>41% du code genere par IA en 2025. Les features sont copiables en 6 mois. Le paradigme bascule : Software-as-a-Service vers <strong>Service-as-Software</strong>. Le logiciel n'est plus un outil -- le logiciel FAIT le travail. Palantir l'a compris : $400Mds vs Accenture $150Mds. Le seul monopole durable : <strong>la data captive</strong>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LE MONOPOLE (dark section) -->
+<section class="bg-dark" id="monopole">
+  <div class="container">
+    <h3 style="color:#FFFFFF; margin-bottom: 0.25rem;">AXE 4 -- LE MONOPOLE</h3>
+    <div class="accent-line" style="background:#00F5FF;margin-bottom:2rem;"></div>
+
+    <div class="card">
+      <h4>T9 : Le Shogunat Digital</h4>
+      <p>Au Japon medieval, l'Empereur regnait (ceremonies, palais, respect) et le Shogun gouvernait (armee, impots, decisions). Chacun avait ce qu'il voulait. Pendant 700 ans. Spider est le Shogun. Le dirigeant garde le titre, le bureau, la signature finale. Spider prend le pouvoir reel : capture, analyse, prepare, suggere. Le CEO valide. "Oui." "Oui." "Oui." Il croit decider. Il signe ce qu'on lui prepare.</p>
+      <blockquote><p>Ce n'est pas de la manipulation -- c'est du soulagement. Spider vend ce qu'ils veulent (tranquillite). Livre ce dont ils ont besoin (restructuration silencieuse).</p></blockquote>
+    </div>
+
+    <div class="card">
+      <h4>T10 : Toile. Data. Mycelium. Pouvoir.</h4>
+      <div class="table-wrapper" style="border-color:rgba(255,255,255,0.1);">
+        <table>
+          <thead>
+            <tr><th>Phase</th><th>Mecanisme</th><th>Lock-in</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Phase 1 : La Toile</strong></td>
+              <td>Spider connecte, capture, tisse. Chaque jour = plus de tacite dans Spider, moins dans les tetes seules. Cout de sortie augmente quotidiennement.</td>
+              <td>Data captive (impossible a repliquer)</td>
+            </tr>
+            <tr>
+              <td><strong>Phase 2 : Le Mycelium</strong></td>
+              <td>1000 entreprises dans Spider. Spider voit ce qu'aucune ne voit seule. "Ton fournisseur a un probleme. 3 autres l'ont signale cette semaine."</td>
+              <td>Reseau (quitter = perdre le reseau)</td>
+            </tr>
+            <tr>
+              <td><strong>Phase 3 : Le Pouvoir</strong></td>
+              <td>Spider cree de nouvelles metriques : Score de Connaissance, Indice de Tacite, Vrai EBE. Le jour ou un fonds PE demande "Quel est leur Spider Score ?", c'est fini.</td>
+              <td>Spider definit la realite</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <h3>Pourquoi maintenant</h3>
+    <p><strong>La triple convergence</strong> n'est pas une abstraction. Elle se manifeste concretement :</p>
+    <div class="card">
+      <p><strong>Decotec</strong> (PME industrielle, 155 salaries, CA ~22M EUR) : 40-48 departs retraite dans 4 ans. Christophe (normes) part fin 2025 avec TOUT le savoir. Laurent (CEO) diagnostique parfaitement, decide de ne rien decider. 3 ans de consulting Drakkar n'ont rien change.</p>
+    </div>
+    <div class="card">
+      <p><strong>OpenAI Frontier</strong> (5 fevrier 2026) : deploiement de flottes d'agents IA en entreprise. Declaration de guerre contre toute l'industrie SaaS. Actions Salesforce, ServiceNow, SAP en chute.</p>
+    </div>
+    <div class="card">
+      <p><strong>Les chiffres</strong> : YC 50%+ du batch Spring 2025 dedie a l'IA agentique. Gartner : 75% des entreprises utiliseront des agents IA d'ici fin 2026 (vs &lt;5% en 2025). Mais 90% des PME francaises sont encore en phase 1.</p>
+    </div>
+
+    <h3>Pourquoi les Americains ne le feront pas</h3>
+    <blockquote><p>C'est comme demander a quelqu'un qui n'a jamais vu la mer de construire un bateau. Il a les outils, il a le bois. Il ne sait pas a quoi ca doit ressembler.</p></blockquote>
+    <p>Le pari Spider : cette invisibilite culturelle protege la fenetre. Quand ils verront le marche, la data sera captive.</p>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART II -- LE MODELE -->
+<!-- ============================================================ -->
+<section id="part-2" class="bg-neutral">
+  <div class="container">
+    <div class="part-header">
+      <span class="part-number">Partie II</span>
+      <h1>Le Modele</h1>
+    </div>
+
+    <h2>Service-as-Software</h2>
+    <p>On ne vend pas un logiciel. On ne vend pas du conseil. <strong>On vend un resultat.</strong></p>
+    <div class="card-grid--2" style="display:grid; gap:1.25rem; margin:1.5rem 0;">
+      <div class="card" style="border-left:3px solid #DC2626;">
+        <h4>Ancien modele (SaaS)</h4>
+        <p class="mb-0">Le client achete un outil, fait le travail lui-meme.</p>
+      </div>
+      <div class="card" style="border-left:3px solid #16A34A;">
+        <h4>Modele Spider</h4>
+        <p class="mb-0">Le client achete un resultat, le logiciel fait le travail.</p>
+      </div>
+    </div>
+    <p class="secondary">Le ratio humain/IA evolue : 80/20 aujourd'hui, 50/50 en phase intermediaire, 20/80 en phase cible. Palantir a eu plus de FDE que d'ingenieurs logiciel jusqu'en 2016. Ca ne les a pas empeches de valoir $400 milliards.</p>
+
+    <hr class="divider">
+
+    <h3>Le parallele Palantir</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Dimension</th><th>Palantir</th><th>Spider</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Cible</strong></td><td>Enterprise ($5M+ ACV)</td><td>PME (500 EUR/mois entry)</td></tr>
+          <tr><td><strong>Deploiement</strong></td><td>FDE on-site</td><td>FDC + FDE (consulting + tech)</td></tr>
+          <tr><td><strong>Ontology</strong></td><td>Custom par client</td><td>Templates verticaux transposables</td></tr>
+          <tr><td><strong>Infra</strong></td><td>Air-gapped/gov, 150+ microservices</td><td>Cloud-native EU souverain</td></tr>
+          <tr><td><strong>Revenue/employee</strong></td><td>$1.01M</td><td>A prouver</td></tr>
+          <tr><td><strong>NDR</strong></td><td>139% (Q4 2025)</td><td>A prouver</td></tr>
+          <tr><td><strong>Moat</strong></td><td>Ontology + 20 ans trust gov</td><td>Data captive + effet reseau PME</td></tr>
+          <tr><td><strong>Temps vers rentabilite</strong></td><td>17 ans</td><td>Objectif : 12-18 mois</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="secondary text-small">L'analogie est structurelle, pas exacte. L'humain dans la boucle n'est pas un bug -- c'est le modele.</p>
+
+    <hr class="divider">
+
+    <!-- DIAGRAM 2: 2-layer architecture -->
+    <h3>Architecture 2 couches</h3>
+    <div class="diagram">
+      <div class="diagram-title">L'architecture 2 couches</div>
+      <svg viewBox="0 0 720 480" xmlns="http://www.w3.org/2000/svg" style="max-width:720px;">
+        <!-- Layer 1: Assistant -->
+        <rect x="60" y="20" width="600" height="160" rx="16" fill="#F4F4F6" stroke="#E8E8ED" stroke-width="1.5"/>
+        <text x="360" y="52" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="16" fill="#0A0A0A">COUCHE 1 -- ASSISTANT</text>
+        <text x="360" y="72" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#525252">Gratuit / Credits</text>
+        <!-- Items -->
+        <rect x="90" y="92" width="160" height="36" rx="6" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="170" y="115" text-anchor="middle" font-family="Fira Sans" font-size="12" fill="#0A0A0A">Diagnostic</text>
+        <rect x="280" y="92" width="160" height="36" rx="6" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="360" y="115" text-anchor="middle" font-family="Fira Sans" font-size="12" fill="#0A0A0A">Questions</text>
+        <rect x="470" y="92" width="160" height="36" rx="6" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="550" y="115" text-anchor="middle" font-family="Fira Sans" font-size="12" fill="#0A0A0A">Revele les problemes</text>
+        <text x="360" y="160" text-anchor="middle" font-family="Fira Sans" font-size="10" fill="#525252" font-style="italic">L'assistant recommande les agents</text>
+
+        <!-- Arrow -->
+        <defs>
+          <marker id="arrowDown" viewBox="0 0 10 10" refX="5" refY="10" markerWidth="8" markerHeight="8" orient="auto">
+            <path d="M 0 0 L 5 10 L 10 0 z" fill="#00D4EE"/>
+          </marker>
+        </defs>
+        <line x1="360" y1="180" x2="360" y2="230" stroke="#00D4EE" stroke-width="2.5" marker-end="url(#arrowDown)"/>
+
+        <!-- Layer 2: Agents -->
+        <rect x="60" y="240" width="600" height="160" rx="16" fill="#022C22" stroke="none"/>
+        <text x="360" y="272" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="16" fill="#FFFFFF">COUCHE 2 -- AGENTS</text>
+        <text x="360" y="292" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="rgba(255,255,255,0.6)">500-990 EUR/mois par agent</text>
+        <!-- Agent items -->
+        <rect x="78" y="310" width="130" height="36" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <text x="143" y="333" text-anchor="middle" font-family="Fira Sans" font-size="11" fill="#FFFFFF">Agent Relance</text>
+        <rect x="222" y="310" width="130" height="36" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <text x="287" y="333" text-anchor="middle" font-family="Fira Sans" font-size="11" fill="#FFFFFF">Agent Campagnes</text>
+        <rect x="366" y="310" width="130" height="36" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <text x="431" y="333" text-anchor="middle" font-family="Fira Sans" font-size="11" fill="#FFFFFF">Agent Achats</text>
+        <rect x="510" y="310" width="130" height="36" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <text x="575" y="333" text-anchor="middle" font-family="Fira Sans" font-size="11" fill="#FFFFFF">Agent Facturation</text>
+        <text x="360" y="380" text-anchor="middle" font-family="Fira Sans" font-size="10" fill="rgba(255,255,255,0.5)" font-style="italic">Font le travail. Le dirigeant recoit les resultats.</text>
+
+        <!-- Chevaux de Troie -->
+        <rect x="60" y="426" width="280" height="44" rx="8" fill="#FAF9F7" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="70" y="443" font-family="JetBrains Mono" font-size="9" fill="#525252" letter-spacing="0.08em">CHEVAL DE TROIE</text>
+        <text x="70" y="460" font-family="Fira Sans" font-size="11" fill="#0A0A0A">Spider People &amp; Spider Chatbot</text>
+        <path d="M340 448 L420 320" stroke="#00D4EE" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
+        <text x="405" y="448" font-family="Fira Sans" font-size="9" fill="#525252">Acces gratuit / credits -> donnees -> upsell</text>
+      </svg>
+    </div>
+
+    <div class="card">
+      <h4>Couche 1 -- L'Assistant (reactif)</h4>
+      <p>Chatbot IA connecte aux donnees business (ERP, comptabilite, CRM). Le dirigeant pose des questions. L'assistant repond, analyse, diagnostique. Il revele des problemes que le dirigeant ignorait. Puis recommande des agents. C'est le "diagnostic gratuit" qui cree la douleur consciente.</p>
+    </div>
+    <div class="card">
+      <h4>Couche 2 -- Les Agents (proactifs)</h4>
+      <p>Travailleurs autonomes en arriere-plan. Agent Relance (chasse les impayes). Agent Campagnes (gere la publicite). Agent Achats (optimise l'approvisionnement). Chaque agent a un "salaire" (190-990 EUR/mois) et un essai gratuit de 14 jours. Le dirigeant ne touche a rien. Il recoit les resultats.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- DIAGRAM 3: Flywheel -->
+    <h3>Le flywheel de l'upsell</h3>
+    <div class="diagram">
+      <div class="diagram-title">Le Flywheel Spider</div>
+      <svg viewBox="0 0 640 500" xmlns="http://www.w3.org/2000/svg" style="max-width:640px;">
+        <!-- Center circle -->
+        <circle cx="290" cy="230" r="72" fill="#022C22" stroke="none"/>
+        <circle cx="290" cy="230" r="72" fill="none" stroke="#00D4EE" stroke-width="1.5" opacity="0.4"/>
+        <text x="290" y="222" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="13" fill="#FFFFFF">DATA</text>
+        <text x="290" y="242" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="13" fill="#FFFFFF">CAPTIVE</text>
+
+        <!-- Steps around the circle -->
+        <!-- Step 1: top -->
+        <rect x="230" y="20" width="120" height="50" rx="8" fill="#F0FDF4" stroke="#16A34A" stroke-width="1"/>
+        <text x="290" y="42" text-anchor="middle" font-family="Fira Sans" font-weight="500" font-size="10" fill="#16A34A">1. Entree</text>
+        <text x="290" y="58" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0A0A0A">500 EUR/mois</text>
+
+        <!-- Step 2: top right -->
+        <rect x="440" y="72" width="120" height="50" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="500" y="94" text-anchor="middle" font-family="Fira Sans" font-weight="500" font-size="10" fill="#525252">2. Spider</text>
+        <text x="500" y="110" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">diagnostique</text>
+
+        <!-- Step 3: right -->
+        <rect x="480" y="180" width="120" height="50" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="540" y="202" text-anchor="middle" font-family="Fira Sans" font-weight="500" font-size="10" fill="#DC2626">3. Revele</text>
+        <text x="540" y="218" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">des problemes</text>
+
+        <!-- Step 4: bottom right -->
+        <rect x="460" y="290" width="120" height="50" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="520" y="312" text-anchor="middle" font-family="Fira Sans" font-weight="500" font-size="10" fill="#525252">4. Propose</text>
+        <text x="520" y="328" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">un agent</text>
+
+        <!-- Step 5: bottom -->
+        <rect x="290" y="370" width="140" height="50" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="360" y="392" text-anchor="middle" font-family="Fira Sans" font-weight="500" font-size="10" fill="#D97706">5. Setup fee</text>
+        <text x="360" y="408" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">+ nouvel agent</text>
+
+        <!-- Step 6: bottom left -->
+        <rect x="80" y="310" width="130" height="50" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="145" y="332" text-anchor="middle" font-family="Fira Sans" font-weight="500" font-size="10" fill="#525252">6. Plus de data</text>
+        <text x="145" y="348" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">capturee</text>
+
+        <!-- Step 7: left -->
+        <rect x="60" y="170" width="130" height="50" rx="8" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="125" y="192" text-anchor="middle" font-family="Fira Sans" font-weight="500" font-size="10" fill="#525252">7. Meilleur</text>
+        <text x="125" y="208" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">diagnostic</text>
+
+        <!-- Curved arrows (simplified as lines) -->
+        <defs>
+          <marker id="arrowCircle" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#525252"/>
+          </marker>
+        </defs>
+        <!-- 1->2 -->
+        <path d="M350 50 Q410 40 440 85" fill="none" stroke="#525252" stroke-width="1" marker-end="url(#arrowCircle)"/>
+        <!-- 2->3 -->
+        <path d="M530 122 Q550 145 535 178" fill="none" stroke="#525252" stroke-width="1" marker-end="url(#arrowCircle)"/>
+        <!-- 3->4 -->
+        <path d="M555 232 Q560 260 545 288" fill="none" stroke="#525252" stroke-width="1" marker-end="url(#arrowCircle)"/>
+        <!-- 4->5 -->
+        <path d="M475 330 Q445 365 432 378" fill="none" stroke="#525252" stroke-width="1" marker-end="url(#arrowCircle)"/>
+        <!-- 5->6 -->
+        <path d="M290 400 Q230 400 212 362" fill="none" stroke="#525252" stroke-width="1" marker-end="url(#arrowCircle)"/>
+        <!-- 6->7 -->
+        <path d="M130 308 Q110 270 120 222" fill="none" stroke="#525252" stroke-width="1" marker-end="url(#arrowCircle)"/>
+        <!-- 7->3 (back to reveal) -->
+        <path d="M155 172 Q200 130 320 100 Q420 82 480 178" fill="none" stroke="#00D4EE" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrowCircle)" opacity="0.5"/>
+
+        <!-- Bottom label -->
+        <text x="290" y="460" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#525252">A chaque tour : cout de sortie augmente</text>
+
+        <!-- Revenue streams -->
+        <rect x="8" y="60" width="42" height="120" rx="4" fill="#F4F4F6" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="29" y="80" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#525252" transform="rotate(-90 29 120)">MRR + Setup + Credits</text>
+      </svg>
+    </div>
+
+    <ol class="thesis-list">
+      <li><strong>Entree a 500 EUR/mois</strong> -- 1 processus gere</li>
+      <li><strong>Spider diagnostique</strong> -- en operant le process, Spider capture les donnees et voit d'autres problemes</li>
+      <li><strong>Upsell</strong> -- "39.3% de vos factures sont impayees. Notre Agent Relance peut regler ca."</li>
+      <li><strong>Setup fee</strong> -- 2-5K EUR par nouveau processus</li>
+      <li><strong>Nouvel agent</strong> -- 190-990 EUR/mois supplementaires</li>
+      <li><strong>Data captive</strong> -- plus de data = meilleur diagnostic = plus d'upsells</li>
+      <li><strong>Repeat</strong> -- le client passe de 500 EUR a 2-3K EUR/mois sur 6-12 mois</li>
+    </ol>
+    <p class="secondary mt-4"><strong>Potentiel d'expansion theorique :</strong> un client a 500 EUR d'entree peut atteindre 5 000 EUR/mois. Facteur d'expansion : 10x.</p>
+
+    <hr class="divider">
+
+    <h3>Architecture de pricing</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Element</th><th>Prix</th><th>Nature</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Entree</strong></td><td>500 EUR/mois</td><td>1 processus gere (le plus douloureux)</td></tr>
+          <tr><td><strong>Setup fee</strong></td><td>2-5K EUR</td><td>Comprendre le metier, formaliser, connecter, calibrer</td></tr>
+          <tr><td><strong>Agents supp.</strong></td><td>190-990 EUR/mois</td><td>Selon la complexite du process</td></tr>
+          <tr><td><strong>Spider People</strong></td><td>Credits / faible</td><td>Cheval de Troie : CRM relationnel</td></tr>
+          <tr><td><strong>Spider Chatbot</strong></td><td>Credits / faible</td><td>Cheval de Troie : LLM sur donnees</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-small text-muted">Ce pricing est une hypothese. Pas un modele valide. Le premier test reel est Jordan a 500 EUR/mois.</p>
+
+    <hr class="divider">
+
+    <h3>Le modele FDE</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Role</th><th>Profil</th><th>Missions</th><th>Qui</th></tr></thead>
+        <tbody>
+          <tr><td><strong>FDC</strong><br><span class="text-small text-muted">Forward Deployed Consultant</span></td><td>Ex-dirigeant industrie, skills consulting</td><td>Comprehension metier, diagnostic, relation client, formalisation des regles</td><td>Thierry Menard, Jean Le Tulzo</td></tr>
+          <tr><td><strong>FDE</strong><br><span class="text-small text-muted">Forward Deployed Engineer</span></td><td>Dev mid-senior avec experience ops</td><td>Connexion sources, validation claims, configuration agents, supervision</td><td>A recruter (1-2 profils)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <blockquote><p>L'amelioration du ratio FDE:client est la question fondamentale du modele. Si le ratio stagne, Spider est une ESN avec de l'IA. Si le ratio s'ameliore, Spider est un SaaS deguise en ESN.</p></blockquote>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART III -- LA PREUVE -->
+<!-- ============================================================ -->
+<section id="part-3" class="bg-warm">
+  <div class="container">
+    <div class="part-header">
+      <span class="part-number">Partie III</span>
+      <h1>La Preuve -- Jordan</h1>
+    </div>
+
+    <h2>Jordan / ComPrivee -- Phase 0</h2>
+    <p><strong>ComPrivee</strong> est une agence de publicite exterieure (affichage, radio, digital, LED) basee en Normandie. Jordan Lefranc est le CEO. C'est un ami tres proche de Nathan -- ce qui est a la fois un avantage (acces total aux donnees, confiance) et un biais (test commercial incomplet).</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Donnee</th><th>Valeur</th></tr></thead>
+        <tbody>
+          <tr><td>CA Total 2025</td><td><strong>1 145 304 EUR</strong></td></tr>
+          <tr><td>Marge 2025</td><td>311 325 EUR</td></tr>
+          <tr><td>Taux de marge moyen</td><td>27.2%</td></tr>
+          <tr><td>Lignes de campagnes suivies</td><td>726</td></tr>
+          <tr><td>Clients uniques</td><td>73</td></tr>
+          <tr><td>Reseaux publicitaires</td><td>32</td></tr>
+          <tr><td>Equipe</td><td>3 permanents + 2 freelances</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="divider">
+
+    <h3>Le probleme : la triple saisie</h3>
+    <p>Chaque campagne est saisie <strong>3 fois</strong> dans 3 outils deconnectes :</p>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Saisie</th><th>Outil</th><th>Qui</th></tr></thead>
+        <tbody>
+          <tr><td>1ere</td><td>Google Sheets</td><td>Plan media complet : dates, reseaux, quantites, tarifs, calculs manuels</td></tr>
+          <tr><td>2eme</td><td>Notion</td><td>Memes donnees + 33+ champs operationnels</td></tr>
+          <tr><td>3eme</td><td>Pennylane</td><td>Donnees facturation re-saisies manuellement</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="secondary">726 lignes/an x 3 saisies = des centaines d'heures evitables + erreurs de transcription + incoherences.</p>
+
+    <hr class="divider">
+
+    <!-- DIAGRAM 4: Workflow before/after -->
+    <h3>Le workflow en 9 etapes</h3>
+    <div class="diagram">
+      <div class="diagram-title">Workflow Jordan -- Avant vs Apres Spider</div>
+      <svg viewBox="0 0 780 560" xmlns="http://www.w3.org/2000/svg" style="max-width:780px;">
+        <!-- Headers -->
+        <rect x="20" y="10" width="350" height="40" rx="8" fill="#F4F4F6" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="195" y="36" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="14" fill="#525252">AVANT</text>
+
+        <rect x="410" y="10" width="350" height="40" rx="8" fill="#022C22"/>
+        <text x="585" y="36" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="14" fill="#FFFFFF">APRES SPIDER</text>
+
+        <!-- Steps -->
+        <!-- Step 1 -->
+        <rect x="20" y="62" width="350" height="42" rx="6" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="40" y="80" font-family="JetBrains Mono" font-size="10" fill="#525252">1</text>
+        <text x="60" y="80" font-family="Fira Sans" font-size="11" fill="#0A0A0A">Brief client</text>
+        <text x="340" y="80" text-anchor="end" font-family="Fira Sans" font-size="9" fill="#525252">Email/Tel</text>
+        <rect x="410" y="62" width="350" height="42" rx="6" fill="rgba(2,44,34,0.04)" stroke="rgba(2,44,34,0.15)" stroke-width="1"/>
+        <text x="430" y="80" font-family="JetBrains Mono" font-size="10" fill="#022C22">1</text>
+        <text x="450" y="80" font-family="Fira Sans" font-size="11" fill="#022C22">Formulaire standardise, extraction auto</text>
+
+        <!-- Step 2 -->
+        <rect x="20" y="112" width="350" height="42" rx="6" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="40" y="130" font-family="JetBrains Mono" font-size="10" fill="#525252">2</text>
+        <text x="60" y="130" font-family="Fira Sans" font-size="11" fill="#0A0A0A">Analyse reseaux</text>
+        <text x="340" y="130" text-anchor="end" font-family="Fira Sans" font-size="9" fill="#525252">Delais</text>
+        <rect x="410" y="112" width="350" height="42" rx="6" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="430" y="130" font-family="JetBrains Mono" font-size="10" fill="#525252">2</text>
+        <text x="450" y="130" font-family="Fira Sans" font-size="11" fill="#525252">Inchange (negociation humaine)</text>
+
+        <!-- Step 3 -- PAIN POINT -->
+        <rect x="20" y="162" width="350" height="42" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.5"/>
+        <text x="40" y="180" font-family="JetBrains Mono" font-size="10" fill="#DC2626">3</text>
+        <text x="60" y="180" font-family="Fira Sans" font-size="11" fill="#DC2626" font-weight="500">Plan media -- 100% calculs manuels</text>
+        <rect x="410" y="162" width="350" height="42" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-width="1.5"/>
+        <text x="430" y="180" font-family="JetBrains Mono" font-size="10" fill="#16A34A">3</text>
+        <text x="450" y="180" font-family="Fira Sans" font-size="11" fill="#16A34A" font-weight="500">Auto-calculs depuis base tarifaire</text>
+
+        <!-- Step 4 -->
+        <rect x="20" y="212" width="350" height="42" rx="6" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="40" y="230" font-family="JetBrains Mono" font-size="10" fill="#525252">4</text>
+        <text x="60" y="230" font-family="Fira Sans" font-size="11" fill="#0A0A0A">Validation -- pas de versioning</text>
+        <rect x="410" y="212" width="350" height="42" rx="6" fill="rgba(2,44,34,0.04)" stroke="rgba(2,44,34,0.15)" stroke-width="1"/>
+        <text x="430" y="230" font-family="JetBrains Mono" font-size="10" fill="#022C22">4</text>
+        <text x="450" y="230" font-family="Fira Sans" font-size="11" fill="#022C22">Versioning auto</text>
+
+        <!-- Step 5 -->
+        <rect x="20" y="262" width="350" height="42" rx="6" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="40" y="280" font-family="JetBrains Mono" font-size="10" fill="#525252">5</text>
+        <text x="60" y="280" font-family="Fira Sans" font-size="11" fill="#0A0A0A">Commandes -- pas de suivi BDC</text>
+        <rect x="410" y="262" width="350" height="42" rx="6" fill="rgba(2,44,34,0.04)" stroke="rgba(2,44,34,0.15)" stroke-width="1"/>
+        <text x="430" y="280" font-family="JetBrains Mono" font-size="10" fill="#022C22">5</text>
+        <text x="450" y="280" font-family="Fira Sans" font-size="11" fill="#022C22">Alertes BDC manquants</text>
+
+        <!-- Step 6 -- PAIN POINT -->
+        <rect x="20" y="312" width="350" height="42" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.5"/>
+        <text x="40" y="330" font-family="JetBrains Mono" font-size="10" fill="#DC2626">6</text>
+        <text x="60" y="330" font-family="Fira Sans" font-size="11" fill="#DC2626" font-weight="500">Saisie Notion -- DOUBLE SAISIE</text>
+        <rect x="410" y="312" width="350" height="42" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-width="1.5"/>
+        <text x="430" y="330" font-family="JetBrains Mono" font-size="10" fill="#16A34A">6</text>
+        <text x="450" y="330" font-family="Fira Sans" font-size="11" fill="#16A34A" font-weight="500">Auto-alimente depuis source unique</text>
+
+        <!-- Step 7 -->
+        <rect x="20" y="362" width="350" height="42" rx="6" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="40" y="380" font-family="JetBrains Mono" font-size="10" fill="#525252">7</text>
+        <text x="60" y="380" font-family="Fira Sans" font-size="11" fill="#0A0A0A">Crea J-28 -- relances manuelles</text>
+        <rect x="410" y="362" width="350" height="42" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-width="1.5"/>
+        <text x="430" y="380" font-family="JetBrains Mono" font-size="10" fill="#16A34A">7</text>
+        <text x="450" y="380" font-family="Fira Sans" font-size="11" fill="#16A34A" font-weight="500">Alertes auto J-28</text>
+
+        <!-- Step 8 -->
+        <rect x="20" y="412" width="350" height="42" rx="6" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="40" y="430" font-family="JetBrains Mono" font-size="10" fill="#525252">8</text>
+        <text x="60" y="430" font-family="Fira Sans" font-size="11" fill="#0A0A0A">Lancement -- suivi disperse</text>
+        <rect x="410" y="412" width="350" height="42" rx="6" fill="rgba(2,44,34,0.04)" stroke="rgba(2,44,34,0.15)" stroke-width="1"/>
+        <text x="430" y="430" font-family="JetBrains Mono" font-size="10" fill="#022C22">8</text>
+        <text x="450" y="430" font-family="Fira Sans" font-size="11" fill="#022C22">Dashboard unifie</text>
+
+        <!-- Step 9 -- PAIN POINT -->
+        <rect x="20" y="462" width="350" height="42" rx="6" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.5"/>
+        <text x="40" y="480" font-family="JetBrains Mono" font-size="10" fill="#DC2626">9</text>
+        <text x="60" y="480" font-family="Fira Sans" font-size="11" fill="#DC2626" font-weight="500">Facturation -- TRIPLE SAISIE</text>
+        <rect x="410" y="462" width="350" height="42" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-width="1.5"/>
+        <text x="430" y="480" font-family="JetBrains Mono" font-size="10" fill="#16A34A">9</text>
+        <text x="450" y="480" font-family="Fira Sans" font-size="11" fill="#16A34A" font-weight="500">Auto-genere vers Pennylane</text>
+
+        <!-- Summary bar -->
+        <rect x="410" y="520" width="350" height="28" rx="6" fill="#022C22"/>
+        <text x="585" y="540" text-anchor="middle" font-family="Fira Sans" font-size="10" fill="#00D4EE" font-weight="500">1 saisie au lieu de 3 -- Alertes auto -- Base centralisee</text>
+      </svg>
+    </div>
+
+    <h3>Impact attendu</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Zone</th><th>Aujourd'hui</th><th>Demain</th><th>Gain</th></tr></thead>
+        <tbody>
+          <tr><td>Creation plan media</td><td>Calculs manuels</td><td>Calculs auto</td><td><strong>30-40%</strong></td></tr>
+          <tr><td>Saisie Notion</td><td>Re-saisie complete</td><td>Auto-alimente</td><td><strong>80-90%</strong></td></tr>
+          <tr><td>Facturation</td><td>Re-saisie Pennylane</td><td>Auto-generee</td><td><strong>90%</strong></td></tr>
+          <tr><td>Relances crea</td><td>Manuelles (memoire)</td><td>Alertes auto J-28</td><td><strong>100%</strong></td></tr>
+          <tr><td>Risque erreur</td><td>Eleve (3 saisies)</td><td>Minimal (1 saisie)</td><td>Reduction massive</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="divider">
+
+    <h3>Economie Phase 0</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Parametre</th><th>Valeur</th></tr></thead>
+        <tbody>
+          <tr><td>Client</td><td>Jordan (ComPrivee)</td></tr>
+          <tr><td>Service</td><td>Operations de campagnes gerees</td></tr>
+          <tr><td>Prix</td><td><strong>500 EUR/mois</strong></td></tr>
+          <tr><td>Upsell vise</td><td>Setup fee + agents supplementaires</td></tr>
+          <tr><td>Branding</td><td>Drakkar (pas Spider)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <blockquote><p>Opportunite upsell immediate : 39.3% des factures 2025 sont impayees (285 lignes sur 726). Un Agent Relance = upsell naturel a 190-500 EUR/mois.</p></blockquote>
+
+    <h3>Gate G1 -- Semaine 4</h3>
+    <div class="card">
+      <h4>Question : Jordan renouvelle-t-il a 500 EUR/mois ?</h4>
+      <p><span class="tag tag--green">On avance si</span> Oui + valeur mesurable livree + au moins 1 demande d'expansion non sollicitee.</p>
+      <p><span class="tag tag--red">On arrete si</span> Jordan refuse de payer ou negocie sous 300 EUR.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART IV -- LE MARCHE -->
+<!-- ============================================================ -->
+<section id="part-4" class="bg-cream">
+  <div class="container">
+    <div class="part-header">
+      <span class="part-number">Partie IV</span>
+      <h1>Le Marche</h1>
+    </div>
+
+    <!-- DIAGRAM 5: The void in the middle -->
+    <h2>Le vide au milieu</h2>
+    <div class="diagram">
+      <div class="diagram-title">Le vide au milieu</div>
+      <svg viewBox="0 0 760 420" xmlns="http://www.w3.org/2000/svg" style="max-width:760px;">
+        <!-- Top band: Orchestrateurs -->
+        <rect x="20" y="10" width="720" height="80" rx="12" fill="#022C22" opacity="0.08" stroke="#022C22" stroke-width="1.5"/>
+        <text x="380" y="38" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="14" fill="#022C22" letter-spacing="0.05em">ORCHESTRATEURS IA</text>
+        <text x="140" y="62" text-anchor="middle" font-family="Fira Sans" font-size="11" fill="#525252">OpenAI Frontier</text>
+        <text x="380" y="62" text-anchor="middle" font-family="Fira Sans" font-size="11" fill="#525252">Microsoft Copilot Studio</text>
+        <text x="610" y="62" text-anchor="middle" font-family="Fira Sans" font-size="11" fill="#525252">Google Vertex Agent Builder</text>
+        <text x="380" y="80" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#525252" font-style="italic">Construisent les modeles. Ne descendent pas sur le terrain.</text>
+
+        <!-- Middle band: THE VOID -->
+        <rect x="20" y="110" width="720" height="190" rx="12" fill="none" stroke="#E8E8ED" stroke-width="2" stroke-dasharray="8 4"/>
+        <text x="380" y="200" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="42" fill="#E8E8ED" letter-spacing="0.05em">PERSONNE</text>
+        <!-- Spider arrow -->
+        <rect x="300" y="215" width="160" height="36" rx="18" fill="#022C22"/>
+        <text x="380" y="239" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="13" fill="#00D4EE">SPIDER</text>
+
+        <!-- Conditions on right -->
+        <text x="540" y="140" font-family="JetBrains Mono" font-size="9" fill="#525252">1. Comprehension intime du metier</text>
+        <text x="540" y="157" font-family="JetBrains Mono" font-size="9" fill="#525252">2. Maitrise technique IA</text>
+        <text x="540" y="174" font-family="JetBrains Mono" font-size="9" fill="#525252">3. Confiance durable avec le dirigeant</text>
+
+        <text x="380" y="285" text-anchor="middle" font-family="Fira Sans" font-size="10" fill="#525252" font-style="italic">Comprendre, formaliser, deployer, superviser.</text>
+
+        <!-- Bottom band: Platforms -->
+        <rect x="20" y="320" width="720" height="80" rx="12" fill="#F4F4F6" stroke="#E8E8ED" stroke-width="1.5"/>
+        <text x="380" y="348" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="14" fill="#525252" letter-spacing="0.05em">PLATEFORMES TRANSACTIONNELLES</text>
+        <text x="100" y="372" text-anchor="middle" font-family="Fira Sans" font-size="11" fill="#525252">Odoo</text>
+        <text x="220" y="372" text-anchor="middle" font-family="Fira Sans" font-size="11" fill="#525252">SAP</text>
+        <text x="340" y="372" text-anchor="middle" font-family="Fira Sans" font-size="11" fill="#525252">Sage</text>
+        <text x="460" y="372" text-anchor="middle" font-family="Fira Sans" font-size="11" fill="#525252">Cegid</text>
+        <text x="580" y="372" text-anchor="middle" font-family="Fira Sans" font-size="11" fill="#525252">Pennylane</text>
+        <text x="380" y="392" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#525252" font-style="italic">Socles commoditises. Agents IA generiques et horizontaux.</text>
+      </svg>
+    </div>
+
+    <hr class="divider">
+
+    <h3>Paysage concurrentiel</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Categorie</th><th>Exemples</th><th>Pourquoi pas une menace</th></tr></thead>
+        <tbody>
+          <tr><td>Editeurs ERP</td><td>Odoo, SAP, Sage</td><td>IA horizontale/generique, ne connait pas le metier client</td></tr>
+          <tr><td>Orchestrateurs IA</td><td>OpenAI Frontier, Microsoft</td><td>Ne descendent pas sur le terrain</td></tr>
+          <tr><td>Dust</td><td>Dust.tt (29 EUR/user/mois)</td><td>Self-service pour equipes tech-savvy</td></tr>
+          <tr><td>ESN generalistes</td><td>Smile, Capgemini, Sopra</td><td>PME pas dans leur radar economique</td></tr>
+          <tr><td>AI Business Assistants</td><td>Lindy AI, MS 365 Copilot</td><td>DIY, pas managed service</td></tr>
+          <tr><td>"AI Employees"</td><td>11x.ai, Artisan AI</td><td>Enterprise-only, pas ERP, hallucinations</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Les vrais concurrents ne sont pas tech</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Alternative</th><th>Cout mensuel</th><th>Limite</th></tr></thead>
+        <tbody>
+          <tr><td>Assistante de direction</td><td>2 500-3 500 EUR</td><td>35h/sem, savoirs non duplicables</td></tr>
+          <tr><td>Cabinet comptable</td><td>150-250 EUR/heure</td><td>Pas operationnel, pas proactif</td></tr>
+          <tr><td>BPO / office manager</td><td>35-50 EUR/heure</td><td>Scaling lineaire, pas d'apprentissage</td></tr>
+          <tr><td>Ne rien faire</td><td>0 EUR</td><td><strong>80% des PME. Le concurrent #1.</strong></td></tr>
+          <tr style="background:#F0FDF4;"><td><strong>Spider</strong></td><td><strong>500 EUR/mois</strong></td><td><strong>24/7, apprentissage cumulatif, expansion</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>5 gaps que personne ne comble</h3>
+    <ol class="thesis-list">
+      <li>Pas de vrai assistant business gratuit et complet pour PME</li>
+      <li>Pas de plateforme qui recommande proactivement des agents</li>
+      <li>Pas de pricing par agent avec essai gratuit</li>
+      <li>La metaphore "embaucher un agent" est incomplete partout</li>
+      <li>Les dirigeants PME non-tech restent sous-servis (89% veulent l'IA, quasi rien les sert)</li>
+    </ol>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART V -- LA TECH -->
+<!-- ============================================================ -->
+<section id="part-5" class="bg-neutral">
+  <div class="container">
+    <div class="part-header">
+      <span class="part-number">Partie V</span>
+      <h1>La Tech</h1>
+    </div>
+
+    <!-- DIAGRAM 6: Intelligence Engine Pipeline -->
+    <h2>Spider Intelligence Engine</h2>
+    <div class="diagram">
+      <div class="diagram-title">Spider Intelligence Engine -- Pipeline</div>
+      <svg viewBox="0 0 940 380" xmlns="http://www.w3.org/2000/svg" style="max-width:940px;">
+        <defs>
+          <marker id="arrowPipe" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#022C22"/>
+          </marker>
+        </defs>
+
+        <!-- Block 1: SOURCES -->
+        <rect x="10" y="30" width="105" height="210" rx="10" fill="#FAF9F7" stroke="#E8E8ED" stroke-width="1.5"/>
+        <text x="62" y="52" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="10" fill="#022C22" letter-spacing="0.05em">SOURCES</text>
+        <text x="62" y="76" text-anchor="middle" font-family="JetBrains Mono" font-size="8.5" fill="#525252">Gmail</text>
+        <text x="62" y="96" text-anchor="middle" font-family="JetBrains Mono" font-size="8.5" fill="#525252">Calendar</text>
+        <text x="62" y="116" text-anchor="middle" font-family="JetBrains Mono" font-size="8.5" fill="#525252">Aircall</text>
+        <text x="62" y="136" text-anchor="middle" font-family="JetBrains Mono" font-size="8.5" fill="#525252">ERP (Odoo)</text>
+        <text x="62" y="156" text-anchor="middle" font-family="JetBrains Mono" font-size="8.5" fill="#525252">Pennylane</text>
+        <text x="62" y="176" text-anchor="middle" font-family="JetBrains Mono" font-size="8.5" fill="#525252">Sheets</text>
+        <text x="62" y="196" text-anchor="middle" font-family="JetBrains Mono" font-size="8.5" fill="#525252">Notion</text>
+        <text x="62" y="226" text-anchor="middle" font-family="Fira Sans" font-size="8" fill="#525252" font-style="italic">7 en V1</text>
+
+        <!-- Arrow -->
+        <line x1="118" y1="135" x2="140" y2="135" stroke="#022C22" stroke-width="2" marker-end="url(#arrowPipe)"/>
+
+        <!-- Block 2: CONNECTEURS -->
+        <rect x="145" y="60" width="100" height="150" rx="10" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1.5"/>
+        <text x="195" y="82" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="10" fill="#022C22">CONNECTEURS</text>
+        <text x="195" y="108" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Python async</text>
+        <text x="195" y="126" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Adapteurs/source</text>
+        <text x="195" y="148" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">OAuth via Nango</text>
+        <text x="195" y="168" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#525252" opacity="0.6">300+ integrations</text>
+
+        <!-- Arrow -->
+        <line x1="248" y1="135" x2="270" y2="135" stroke="#022C22" stroke-width="2" marker-end="url(#arrowPipe)"/>
+
+        <!-- Block 3: EXTRACTEUR LLM -->
+        <rect x="275" y="60" width="110" height="150" rx="10" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1.5"/>
+        <text x="330" y="82" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="10" fill="#022C22">EXTRACTEUR LLM</text>
+        <rect x="285" y="96" width="90" height="26" rx="4" fill="#F4F4F6"/>
+        <text x="330" y="114" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Haiku 4.5 (vol.)</text>
+        <rect x="285" y="130" width="90" height="26" rx="4" fill="#F4F4F6"/>
+        <text x="330" y="148" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Sonnet 4.5 (cpx)</text>
+        <text x="330" y="186" text-anchor="middle" font-family="Fira Sans" font-size="8" fill="#525252" font-style="italic">Non-struct -> Claims</text>
+
+        <!-- Arrow -->
+        <line x1="388" y1="135" x2="410" y2="135" stroke="#022C22" stroke-width="2" marker-end="url(#arrowPipe)"/>
+
+        <!-- Block 4: ENTITY RESOLVER -->
+        <rect x="415" y="60" width="105" height="150" rx="10" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1.5"/>
+        <text x="467" y="82" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="9.5" fill="#022C22">ENTITY RESOLVER</text>
+        <text x="467" y="110" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Fellegi-Sunter</text>
+        <text x="467" y="128" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Jaro-Winkler</text>
+        <text x="467" y="154" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#16A34A">Auto >= 0.94</text>
+        <text x="467" y="186" text-anchor="middle" font-family="Fira Sans" font-size="8" fill="#525252" font-style="italic">Deduplication</text>
+
+        <!-- Arrow -->
+        <line x1="523" y1="135" x2="545" y2="135" stroke="#022C22" stroke-width="2" marker-end="url(#arrowPipe)"/>
+
+        <!-- Block 5: CLAIM ENGINE (highlighted) -->
+        <rect x="550" y="50" width="110" height="170" rx="10" fill="#022C22" stroke="#00D4EE" stroke-width="2"/>
+        <text x="605" y="72" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="10" fill="#00D4EE">CLAIM ENGINE</text>
+        <text x="605" y="100" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="rgba(255,255,255,0.7)">Dempster-Shafer</text>
+        <text x="605" y="120" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="rgba(255,255,255,0.7)">Belief [0,1]</text>
+        <text x="605" y="140" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="rgba(255,255,255,0.7)">Plausibility</text>
+        <text x="605" y="168" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#DC2626">K > 0.9 = alerte</text>
+        <text x="605" y="200" text-anchor="middle" font-family="Fira Sans" font-size="8" fill="rgba(255,255,255,0.5)" font-style="italic">Coeur du systeme</text>
+
+        <!-- Arrow -->
+        <line x1="663" y1="135" x2="685" y2="135" stroke="#022C22" stroke-width="2" marker-end="url(#arrowPipe)"/>
+
+        <!-- Block 6: ANALYSEUR -->
+        <rect x="690" y="60" width="100" height="150" rx="10" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1.5"/>
+        <text x="740" y="82" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="10" fill="#022C22">ANALYSEUR</text>
+        <text x="740" y="110" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Communautes</text>
+        <text x="740" y="128" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Autorite</text>
+        <text x="740" y="146" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Bus factor</text>
+        <text x="740" y="172" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#525252" opacity="0.6">networkx + sklearn</text>
+
+        <!-- Arrow -->
+        <line x1="793" y1="135" x2="815" y2="135" stroke="#022C22" stroke-width="2" marker-end="url(#arrowPipe)"/>
+
+        <!-- Block 7: LIVEVIEWS -->
+        <rect x="820" y="30" width="110" height="210" rx="10" fill="#FAF9F7" stroke="#E8E8ED" stroke-width="1.5"/>
+        <text x="875" y="52" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="10" fill="#022C22">LIVEVIEWS</text>
+        <text x="875" y="76" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#525252">Organigramme</text>
+        <text x="875" y="92" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#525252">Competences</text>
+        <text x="875" y="108" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#525252">Porter</text>
+        <text x="875" y="124" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#525252">VSM</text>
+        <text x="875" y="140" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#525252">SIPOC</text>
+        <text x="875" y="156" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#525252">RACI</text>
+        <text x="875" y="172" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#525252">Carto SI</text>
+        <text x="875" y="188" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#525252">SNA</text>
+        <text x="875" y="204" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#525252">Diagnostic</text>
+        <text x="875" y="220" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#525252">Roadmap</text>
+
+        <!-- Data model bar -->
+        <rect x="10" y="280" width="920" height="80" rx="10" fill="#F4F4F6" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="470" y="302" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#022C22" letter-spacing="0.05em">DATA MODEL</text>
+        <rect x="30" y="314" width="270" height="32" rx="6" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="165" y="334" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Entity (type, canonical_name, aliases)</text>
+        <rect x="320" y="314" width="300" height="32" rx="6" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="470" y="334" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Claim (subject->predicate->object, belief [0,1])</text>
+        <rect x="640" y="314" width="270" height="32" rx="6" fill="#FFFFFF" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="775" y="334" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">14 predicats (HOLDS_ROLE, REPORTS_TO...)</text>
+      </svg>
+    </div>
+
+    <div class="card">
+      <h4>Le systeme de claims</h4>
+      <p>Chaque information extraite par l'IA est un "claim" -- une affirmation avec un degre de croyance entre 0 et 1. <code>"Pierre est CEO" (belief: 0.95)</code>. <code>"Pierre est aussi directeur de production" (belief: 0.72)</code>. Quand deux claims se contredisent (K &gt; 0.9), Spider leve une alerte. Chaque conflit detecte = opportunite de consulting.</p>
+    </div>
+
+    <hr class="divider">
+
+    <h3>Infrastructure souveraine</h3>
+    <p><strong>Zero SaaS US. Tout self-hosted.</strong></p>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Composant</th><th>Choix</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td>Cloud</td><td>OVH + Scaleway (France)</td><td>Souverainete EU</td></tr>
+          <tr><td>Orchestration</td><td>Kubernetes, 3 clusters</td><td>GitOps via ArgoCD</td></tr>
+          <tr><td>Auth</td><td>Zitadel self-hosted</td><td>OIDC, SSO, multi-tenancy</td></tr>
+          <tr><td>BDD relationnelle</td><td>PostgreSQL 16 HA</td><td>Source de verite</td></tr>
+          <tr><td>BDD multi-model</td><td>SurrealDB + TiKV</td><td>Knowledge graph, claims, vecteurs</td></tr>
+          <tr><td>Gateway IA</td><td>AgentGateway / Higress</td><td>Multi-provider LLM, RAG, fallback</td></tr>
+          <tr><td>Connecteurs OAuth</td><td>Nango</td><td>300+ integrations</td></tr>
+          <tr><td>Embeddings</td><td>Nomic Embed self-hosted</td><td>768D FR/EN</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="divider">
+
+    <h3>Les 6 apps</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>App</th><th>URL</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><strong>People</strong></td><td><code>people.spideros.ai</code></td><td>CRM relationnel, timeline, audio, Score of Knowledge</td></tr>
+          <tr><td><strong>Builder</strong></td><td><code>builder.spideros.ai</code></td><td>IDE AI-assisted, Monaco Editor</td></tr>
+          <tr><td><strong>Documents</strong></td><td><code>documents.spideros.ai</code></td><td>Editeur livrables, export PDF/HTML</td></tr>
+          <tr><td><strong>Platform</strong></td><td><code>app.spideros.ai</code></td><td>Hub, dashboard, 10 livrables Spider Intelligence</td></tr>
+          <tr><td><strong>Website</strong></td><td><code>spideros.ai</code></td><td>Site corporate</td></tr>
+          <tr><td><strong>Playbook</strong></td><td>interne</td><td>Documentation Design System</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Stack technique</h3>
+    <div class="card-grid" style="display:grid; gap:1.25rem;">
+      <div class="card">
+        <h4>Frontend</h4>
+        <p class="mb-0 mono text-small">pnpm 10, Turborepo, TypeScript 5.9+ strict, Next.js 16 App Router, TanStack Query 5, Zustand 5, Base UI + CVA, CSS Modules, Phosphor Icons.</p>
+      </div>
+      <div class="card">
+        <h4>Backend</h4>
+        <p class="mb-0 mono text-small">Litestar 2.21+ (ASGI async), Piccolo ORM, Pydantic 2.0+, uv, Ruff. Architecture flat : controllers/ -> services/ -> models/ -> schemas/.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART VI -- L'EQUIPE ET LE DEAL -->
+<!-- ============================================================ -->
+<section id="part-6" class="bg-warm">
+  <div class="container">
+    <div class="part-header">
+      <span class="part-number">Partie VI</span>
+      <h1>L'Equipe et le Deal</h1>
+    </div>
+
+    <h2>Cap table Spider</h2>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Personne</th><th>% Spider</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Nathan Menard</strong> (26 ans)</td><td><strong>51%</strong></td><td>CEO -- vision, produit, sales, fundraising</td></tr>
+          <tr><td><strong>Jean Le Tulzo</strong> (38 ans)</td><td><strong>20%</strong></td><td>CFO -- structuration offre, ops, front client</td></tr>
+          <tr><td><strong>Remy Menard</strong> (23 ans)</td><td><strong>14%</strong></td><td>CTO -- construit la tech avec Nathan</td></tr>
+          <tr><td><strong>Thierry Menard</strong> (53 ans)</td><td><strong>10%</strong></td><td>Lead FDC -- credibilite industrielle, consulting terrain</td></tr>
+          <tr><td>Drakkar Group</td><td>5%</td><td>Financement uniquement (regime mere-fille)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="divider">
+
+    <h3>Ce que le deal raconte</h3>
+    <blockquote><p>"J'ai joue defenseur pendant 6 ans pour que tu puisses scorer. La tu me dis que le prochain match est dans un autre stade, et moi je reste balayer le vestiaire." -- Jean Le Tulzo, CODIR du 31 janvier 2026</p></blockquote>
+    <p>Nathan realise : si Spider = Palantir des PME, il faut la brique consulting. La brique consulting = les FDE. Les FDE = Jean (structuration) + Thierry (credibilite). Sans equity directe, ils ne seront jamais all-in.</p>
+    <p><strong>Deal final (valide avec Remy le 2 fevrier) :</strong> Nathan sacrifie 19 points d'equity avant un seul euro de revenu. Ce qu'il achete : l'alignement. Jean et Thierry passent de spectateurs a co-fondateurs.</p>
+
+    <hr class="divider">
+
+    <h3>Structure Drakkar Group</h3>
+    <pre>Drakkar Group (Nathan 47%, Jean 38%, Thierry 15%)
+├── Drakkar Studio (100%)
+├── Drakkar Accelerateur (87.5% -- Nicolas Guimier 12.5%)
+└── Drakkar Academie (100%)</pre>
+    <p class="secondary">Drakkar genere ~1.5M EUR/an de revenu. C'est le self-funded R&D de Spider. Pas de pression VC a ce stade.</p>
+
+    <hr class="divider">
+
+    <h3>Mecanisme en 2 phases</h3>
+    <div class="card-grid--2" style="display:grid; gap:1.25rem;">
+      <div class="card">
+        <h4>Phase 1 -- Incubation (12-18 mois)</h4>
+        <p>Drakkar finance 100K EUR. Force commerciale signe les premiers clients. Jean structure le consulting. Nathan + Remy construisent la tech. Tout le revenu Service-as-Software reste chez Drakkar. Pas d'entite separee.</p>
+      </div>
+      <div class="card">
+        <h4>Phase 2 -- Fundraising</h4>
+        <p>Seed 2-5M EUR (Europe ou US). Jean/Thierry choisissent : vendre Drakkar et rejoindre Spider full-time, ou rester et etre dilues. Intuition de Nathan : si Spider decolle, personne ne voudra rester chez Drakkar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART VII -- LA ROADMAP -->
+<!-- ============================================================ -->
+<section id="part-7" class="bg-cream">
+  <div class="container">
+    <div class="part-header">
+      <span class="part-number">Partie VII</span>
+      <h1>La Roadmap</h1>
+    </div>
+
+    <!-- DIAGRAM 7: Roadmap Timeline -->
+    <div class="diagram">
+      <div class="diagram-title">Roadmap Spider -- Phases et Gates</div>
+      <svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" style="max-width:900px;">
+        <!-- Phase blocks -->
+        <!-- Phase 0 -->
+        <rect x="20" y="80" width="120" height="70" rx="8" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="1.5"/>
+        <text x="80" y="100" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#0369A1">Phase 0</text>
+        <text x="80" y="116" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Sem 1-4</text>
+        <text x="80" y="132" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">Jordan seul</text>
+        <text x="80" y="144" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">500 EUR</text>
+
+        <!-- Phase 1 -->
+        <rect x="155" y="80" width="150" height="70" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+        <text x="230" y="100" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#1D4ED8">Phase 1</text>
+        <text x="230" y="116" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Mois 2-4</text>
+        <text x="230" y="132" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">5 clients Drakkar</text>
+        <text x="230" y="144" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">500-2000 EUR</text>
+
+        <!-- Phase 2 -->
+        <rect x="320" y="80" width="160" height="70" rx="8" fill="#DCFCE7" stroke="#22C55E" stroke-width="1.5"/>
+        <text x="400" y="100" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#15803D">Phase 2</text>
+        <text x="400" y="116" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Mois 5-8</text>
+        <text x="400" y="132" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">Productisation</text>
+        <text x="400" y="144" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">Branding Spider</text>
+
+        <!-- Phase 3 -->
+        <rect x="495" y="80" width="160" height="70" rx="8" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+        <text x="575" y="100" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#B45309">Phase 3</text>
+        <text x="575" y="116" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Mois 9-12</text>
+        <text x="575" y="132" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">Assistant gratuit</text>
+        <text x="575" y="144" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">Canal de vente IA</text>
+
+        <!-- Phase 4 -->
+        <rect x="670" y="80" width="210" height="70" rx="8" fill="#FEE2E2" stroke="#EF4444" stroke-width="1.5"/>
+        <text x="775" y="100" text-anchor="middle" font-family="Fira Sans" font-weight="600" font-size="11" fill="#B91C1C">Phase 4</text>
+        <text x="775" y="116" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#525252">Annee 2</text>
+        <text x="775" y="132" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">Plateforme + partenaires</text>
+        <text x="775" y="144" text-anchor="middle" font-family="Fira Sans" font-size="9" fill="#0A0A0A">Entite separee ?</text>
+
+        <!-- Gates (diamonds) -->
+        <polygon points="80,50 92,30 80,10 68,30" fill="#0A0A0A"/>
+        <text x="80" y="5" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0A0A0A" font-weight="600">G1</text>
+
+        <polygon points="195,50 207,30 195,10 183,30" fill="#0A0A0A"/>
+        <text x="195" y="5" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0A0A0A" font-weight="600">G2</text>
+
+        <polygon points="400,50 412,30 400,10 388,30" fill="#0A0A0A"/>
+        <text x="400" y="5" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0A0A0A" font-weight="600">G3</text>
+
+        <polygon points="555,50 567,30 555,10 543,30" fill="#0A0A0A"/>
+        <text x="555" y="5" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0A0A0A" font-weight="600">G4</text>
+
+        <polygon points="670,50 682,30 670,10 658,30" fill="#0A0A0A"/>
+        <text x="670" y="5" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0A0A0A" font-weight="600">G5</text>
+
+        <polygon points="830,50 842,30 830,10 818,30" fill="#0A0A0A"/>
+        <text x="830" y="5" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0A0A0A" font-weight="600">G6</text>
+
+        <!-- Revenue bar -->
+        <text x="20" y="185" font-family="Fira Sans" font-weight="600" font-size="10" fill="#525252" letter-spacing="0.05em">REVENUE MENSUEL</text>
+        <rect x="20" y="195" width="120" height="24" rx="4" fill="#F4F4F6" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="80" y="212" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#525252">500 EUR</text>
+        <rect x="155" y="195" width="150" height="24" rx="4" fill="#F4F4F6" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="230" y="212" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#525252">3-5K EUR</text>
+        <rect x="320" y="195" width="160" height="24" rx="4" fill="#F4F4F6" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="400" y="212" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#525252">10-14K EUR</text>
+        <rect x="495" y="195" width="160" height="24" rx="4" fill="#F4F4F6" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="575" y="212" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#525252">30-45K EUR</text>
+        <rect x="670" y="195" width="210" height="24" rx="4" fill="#F4F4F6" stroke="#E8E8ED" stroke-width="1"/>
+        <text x="775" y="212" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#525252">144-270K EUR</text>
+
+        <!-- IA maturity bar -->
+        <text x="20" y="255" font-family="Fira Sans" font-weight="600" font-size="10" fill="#525252" letter-spacing="0.05em">MATURITE IA</text>
+        <rect x="20" y="265" width="300" height="30" rx="6" fill="#022C22" opacity="0.06"/>
+        <text x="170" y="285" text-anchor="middle" font-family="Fira Sans" font-size="10" fill="#022C22" font-weight="500">Copilote</text>
+        <rect x="320" y="265" width="335" height="30" rx="6" fill="#022C22" opacity="0.12"/>
+        <text x="487" y="285" text-anchor="middle" font-family="Fira Sans" font-size="10" fill="#022C22" font-weight="500">Agent executant</text>
+        <rect x="655" y="265" width="225" height="30" rx="6" fill="#022C22" opacity="0.2"/>
+        <text x="767" y="285" text-anchor="middle" font-family="Fira Sans" font-size="10" fill="#022C22" font-weight="500">Agent autonome</text>
+
+        <!-- Timeline label -->
+        <text x="20" y="330" font-family="JetBrains Mono" font-size="8" fill="#525252">Sem 1</text>
+        <text x="155" y="330" font-family="JetBrains Mono" font-size="8" fill="#525252">Mois 2</text>
+        <text x="320" y="330" font-family="JetBrains Mono" font-size="8" fill="#525252">Mois 5</text>
+        <text x="495" y="330" font-family="JetBrains Mono" font-size="8" fill="#525252">Mois 9</text>
+        <text x="670" y="330" font-family="JetBrains Mono" font-size="8" fill="#525252">Mois 13</text>
+        <text x="845" y="330" font-family="JetBrains Mono" font-size="8" fill="#525252">Mois 24</text>
+        <line x1="20" y1="340" x2="880" y2="340" stroke="#E8E8ED" stroke-width="1"/>
+      </svg>
+    </div>
+
+    <h3>Decision gates</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Gate</th><th>Timing</th><th>Question</th><th>On avance si</th></tr></thead>
+        <tbody>
+          <tr><td><strong>G1</strong></td><td>Semaine 4</td><td>Jordan renouvelle ?</td><td>Oui + valeur mesurable + demande expansion</td></tr>
+          <tr><td><strong>G2</strong></td><td>Mois 3</td><td>3+ clients payants ?</td><td>3+ clients a 500+ EUR, &lt;20% churn</td></tr>
+          <tr><td><strong>G3</strong></td><td>Mois 6</td><td>Ratio IA/humain s'ameliore ?</td><td>50%+ IA sur au moins 2 processus</td></tr>
+          <tr><td><strong>G4</strong></td><td>Mois 9</td><td>Faut-il construire l'assistant ?</td><td>5+ agents, ontology 2+ verticaux</td></tr>
+          <tr><td><strong>G5</strong></td><td>Mois 12</td><td>Spider = entite separee ?</td><td>20+ clients, 30K+ EUR MRR, 65%+ marges</td></tr>
+          <tr><td><strong>G6</strong></td><td>Mois 18</td><td>Faut-il lever ?</td><td>PMF confirme, unit economics valides</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Trajectoire revenue</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Jalon</th><th>Clients</th><th>Revenue mensuel</th><th>Annualise</th></tr></thead>
+        <tbody>
+          <tr><td>Mois 3</td><td>3-5</td><td>3-5K EUR</td><td>36-60K EUR</td></tr>
+          <tr><td>Mois 6</td><td>8-12</td><td>10-14K EUR</td><td>120-170K EUR</td></tr>
+          <tr><td>Mois 12</td><td>20-30</td><td>30-45K EUR</td><td>360-540K EUR</td></tr>
+          <tr><td>Mois 24</td><td>80-150</td><td>144-270K EUR</td><td><strong>1.7-3.2M EUR</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART VIII -- CE QU'ON NE SAIT PAS -->
+<!-- ============================================================ -->
+<section id="part-8" class="bg-neutral">
+  <div class="container">
+    <div class="part-header">
+      <span class="part-number">Partie VIII</span>
+      <h1>Ce qu'on ne sait pas</h1>
+    </div>
+
+    <blockquote><p>Etre honnete sur les inconnues, c'est de la force, pas de la faiblesse. Un investisseur qui voit une equipe mentir sur ses certitudes fuit. Un investisseur qui voit une equipe nommer ses inconnues investit.</p></blockquote>
+
+    <div class="card">
+      <h4>Le pricing est une hypothese</h4>
+      <p>500 EUR/mois est le chiffre teste. Pas le modele valide. Les docs historiques ont propose 49, 990, 2 000-5 000 EUR. Quatre modeles = aucun modele. Le prix ne sera connu qu'apres 5-10 ventes reelles a des non-amis.</p>
+    </div>
+
+    <div class="card">
+      <h4>La fenetre de 24 mois -- pour qui ?</h4>
+      <p>Si la fenetre concerne le monde : Spider est en retard. Les "AI employees" americains sont finances a 50M+. Si la fenetre concerne la France : Spider a peut-etre 3-5 ans. Le timing exact importe moins que la direction.</p>
+    </div>
+
+    <div class="card">
+      <h4>Spider peut-il capturer le tacite la ou Drakkar a echoue ?</h4>
+      <p>Nathan l'admet : Drakkar a echoue chez Decotec. 3 ans de consulting, le tacite n'a pas ete capture. La difference promise : Drakkar capturait via des rapports et des reunions (l'info mourait dans la tete du consultant). Spider capture via des connecteurs automatiques et l'IA extrait le tacite. <strong>C'est un pari technologique, pas un heritage acquis.</strong></p>
+    </div>
+
+    <div class="card">
+      <h4>Le race-to-bottom</h4>
+      <p>L'IA compresse les couts. Si ca compresse pour les agences, ca compressera aussi pour Spider. Un freelance pourra-t-il repliquer le service pour 200 EUR/mois avec les outils de 2027 ? La reponse possible : l'ontology accumulee + l'effet reseau. Mais en Phase 1, il n'y a pas d'effet reseau. <strong>Nathan : "tres bonne question, je sais pas."</strong></p>
+    </div>
+
+    <div class="card">
+      <h4>SaaS vs ESN -- la question de la valorisation</h4>
+      <p>Si l'humain reste a 20% dans la boucle, les investisseurs valorisent Spider comme une ESN (1-3x revenue). S'il descend a 5%, c'est un SaaS (10-20x). La difference : facteur 5 a 10 sur la valorisation pour le meme CA.</p>
+    </div>
+
+    <div class="card">
+      <h4>Le ratio FDE:client</h4>
+      <p>C'est la question fondamentale. Le ratio s'ameliore-t-il ou reste-t-il constant ? Si stagnation : ESN avec de l'IA. Si amelioration exponentielle : SaaS deguise. <strong>Toute la these repose dessus.</strong></p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART IX -- HYPOTHESES ET KILL CRITERIA -->
+<!-- ============================================================ -->
+<section id="part-9" class="bg-warm">
+  <div class="container">
+    <div class="part-header">
+      <span class="part-number">Partie IX</span>
+      <h1>Hypotheses et Kill Criteria</h1>
+    </div>
+
+    <h3><span class="tag tag--red">Priorite 1</span> &nbsp;Survie -- si fausses, Spider s'arrete</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>#</th><th>Hypothese</th><th>Test</th><th>Kill criteria</th></tr></thead>
+        <tbody>
+          <tr><td><strong>H1</strong></td><td>Un dirigeant PME paie 500 EUR/mois pour des operations gerees</td><td>Jordan accepte de payer apres le mois gratuit</td><td>Jordan refuse ou negocie sous 300 EUR</td></tr>
+          <tr><td><strong>H2</strong></td><td>L'IA gere 50%+ des taches avec supervision humaine en 6 mois</td><td>Tracker le ratio IA/humain par processus</td><td>Ratio reste &lt;40% IA apres 6 mois</td></tr>
+          <tr><td><strong>H3</strong></td><td>Un deuxieme client non-ami paie le prix demande</td><td>Vendre a un prospect dans 90 jours</td><td>Aucun client non-ami ne signe en 90 jours</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="mt-4"><span class="tag tag--amber">Priorite 2</span> &nbsp;Croissance -- si fausses, Spider pivote</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>#</th><th>Hypothese</th><th>Test</th><th>Signal de pivot</th></tr></thead>
+        <tbody>
+          <tr><td><strong>H4</strong></td><td>L'ontology se transfere entre clients du meme vertical</td><td>Temps d'onboarding client 1 vs client 5</td><td>Client 5 prend &gt;60% du temps de client 1</td></tr>
+          <tr><td><strong>H5</strong></td><td>Le chatbot gratuit convertit en agents payants</td><td>Deployer chez 20 PME, mesurer conversion</td><td>Conversion &lt;10% en 3 mois</td></tr>
+          <tr><td><strong>H6</strong></td><td>Le ratio FDE:clients s'ameliore dans le temps</td><td>Tracker heures humaines par client sur 12 mois</td><td>Les heures ne baissent pas apres 6 mois</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="mt-4"><span class="tag tag--green">Priorite 3</span> &nbsp;Vision -- si fausses, Spider marche mais n'est pas un empire</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>#</th><th>Hypothese</th><th>Test</th><th>Implication si faux</th></tr></thead>
+        <tbody>
+          <tr><td><strong>H7</strong></td><td>La data captive cree un moat irreplicable</td><td>Apres 100 clients, evaluer la replicabilite</td><td>Bon business, pas un monopole</td></tr>
+          <tr><td><strong>H8</strong></td><td>Le mycelium cree de la valeur inter-entreprise</td><td>Apres 50 clients, identifier patterns cross-clients</td><td>Outil par-client, pas reseau</td></tr>
+          <tr><td><strong>H9</strong></td><td>Le marche valorise Spider comme un SaaS</td><td>Multiple propose par les investisseurs</td><td>Si multiple &lt;5x, le marche voit une ESN</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <blockquote><p>Ordre de validation : H1 -> H3 -> H2 -> H4 -> H6 -> H5 -> H7 -> H8 -> H9. Pas de raccourci. Chaque hypothese est un prerequis de la suivante.</p></blockquote>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART X -- LE PITCH (dark section) -->
+<!-- ============================================================ -->
+<section id="part-10" class="bg-dark">
+  <div class="container">
+    <div class="part-header">
+      <span class="part-number">Partie X</span>
+      <h1>Le Pitch</h1>
+    </div>
+
+    <p>Le pitch n'est pas fixe. Nathan est ouvert. Voici 4 angles pour 4 personas.</p>
+
+    <div style="margin-top:2rem;">
+      <!-- Pitch 1: Dirigeant familial -->
+      <div class="pitch-card pitch-card--familial">
+        <div class="pitch-persona">Pour le dirigeant familial</div>
+        <blockquote><p>"On fait tourner votre back-office pour 500 EUR/mois. Vous, vous faites ce que vous aimez : vos clients."</p></blockquote>
+        <p>Spider = le clone de Marie. Sans ego, sans arret maladie, sans demande d'augmentation. Il ne demande rien, ne juge pas, ne montre pas les problemes en public. Il fait le travail en silence. Le dirigeant garde le titre et la tranquillite.</p>
+      </div>
+
+      <!-- Pitch 2: Corporate acquirer -->
+      <div class="pitch-card pitch-card--corporate">
+        <div class="pitch-persona">Pour le corporate acquirer</div>
+        <blockquote><p>"En 30 jours, Spider cartographie ce que 3 ans de consulting n'ont pas capture."</p></blockquote>
+        <p>Le repreneur achete un bilan, recoit une coquille. Spider se branche sur les flux de donnees existants et revele le vrai capital : qui sait quoi, qui connait qui, quelles regles non-ecrites font tourner la machine. Avant le depart du cedant, pas apres.</p>
+      </div>
+
+      <!-- Pitch 3: Heritier -->
+      <div class="pitch-card pitch-card--heritier">
+        <div class="pitch-persona">Pour l'heritier</div>
+        <blockquote><p>"Le savoir de votre pere ne part pas avec lui. Spider le capture avant."</p></blockquote>
+        <p>30 ans de relationnel, de savoir-faire, d'exceptions accumulees -- tout ca vit dans la tete du cedant. Spider capture automatiquement, structure, rend actionnable. L'heritier ne recoit plus une coquille. Il recoit le mode d'emploi.</p>
+      </div>
+
+      <!-- Pitch 4: Investisseur -->
+      <div class="pitch-card pitch-card--investisseur">
+        <div class="pitch-persona">Pour l'investisseur</div>
+        <blockquote><p>"Palantir for European SMBs. Service-as-Software. Data moat. 500 EUR/mois entry, 10x expansion potential per client."</p></blockquote>
+        <p>25M de PME/ETI europeennes, 5-7T EUR de valeur ajoutee, zero outil concu pour elles. Spider capture le tacite (seul actif non-reproductible), deploie des agents IA pour faire le travail, et accumule de la data captive a chaque jour d'operation. Le code est copiable. La data ne l'est pas. Premier a capturer = premier a gagner. Fenetre : 24 mois.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- ANNEXES -->
+<!-- ============================================================ -->
+<section id="annexes" class="bg-neutral">
+  <div class="container">
+    <div class="part-header">
+      <span class="part-number">Annexes</span>
+      <h1>Annuaire et Donnees</h1>
+    </div>
+
+    <h3>Annexe A : Equipe Spider / Drakkar</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Personne</th><th>Age</th><th>Role</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Nathan Menard</strong></td><td>26</td><td>CEO Drakkar (47%), CEO Spider (51%)</td><td>Vision, produit, sales, fundraising</td></tr>
+          <tr><td><strong>Jean Le Tulzo</strong></td><td>38</td><td>COO Drakkar (38%), CFO Spider (20%)</td><td>Structuration offre, ops, front client</td></tr>
+          <tr><td><strong>Remy Menard</strong></td><td>23</td><td>CTO Spider (14%)</td><td>Frere de Nathan. Construit la stack.</td></tr>
+          <tr><td><strong>Thierry Menard</strong></td><td>53</td><td>Lead FDC Spider (10%)</td><td>Pere de Nathan. Ex-Airbus.</td></tr>
+          <tr><td>Matthis Ruel</td><td>--</td><td>PO/PM Drakkar</td><td>Responsable studio</td></tr>
+          <tr><td>Thibault Piqueras</td><td>--</td><td>Commercial Drakkar</td><td>Premier contact deals</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Personnes externes cles</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Personne</th><th>Relation</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Jordan Lefranc</strong></td><td>Ami de Nathan, CEO ComPrivee</td><td>Premier test Spider. 1.16M EUR CA, Normandie.</td></tr>
+          <tr><td>Benoit Vasseur</td><td>CEO The Tribe (70+ pers.)</td><td>Signal d'inertie francaise. "Dans 2 ans."</td></tr>
+          <tr><td>Laurent de Bray</td><td>CEO Decotec</td><td>Archetype T4. Diagnostique, ne decide pas.</td></tr>
+          <tr><td>Carlos Diaz</td><td>Silicon Carne</td><td>Seule source FR quali de veille tech selon Nathan.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="divider">
+
+    <h3>Annexe B : Top 10 clients ComPrivee par CA</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Client</th><th>Campagnes</th><th>CA HT (EUR)</th><th>Marge (EUR)</th><th>Marge %</th></tr></thead>
+        <tbody>
+          <tr><td>CAO Paris</td><td>13</td><td>79 173</td><td>17 901</td><td>22.6%</td></tr>
+          <tr><td>Grin</td><td>24</td><td>61 122</td><td>17 129</td><td>28.0%</td></tr>
+          <tr><td>Caen evenements</td><td>27</td><td>58 366</td><td>8 575</td><td>14.7%</td></tr>
+          <tr><td>Schmidt Mondeville</td><td>36</td><td>50 156</td><td>12 594</td><td>25.1%</td></tr>
+          <tr><td>Game Fest</td><td>9</td><td>44 937</td><td>14 180</td><td>31.6%</td></tr>
+          <tr><td>Art et Fenetres</td><td>18</td><td>44 190</td><td>8 566</td><td>19.4%</td></tr>
+          <tr><td>Cuisinella Mondeville</td><td>26</td><td>44 090</td><td>11 972</td><td>27.2%</td></tr>
+          <tr><td>Aasgard Mondeville</td><td>14</td><td>35 135</td><td>6 903</td><td>19.6%</td></tr>
+          <tr><td>Aasgard Saint Lo</td><td>17</td><td>33 472</td><td>6 657</td><td>19.9%</td></tr>
+          <tr><td>Schmidt Bayeux</td><td>34</td><td>33 126</td><td>7 859</td><td>23.7%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Metriques operationnelles</h3>
+    <div class="card">
+      <p><strong>Commissions :</strong> 13% (50.3% des lignes), 15% (41.9%), 20% (3.3%)<br>
+      <strong>Frais monitoring :</strong> 85 EUR (250 lignes), 150 EUR (140 lignes)<br>
+      <strong>Saisonnalite :</strong> pic septembre (125 campagnes), pic mars (111), creux decembre (11)<br>
+      <strong>Statut 2025 :</strong> 90.2% terminees, 94.5% facturees, <strong>60.7% payees seulement</strong> (39.3% impayes)<br>
+      <strong>Imprimeur unique :</strong> Publitex (173 jobs)</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="container">
+    <p>Document genere le 19 fevrier 2026. Tout est la. Les certitudes et les doutes. C'est la base.</p>
+    <p style="margin-top:0.5rem; opacity:0.5;">SpiderOS &mdash; Document Interne</p>
+  </div>
+</footer>
+
+</body>
+</html>
